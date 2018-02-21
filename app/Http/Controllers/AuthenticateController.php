@@ -22,10 +22,10 @@ class AuthenticateController extends Controller
         $credentials = $request->only('email','password');
         try{
             if(!$token = JWTAuth::attempt($credentials)){
-                return response()->json(['error'=>'invalid_credential'],401);
+                return response()->json(['message'=>'invalid_credential','status'=>'error'],401);
             }
         }catch(JWTException $e){
-            return response()->json(['error'=>'could_not_create_token'],500);
+            return response()->json(['message'=>'could_not_create_token','status'=>'error'],500);
         }
 
         $response = compact('token');
@@ -54,8 +54,18 @@ class AuthenticateController extends Controller
 
     public function refresh()
     {
-        return response([
-            'status' => 'success'
-        ]);
+        $token = JWTAuth::getToken();
+
+        if (! $token) {
+            throw new BadRequestHttpException('Token not provided');
+        }
+
+        try {
+            $token = JWTAuth::refresh($token);
+        } catch (TokenInvalidException $e) {
+            throw new AccessDeniedHttpException('The token is invalid');
+        }
+
+        return response()->json(compact('token'));
     }
 }
