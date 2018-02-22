@@ -24,12 +24,14 @@ Route::middleware(['jwt.auth'])->group(function(){
     Route::post('products','ProductsController@add')->name('addProducts');
     Route::post('products/{id}','ProductsController@edit')->name('editProduct');
     Route::get('products/delete/{id}','ProductsController@delete')->name('deleteProduct');
-    Route::get('auth/user', 'AuthenticateController@user')->name('me');
+    Route::get('auth/user', 'AuthenticateController@getAuthenticatedUser')->name('me');
     Route::post('auth/logout', 'AuthenticateController@logout')->name('logout');
     Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthenticateController@refresh')->name('refresh_token');
 });
 
 Route::post('login','AuthenticateController@authenticate')->name('login');
+
+
 
 
 

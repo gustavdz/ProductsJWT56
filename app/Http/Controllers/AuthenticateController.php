@@ -11,8 +11,11 @@ namespace Products_JWT\Http\Controllers;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Illuminate\Support\Facades\Auth;
 use Products_JWT\User;
+
 
 
 
@@ -24,14 +27,50 @@ class AuthenticateController extends Controller
             if(!$token = JWTAuth::attempt($credentials)){
                 return response()->json(['message'=>'invalid_credential','status'=>'error'],401);
             }
+
+            $user_auth = JWTAuth::toUser($token);
+            $last_token=$user_auth->api_token;
+            $user_auth->api_token=$token;
+            $user_auth->save();
+            $user = User::find($user_auth->id);
+            $response['status']='success';
+            $response['user']=$user;
+            $response['last_token'] =$last_token;
+
+            return $response;
+
         }catch(JWTException $e){
-            return response()->json(['message'=>'could_not_create_token','status'=>'error'],500);
+            //return response()->json(['message'=>'could_not_create_token','status'=>'error'],500);
+            return response()->json(['message'=>$e->getMessage(),'status'=>'error'],500);
         }
 
-        $response = compact('token');
-        $response['status']='success';
-        $response['user'] = Auth::user();
-        return $response;
+
+    }
+
+    public function getAuthenticatedUser()
+    {
+        try {
+
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+
+        } catch (TokenExpiredException $e) {
+
+            return response()->json(['token_expired'], $e->getStatusCode());
+
+        } catch (TokenInvalidException $e) {
+
+            return response()->json(['token_invalid'], $e->getStatusCode());
+
+        } catch (JWTException $e) {
+
+            return response()->json(['token_absent'], $e->getStatusCode());
+
+        }
+
+        // the token is valid and we have found the user via the sub claim
+        return response()->json(compact('user'));
     }
 
     public function user(Request $request)
