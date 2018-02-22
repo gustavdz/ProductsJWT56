@@ -12,7 +12,10 @@ class ProductsController extends Controller
         return $products;
     }
     public function add(Request $request){
-        $product = Products::create($request->all());
+        $user = User::find(Auth::user()->id);
+        $product_request = $request->only('name','detail','price');
+        $product_request['user_id']=$user->id;
+        $product = Products::create($product_request);
         return $product;
     }
     public function get($id){

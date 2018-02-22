@@ -4,11 +4,11 @@ namespace Products_JWT;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Products extends Model
+class Clients extends Model
 {
     //
-    Protected $table='products';
-    Protected $fillable = array('name','detail','price','user_id');
+    Protected $table='clients';
+    Protected $fillable = array('name','last_name','email','dni','client_vip','phone','address','user_id');
     protected $hidden = [];
 
     public function user(){
