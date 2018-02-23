@@ -15,7 +15,8 @@ use Products_JWT\User;
 class ClientsController extends Controller
 {
     public function getAll(){
-        $clients = Clients::all();
+        $user = User::find(Auth::user()->id);
+        $clients = Clients::where('user_id', $user->id)->get();//->paginate();
         return $clients;
     }
     public function add(Request $request){

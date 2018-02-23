@@ -16,7 +16,7 @@ class ProductsTableSeeder extends Seeder
             ['name'=>'Zapatos','detail'=>'Zapatos cafés','price'=>'79.99','user_id'=>1],
             ['name'=>'Camisa','detail'=>'Camisa blanca mangas largas','price'=>'25','user_id'=>1],
             ['name'=>'Reloj','detail'=>'Reloj cuero café','price'=>'90','user_id'=>1],
-            ['name'=>'Celular','detail'=>'Iphone 7 plus','price'=>'800','user_id'=>1]
+            ['name'=>'Celular','detail'=>'Iphone 7 plus','price'=>'800','user_id'=>2]
         );
         foreach($products as $product){
             Products::create($product);

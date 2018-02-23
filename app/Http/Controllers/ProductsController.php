@@ -4,11 +4,18 @@ namespace Products_JWT\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Products_JWT\Products;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Illuminate\Support\Facades\Auth;
+use Products_JWT\User;
 
 class ProductsController extends Controller
 {
     public function getAll(){
-        $products = Products::all();
+        $user = User::find(Auth::user()->id);
+        $products = Products::where('user_id', $user->id)->get(); //->paginate();
         return $products;
     }
     public function add(Request $request){
