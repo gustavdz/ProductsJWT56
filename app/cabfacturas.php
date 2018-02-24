@@ -9,7 +9,7 @@ class cabfacturas extends Model
     //
     Protected $table ='cabfacturas';
 
-    Protected $fillable = array('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','numeroAutorizacion','fechaAutorizacion','tipoAmbiente','tipoEmision','PrefijoSucursal','PrefijoPuntoVenta','numeroFactura','clientTipoId','clientDNI','clientName','clientAdress','clientPhone','clientEmail','totalBruto','totalDscto','totalTax1','totalTax2','totalNeto','puntoVentaId','estadoElectronico','factEnviada','fechaEnvio','factEstado','user_id','clientId');
+    Protected $fillable = array('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','numeroAutorizacion','fechaAutorizacion','tipoAmbiente','tipoEmision','PrefijoSucursal','PrefijoPuntoVenta','numeroFactura','clientTipoId','clientDNI','clientName','clientAddress','clientPhone','clientEmail','totalBruto','totalDscto','totalTax1','totalTax2','totalNeto','puntoVentaId','estadoElectronico','factEnviada','fechaEnvio','factEstado','user_id','clientId');
     protected $hidden = [];
 
 

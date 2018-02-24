@@ -17,7 +17,7 @@ class CabFacturasController extends Controller
     }
     public function add(Request $request){
         $user = User::find(Auth::user()->id);
-        $cabfactura_request = $request->only('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','numeroAutorizacion','fechaAutorizacion','tipoAmbiente','tipoEmision','PrefijoSucursal','PrefijoPuntoVenta','numeroFactura','clientTipoId','clientDNI','clientName','clientAdress','clientPhone','clientEmail','totalBruto','totalDscto','totalTax1','totalTax2','totalNeto','puntoVentaId','estadoElectronico','factEnviada','fechaEnvio','factEstado','clientId');
+        $cabfactura_request = $request->only('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','numeroAutorizacion','fechaAutorizacion','tipoAmbiente','tipoEmision','PrefijoSucursal','PrefijoPuntoVenta','numeroFactura','clientTipoId','clientDNI','clientName','clientAddress','clientPhone','clientEmail','totalBruto','totalDscto','totalTax1','totalTax2','totalNeto','puntoVentaId','estadoElectronico','factEnviada','fechaEnvio','factEstado','clientId');
         $cabfactura_request['user_id']=$user->id;
         $cabfactura = cabfacturas::create($cabfactura_request);
         return $cabfactura;
