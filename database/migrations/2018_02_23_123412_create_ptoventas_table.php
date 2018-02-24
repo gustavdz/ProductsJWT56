@@ -15,10 +15,10 @@ class CreatePtoventasTable extends Migration
     {
         Schema::create('ptoventas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('prefijo');
-            $table->string('prefijoSucursal');
-            $table->integer('secuenciaFactura');
-            $table->string('secuenciaNC');
+            $table->string('prefijo',3);
+            $table->string('prefijoSucursal',3);
+            $table->integer('secuenciaFactura')->default(0);
+            $table->string('secuenciaNC')->default(0);
 
             //FK
             $table->integer('user_id')->unsigned();
