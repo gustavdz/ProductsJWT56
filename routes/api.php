@@ -32,23 +32,23 @@ Route::middleware(['jwt.auth'])->group(function(){
     Route::post('clients/{id}','ClientsController@edit')->name('editClient');
     Route::get('clients/delete/{id}','ClientsController@delete')->name('deleteClient');
 
-    Route::get('ptoventas','ClientsController@getAll')->name('getAllptoVentas');
-    Route::get('ptoventa/{id}','ClientsController@get')->name('getptoVenta');
-    Route::post('ptoventa','ClientsController@add')->name('addptoVenta');
-    Route::post('ptoventa/{id}','ClientsController@edit')->name('editptoVenta');
-    Route::get('ptoventa/delete/{id}','ClientsController@delete')->name('deleteptoVenta');
+    Route::get('ptoventas','PtoVentasController@getAll')->name('getAllptoVentas');
+    Route::get('ptoventa/{id}','PtoVentasController@get')->name('getptoVenta');
+    Route::post('ptoventa','PtoVentasController@add')->name('addptoVenta');
+    Route::post('ptoventa/{id}','PtoVentasController@edit')->name('editptoVenta');
+    Route::get('ptoventa/delete/{id}','PtoVentasController@delete')->name('deleteptoVenta');
 
-    Route::get('cabfacturas','ClientsController@getAll')->name('getAllcabfacturas');
-    Route::get('cabfactura/{id}','ClientsController@get')->name('getcabfactura');
-    Route::post('cabfactura','ClientsController@add')->name('addcabfactura');
-    Route::post('cabfactura/{id}','ClientsController@edit')->name('editcabfactura');
-    Route::get('cabfactura/delete/{id}','ClientsController@delete')->name('deletecabfactura');
+    Route::get('cabfacturas','CabFacturasController@getAll')->name('getAllcabfacturas');
+    Route::get('cabfactura/{id}','CabFacturasController@get')->name('getcabfactura');
+    Route::post('cabfactura','CabFacturasController@add')->name('addcabfactura');
+    Route::post('cabfactura/{id}','CabFacturasController@edit')->name('editcabfactura');
+    Route::get('cabfactura/delete/{id}','CabFacturasController@delete')->name('deletecabfactura');
 
-    Route::get('detfacturas','ClientsController@getAll')->name('getAlldetfacturas');
-    Route::get('detfactura/{id}','ClientsController@get')->name('getdetfacturas');
-    Route::post('detfactura','ClientsController@add')->name('adddetfacturas');
-    Route::post('detfactura/{id}','ClientsController@edit')->name('editdetfacturas');
-    Route::get('detfactura/delete/{id}','ClientsController@delete')->name('deletedetfacturas');
+    Route::get('detfacturas/{cabfacturas_id}','DetFacturasController@getAll')->name('getAlldetfacturas');
+    Route::get('detfactura/{id}','DetFacturasController@get')->name('getdetfacturas');
+    Route::post('detfactura','DetFacturasController@add')->name('adddetfacturas');
+    Route::post('detfactura/{id}','DetFacturasController@edit')->name('editdetfacturas');
+    Route::get('detfactura/delete/{id}','DetFacturasController@delete')->name('deletedetfacturas');
 
     Route::get('auth/user', 'AuthenticateController@getAuthenticatedUser')->name('me');
     Route::post('auth/logout', 'AuthenticateController@logout')->name('logout');
