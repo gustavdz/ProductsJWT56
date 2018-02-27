@@ -40,9 +40,24 @@ class AuthenticateController extends Controller
             return $response;
 
         }catch(JWTException $e){
-            //return response()->json(['message'=>'could_not_create_token','status'=>'error'],500);
             return response()->json(['message'=>$e->getMessage(),'status'=>'error'],500);
         }
+
+
+    }
+
+    public function register(Request $request){
+        $rules =[
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ];
+        $this->validate($request,$rules);
+        return User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
 
 
     }

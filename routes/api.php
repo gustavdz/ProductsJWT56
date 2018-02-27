@@ -57,9 +57,7 @@ Route::middleware(['jwt.auth'])->group(function(){
 });
 
 Route::post('login','AuthenticateController@authenticate')->name('login');
-
-
-
+Route::post('register','AuthenticateController@register')->name('register');
 
 
 
