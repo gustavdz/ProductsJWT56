@@ -25,7 +25,7 @@ class AuthenticateController extends Controller
         $credentials = $request->only('email','password');
         try{
             if(!$token = JWTAuth::attempt($credentials)){
-                return response()->json(['message'=>'invalid_credential','status'=>'error'],401);
+                return response()->json(['error_message'=>'invalid_credential','status'=>'error'],401);
             }
 
             $user_auth = JWTAuth::toUser($token);
@@ -34,13 +34,13 @@ class AuthenticateController extends Controller
             $user_auth->save();
             $user = User::find($user_auth->id);
             $response['status']='success';
-            $response['user']=$user;
+            $response['user_data']=$user;
             $response['last_token'] =$last_token;
 
             return $response;
 
         }catch(JWTException $e){
-            return response()->json(['message'=>$e->getMessage(),'status'=>'error'],500);
+            return response()->json(['error_mmessage'=>$e->getMessage(),'status'=>'error'],500);
         }
 
 
