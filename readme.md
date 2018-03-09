@@ -54,6 +54,11 @@ Thank you for considering contributing to the Laravel framework! The contributio
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+##External Plugin
+http://www.laravelinterviewquestions.com/2017/12/cross-origin-request-blocked-error-laravel.html#sthash.kzFyS0ZT.lZoXlZde.dpbs
+install barryvdh/laravel-cors package. By running below command. It will take few minutes.
+composer require barryvdh/laravel-cors
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

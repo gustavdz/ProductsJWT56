@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
     return $request->user();
 })->name('user');*/
 
-Route::middleware(['jwt.auth'])->group(function(){
+Route::middleware(['cors','jwt.auth'])->group(function(){
 
     Route::get('products','ProductsController@getAll')->name('getAllProducts');
     Route::get('products/{id}','ProductsController@get')->name('getProduct');
@@ -56,8 +56,7 @@ Route::middleware(['jwt.auth'])->group(function(){
 
 });
 
-Route::post('login','AuthenticateController@authenticate')->name('login');
-Route::post('register','AuthenticateController@register')->name('register');
-
-
-
+Route::middleware(['cors'])->group(function(){
+  Route::post('login','AuthenticateController@authenticate')->name('login');
+  Route::post('register','AuthenticateController@register')->name('register');
+});
