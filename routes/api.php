@@ -50,7 +50,7 @@ Route::middleware(['cors','jwt.auth'])->group(function(){
     Route::post('detfactura/{id}','DetFacturasController@edit')->name('editdetfacturas');
     Route::get('detfactura/delete/{id}','DetFacturasController@delete')->name('deletedetfacturas');
 
-    Route::get('auth/user', 'AuthenticateController@getAuthenticatedUser')->name('me');
+    Route::get('auth/user', 'AuthenticateController@user')->name('me');
     Route::post('auth/logout', 'AuthenticateController@logout')->name('logout');
     Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthenticateController@refresh')->name('refresh_token');
 

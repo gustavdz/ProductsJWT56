@@ -93,7 +93,7 @@ class AuthenticateController extends Controller
         $user = User::find(Auth::user()->id);
         return response([
             'status' => 'success',
-            'data' => $user
+            'data' => $user,
         ]);
     }
 
