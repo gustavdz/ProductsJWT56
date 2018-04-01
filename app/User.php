@@ -65,4 +65,8 @@ class User extends Authenticatable
     public function cabfacturas(){
         return $this->hasMany(cabfacturas::class);
     }
+
+    public function empresas(){
+        return $this->hasOne(empresas::class);
+    }
 }

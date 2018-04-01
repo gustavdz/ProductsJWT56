@@ -32,6 +32,12 @@ Route::middleware(['cors','jwt.auth'])->group(function(){
     Route::post('clients/{id}','ClientsController@edit')->name('editClient');
     Route::get('clients/delete/{id}','ClientsController@delete')->name('deleteClient');
 
+    Route::get('empresas','EmpresaController@getAll')->name('getAllEmpresas');
+    Route::get('empresas/{id}','EmpresaController@get')->name('getEmpresa');
+    Route::post('empresas','EmpresaController@add')->name('addEmpresa');
+    Route::post('empresas/{id}','EmpresaController@edit')->name('editEmpresa');
+    Route::get('empresas/delete/{id}','EmpresaController@delete')->name('deleteEmpresa');
+
     Route::get('ptoventas','PtoVentasController@getAll')->name('getAllptoVentas');
     Route::get('ptoventa/{id}','PtoVentasController@get')->name('getptoVenta');
     Route::post('ptoventa','PtoVentasController@add')->name('addptoVenta');
