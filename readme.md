@@ -54,10 +54,14 @@ Thank you for considering contributing to the Laravel framework! The contributio
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-##External Plugin
-http://www.laravelinterviewquestions.com/2017/12/cross-origin-request-blocked-error-laravel.html#sthash.kzFyS0ZT.lZoXlZde.dpbs
-install barryvdh/laravel-cors package. By running below command. It will take few minutes.
-composer require barryvdh/laravel-cors
+##External Dependencies
+Install Laravel Cors to resolve CORS problem with this command 
+"composer require barryvdh/laravel-cors" Doc at (http://www.laravelinterviewquestions.com/2017/12/cross-origin-request-blocked-error-laravel.html#sthash.kzFyS0ZT.IJiK7A5h.dpbs)
+
+Install JWT Authentication to use JSON Web Token to authenticate this RESTAPI with this command 
+"composer require tymon/jwt-auth" Doc at (https://arjunphp.com/laravel-5-6-rest-api-jwt-authentication/)
+
+
 
 ## License
 
