@@ -17,7 +17,7 @@ class EmpresaController extends Controller
     }
     public function add(Request $request){
         $user = User::find(Auth::user()->id);
-        $empresa_request = $request->only('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa');
+        $empresa_request = $request->only('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','telefono');
         $empresa_request['user_id']=$user->id;
         $empresa = Empresas::create($empresa_request);
         return $empresa;

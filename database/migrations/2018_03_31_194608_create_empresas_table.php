@@ -20,6 +20,7 @@ class CreateEmpresasTable extends Migration
             $table->string('direccion_matriz');
             $table->string('direccion_sucursal');
             $table->string('ruc_empresa');
+            $table->string('telefono');
 
             //FK
             $table->integer('user_id')->unsigned();

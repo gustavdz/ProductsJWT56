@@ -91,6 +91,7 @@ class AuthenticateController extends Controller
     public function user(Request $request)
     {
         $user = User::find(Auth::user()->id);
+        $user['empresa']= $user->empresas()->first();
         return response([
             'status' => 'success',
             'data' => $user,

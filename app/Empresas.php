@@ -8,7 +8,7 @@ class Empresas extends Model
 {
     //
     Protected $table = 'empresas';
-    Protected $fillable = array('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','user_id');
+    Protected $fillable = array('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','user_id','telefono');
     protected $hidden = [];
 
     public function user(){
