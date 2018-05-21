@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
     {
         $users = array(
             ['name'=>'Gustavo', 'email'=> 'gustavdz@gmail.com', 'password'=>bcrypt('Gustavo123'), 'admin'=>true],
-            ['name'=>'Nayibe', 'email'=> 'princesita_superhappy_foryou@hotmail.com', 'password'=>bcrypt('123'), 'admin'=>false]
+            ['name'=>'Nayibe', 'email'=> 'princesita_superhappy_4you@hotmail.com', 'password'=>bcrypt('123'), 'admin'=>false]
         );
         foreach($users as $user){
             User::create($user);
