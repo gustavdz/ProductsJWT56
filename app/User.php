@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','admin','api_token',
+        'name', 'email', 'password','admin','api_token','profilepicture_filename'
     ];
 
     /**
@@ -68,5 +68,14 @@ class User extends Authenticatable
 
     public function empresas(){
         return $this->hasOne(empresas::class);
+    }
+
+    public function getProfilepictureFilenameAttribute()
+    {
+        if (! $this->attributes['profilepicture_filename']) {
+            return '/img/default-avatar.png';
+        }
+
+        return $this->attributes['profilepicture_filename'];
     }
 }

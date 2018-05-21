@@ -1,69 +1,124 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{asset('img/favicon.png')}}" type="image/ico" />
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card card-default">
-                <div class="card-header">Login</div>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+    <!-- Bootstrap -->
+    <link href="{{asset('css/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{asset('css/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{{asset('css/nprogress/nprogress.css')}}" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="{{asset('css/animate.css/animate.min.css')}}" rel="stylesheet">
 
-                        <div class="form-group row">
-                            <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
+    <!-- Custom Theme Style -->
+    <link href="{{asset('css/custom.min.css')}}" rel="stylesheet">
+</head>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+<body class="login">
+<div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
 
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+    <div class="login_wrapper">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <form method="POST" action="{{ route('login') }}">
+                    {{ csrf_field() }}
+                    <h1>Login Form</h1>
+                    <div class="{{ $errors->has('email') ? ' has-error' : '' }}">
+
+                            <input id="email" type="email" placeholder="Email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+
+                            @if ($errors->has('email'))
+                                <span class="help-block">
+                                                            <strong>{{ $errors->first('email') }}</strong>
+                                                        </span>
+                            @endif
+
+                    </div>
+
+                    <div class="{{ $errors->has('password') ? ' has-error' : '' }}">
+
+                            <input id="password" type="password" placeholder="Password" class="form-control" name="password" required>
+
+                            @if ($errors->has('password'))
+                                <span class="help-block">
+                                                            <strong>{{ $errors->first('password') }}</strong>
+                                                        </span>
+                            @endif
+
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-default submit" >Log in</button>
+                        <a class="reset_pass" href="#">Lost your password?</a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="separator">
+                        <p class="change_link">New to site?
+                            <a href="#signup" class="to_register"> Create Account </a>
+                        </p>
+
+                        <div class="clearfix"></div>
+                        <br />
+
+                        <div>
+                            <img src="{{asset('img/logoEcuabill.png')}}" alt="..." >
+                            <p>©2016 All Rights Reserved to EcuaBill. Privacy and Terms</p>
                         </div>
+                    </div>
+                </form>
+            </section>
+        </div>
 
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
+        <div id="register" class="animate form registration_form">
+            <section class="login_content">
+                <form>
+                    {{ csrf_field() }}
+                    <h1>Create Account</h1>
+                    <div>
+                        <input type="text" class="form-control" placeholder="Username" required="" />
+                    </div>
+                    <div>
+                        <input type="email" class="form-control" placeholder="Email" required="" />
+                    </div>
+                    <div>
+                        <input type="password" class="form-control" placeholder="Password" required="" />
+                    </div>
+                    <div>
+                        <a class="btn btn-default submit" href="index.html">Submit</a>
+                    </div>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                    <div class="clearfix"></div>
 
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+                    <div class="separator">
+                        <p class="change_link">Already a member ?
+                            <a href="#signin" class="to_register"> Log in </a>
+                        </p>
+
+                        <div class="clearfix"></div>
+                        <br />
+
+                        <div>
+                            <img src="{{asset('img/logoEcuabill.png')}}" alt="..." >
+                            <p>©2018 All Rights Reserved to EcuaBill. Privacy and Terms</p>
                         </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    Forgot Your Password?
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
+                </form>
+            </section>
         </div>
     </div>
 </div>
-@endsection
+</body>
+</html>
