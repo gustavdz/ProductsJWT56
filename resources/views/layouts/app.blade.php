@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{asset('img/favicon.png')}}" type="image/ico" />
 
-    <title>{{ config('app.name', 'EcuaBill') }}</title>
+    <title>{{ config('app.name', 'EcuaBill') }} | @yield('topnavbar')</title>
 
     <!-- Bootstrap -->
     <link href="{{asset('css/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">

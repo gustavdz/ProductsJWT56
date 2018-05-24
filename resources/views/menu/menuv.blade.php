@@ -15,7 +15,7 @@
                 </div>
                 <div class="profile_info">
                     <span>Welcome,</span>
-                    <h2>{{ Auth::user()->name }} {{ Auth::user()->lastname }}</h2>
+                    <h2>{{ Auth::user()->name }}</h2>
                 </div>
             </div>
     @endguest
@@ -57,7 +57,7 @@
                         </li>
                         <li><a><i class="fa fa-gear"></i> Configuracion <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
-                                <li class="{{ active(url('/cliente'))? 'current-page' : '' }}"><a href="{{ url('/cliente') }}">Clientes</a></li>
+                                <li class="{{ active(url('/clients'))? 'current-page' : '' }}"><a href="{{ url('/clients') }}">Clientes</a></li>
                                 <li class="{{ active(url('/departamentos'))? 'current-page' : '' }}"><a href="{{ url('/departamentos') }}">Departamentos</a></li>
                                 <li class="{{ active(url('/rubros'))? 'current-page' : '' }}"><a href="{{ url('/rubros') }}">Rubros</a></li>
                                 <li class="{{ active(url('/usuarios'))? 'current-page' : '' }}"><a href="{{ url('/usuarios') }}">Usuarios</a></li>

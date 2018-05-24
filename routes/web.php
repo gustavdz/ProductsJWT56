@@ -22,4 +22,10 @@ Auth::routes();
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::get('clients','ClientsController@index')->name('getAllClients');
+    Route::get('clients/{id}','ClientsController@get')->name('getClient');
+    Route::post('clients','ClientsController@add')->name('addClient');
+    Route::post('clients/{id}','ClientsController@edit')->name('editClient');
+    Route::get('clients/delete/{id}','ClientsController@delete')->name('deleteClient');
 });

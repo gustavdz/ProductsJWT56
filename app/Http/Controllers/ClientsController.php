@@ -37,4 +37,10 @@ class ClientsController extends Controller
         $client->delete();
         return $client;
     }
+
+    public function index(){
+        $user = User::find(Auth::user()->id);
+        $clients = Clients::where('user_id', '=',$user->id)->paginate(10);
+        return view('clients.show')->with(compact('clients'));
+    }
 }

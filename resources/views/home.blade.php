@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('topnavbar','Proformas')
+@section('topnavbar','Inicio')
 @section('body-class','nav-md  footer_fixed')
 
 @section('content')
