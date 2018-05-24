@@ -1,7 +1,33 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{asset('img/favicon.png')}}" type="image/ico" />
 
-@section('content')
+    <title>{{ config('app.name', 'EcuaBill') }}</title>
+
+    <!-- Bootstrap -->
+    <link href="{{asset('css/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{asset('css/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{{asset('css/nprogress/nprogress.css')}}" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="{{asset('css/animate.css/animate.min.css')}}" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{{asset('css/custom.min.css')}}" rel="stylesheet">
+</head>
+
+<body class="login">
 <div class="container">
+    <div class="row">
+        &nbsp;
+    </div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
@@ -67,4 +93,5 @@
         </div>
     </div>
 </div>
-@endsection
+</body>
+</html>

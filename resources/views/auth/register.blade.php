@@ -1,114 +1,102 @@
-@extends('layouts.app')
-@section('topnavbar','Proformas')
-@section('body-class','nav-md  footer_fixed ')
-@section('content')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{asset('img/favicon.png')}}" type="image/ico" />
 
-    <div class="">
+    <title>{{ config('app.name', 'EcuaBill') }}</title>
+
+    <!-- Bootstrap -->
+    <link href="{{asset('css/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{asset('css/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{{asset('css/nprogress/nprogress.css')}}" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="{{asset('css/animate.css/animate.min.css')}}" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{{asset('css/custom.min.css')}}" rel="stylesheet">
+</head>
+
+<body class="login">
+<div>
 
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Agregar Nuevo Usuario</h2>
+    <div class="login_wrapper">
 
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
+        <div class="animate form">
+            <section class="login_content">
+                <form method="POST" action="{{ route('register') }}">
+                    {{ csrf_field() }}
+                    <h1>Create Account</h1>
+                    <div class="{{ $errors->has('name') ? ' has-error' : '' }}">
+                        <input id="name" name="name" type="text" value="{{ old('name') }}" class="form-control" placeholder="Name" required="" />
+                        @if ($errors->has('name'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('name') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    <div class="{{ $errors->has('username') ? ' has-error' : '' }}">
+                        <input id="username" name="username" type="text" value="{{ old('username') }}" class="form-control" placeholder="Username" required="" />
+                        @if ($errors->has('username'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('username') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    <div class="{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <input id="email" name="email" type="email" value="{{ old('email') }}" class="form-control" placeholder="Email" required="" />
+                        @if ($errors->has('email'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('email') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    <div class="{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <input id="password" name="password" type="password" class="form-control" placeholder="Password" required="" />
+                        @if ($errors->has('password'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('password') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    <div class="{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                        <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Repeat Password" required="" />
+                        @if ($errors->has('password_confirmation'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('password_confirmation') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-default submit" >Create account</button>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="separator">
+                        <p class="change_link">Already a member ?
+                            <a href="{{ route('login') }}" class="to_register"> Log in </a>
+                        </p>
+
                         <div class="clearfix"></div>
+                        <br />
+
+                        <div>
+                            <img src="{{asset('img/logoEcuabill.png')}}" alt="..." >
+                            <p>©2018 All Rights Reserved to EcuaBill. Privacy and Terms</p>
+                        </div>
                     </div>
-                    <div class="x_content">
-
-                        <p>Formulario de registro de informacion de cliente - <?php echo date("d-M-Y");?></p>
-
-                        <span class="section">Información de Usuario</span>
-
-                        <form class="form-horizontal" method="POST" role="form" action="{{ route('register') }}" enctype="multipart/form-data" >
-                                    {{ csrf_field() }}
-
-
-                                    <div class="item form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name <span class="required">*</span>
-                                        </label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="2" name="name" placeholder="Nombre Completo" value="{{ old('name') }}" required="required" type="text">
-                                            @if ($errors->has('name'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('name') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="item form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email Address<span class="required">*</span>
-                                        </label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input type="email" id="email" name="email" required="required" value="{{ old('email') }}" class="form-control col-md-7 col-xs-12">
-                                            @if ($errors->has('email'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('email') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="item form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                        <label for="password" class="control-label col-md-3">Password</label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input id="password" type="password"  name="password" class="form-control col-md-7 col-xs-12" required="required">
-                                            @if ($errors->has('password'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('password') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="item form-group">
-                                        <label for="password-confirm" class="control-label col-md-3 col-sm-3 col-xs-12">Repeat Password</label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" class="form-control col-md-7 col-xs-12" required="required">
-                                        </div>
-                                    </div>
-                                    <div class="item form-group">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="imagen">Foto </span>
-                                        </label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input id="userimage" class="form-control col-md-7 col-xs-12"  name="userimage" type="file">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="ln_solid"></div>
-                                    <div class="form-group">
-                                        <div class="col-md-6 col-md-offset-3">
-                                            <button type="submit" class="btn btn-primary">
-                                                Register
-                                            </button>
-                                            <a href="{{ url('/') }}" style="margin-right: 10px" type="button" class="btn btn-default">
-                                                Cancelar
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                </form>
-
-
-                    </div>
-                </div>
-            </div>
+                </form>
+            </section>
         </div>
     </div>
-
-@endsection
+</div>
+</body>
+</html>

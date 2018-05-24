@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{asset('img/favicon.png')}}" type="image/ico" />
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'EcuaBill') }}</title>
 
     <!-- Bootstrap -->
     <link href="{{asset('css/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -25,8 +25,7 @@
 
 <body class="login">
 <div>
-    <a class="hiddenanchor" id="signup"></a>
-    <a class="hiddenanchor" id="signin"></a>
+
 
     <div class="login_wrapper">
         <div class="animate form login_form">
@@ -60,14 +59,14 @@
 
                     <div>
                         <button type="submit" class="btn btn-default submit" >Log in</button>
-                        <a class="reset_pass" href="#">Lost your password?</a>
+                        <a class="reset_pass" href="{{ route('password.request') }}">Lost your password?</a>
                     </div>
 
                     <div class="clearfix"></div>
 
                     <div class="separator">
                         <p class="change_link">New to site?
-                            <a href="#signup" class="to_register"> Create Account </a>
+                            <a href="{{ route('register') }}" class="to_register"> Create Account </a>
                         </p>
 
                         <div class="clearfix"></div>
@@ -76,43 +75,6 @@
                         <div>
                             <img src="{{asset('img/logoEcuabill.png')}}" alt="..." >
                             <p>©2016 All Rights Reserved to EcuaBill. Privacy and Terms</p>
-                        </div>
-                    </div>
-                </form>
-            </section>
-        </div>
-
-        <div id="register" class="animate form registration_form">
-            <section class="login_content">
-                <form>
-                    {{ csrf_field() }}
-                    <h1>Create Account</h1>
-                    <div>
-                        <input type="text" class="form-control" placeholder="Username" required="" />
-                    </div>
-                    <div>
-                        <input type="email" class="form-control" placeholder="Email" required="" />
-                    </div>
-                    <div>
-                        <input type="password" class="form-control" placeholder="Password" required="" />
-                    </div>
-                    <div>
-                        <a class="btn btn-default submit" href="index.html">Submit</a>
-                    </div>
-
-                    <div class="clearfix"></div>
-
-                    <div class="separator">
-                        <p class="change_link">Already a member ?
-                            <a href="#signin" class="to_register"> Log in </a>
-                        </p>
-
-                        <div class="clearfix"></div>
-                        <br />
-
-                        <div>
-                            <img src="{{asset('img/logoEcuabill.png')}}" alt="..." >
-                            <p>©2018 All Rights Reserved to EcuaBill. Privacy and Terms</p>
                         </div>
                     </div>
                 </form>

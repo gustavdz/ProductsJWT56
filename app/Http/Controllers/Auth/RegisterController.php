@@ -2,6 +2,9 @@
 
 namespace Products_JWT\Http\Controllers\Auth;
 
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Products_JWT\User;
 use Products_JWT\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -47,10 +50,17 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+
         return Validator::make($data, [
             'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+        ],[
+            'name.required'=> 'Es necesario ingresar un nombre para el usuario.',
+            'username.required'=> 'Es necesario ingresar un username.',
+            'email.required'=> 'Es necesario ingresar un email para el usuario.',
+            'password.min'=>'La contraseña debe tener mínimo 6 caracteres.',
         ]);
     }
 
@@ -64,8 +74,10 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
     }
+
 }
