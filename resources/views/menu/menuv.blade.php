@@ -38,6 +38,7 @@
                         <li><a><i class="fa fa-calculator"></i> Administracion <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
                                 <li class="{{ active(url('/clients'))? 'current-page' : '' }}"><a href="{{ url('/clients') }}">Clientes</a></li>
+                                <li class="{{ active(url('/products'))? 'current-page' : '' }}"><a href="{{ url('/products') }}">Productos</a></li>
                                 <li ><a>Proyectos<span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li  class="sub_menu {{ active(url('/proyectos'))? 'current-page' : '' }}"><a href="{{ url('/proyectos') }}">Listado de Proyectos</a></li>

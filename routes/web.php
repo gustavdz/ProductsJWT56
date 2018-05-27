@@ -27,8 +27,15 @@ Route::middleware(['auth'])->group(function(){
     Route::get('clients/create','ClientsController@createview')->name('getAllClientsweb');
     Route::post('clients/store','ClientsController@store')->name('addClientweb');
     Route::get('clients/edit/{id}','ClientsController@getview')->name('editClientweb');
-    Route::post('clients/edit/{id}','ClientsController@update')->name('editaClientweb');
-    Route::post('clients/edit_picture/{id}','ClientsController@update_picture')->name('editaClientweb');
+    Route::post('clients/edit/{id}','ClientsController@update')->name('updateClientweb');
+    Route::post('clients/edit_picture/{id}','ClientsController@update_picture')->name('editPicClientweb');
     Route::get('clients/delete/{id}','ClientsController@destroy')->name('deleteClientweb');
-    //Route::post('clients','ClientsController@indexview')->name('searchClientweb');
+
+    Route::get('products','ProductsController@indexview')->name('getAllProductsweb');
+    Route::get('products/create','ProductsController@createview')->name('getAllProductsweb');
+    Route::post('products/store','ProductsController@store')->name('addProductweb');
+    Route::get('products/edit/{id}','ProductsController@getview')->name('editProductweb');
+    Route::post('products/edit/{id}','ProductsController@update')->name('updateProductweb');
+    Route::post('products/edit_picture/{id}','ProductsController@update_picture')->name('editPicProductweb');
+    Route::get('products/delete/{id}','ProductsController@destroy')->name('deleteProductweb');
 });

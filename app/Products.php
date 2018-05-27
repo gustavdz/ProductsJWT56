@@ -8,7 +8,7 @@ class Products extends Model
 {
     //
     Protected $table = 'products';
-    Protected $fillable = array('name','detail','price','user_id');
+    Protected $fillable = array('name','detail','price','picture_filename','user_id');
     protected $hidden = [];
 
     public function user(){
@@ -17,5 +17,14 @@ class Products extends Model
 
     public function cabfacturas(){
         return $this->hasMany(cabfacturas::class);
+    }
+
+    public function getPictureFilenameAttribute()
+    {
+        if (! $this->attributes['picture_filename']) {
+            return '/img/default-avatar.png';
+        }
+
+        return '/images/products/'.$this->attributes['picture_filename'];
     }
 }
