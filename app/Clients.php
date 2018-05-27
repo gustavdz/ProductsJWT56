@@ -25,6 +25,6 @@ class Clients extends Model
             return '/img/default-avatar.png';
         }
 
-        return $this->attributes['profilepicture_filename'];
+        return '/images/clients/'.$this->attributes['profilepicture_filename'];
     }
 }

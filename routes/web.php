@@ -23,9 +23,12 @@ Auth::routes();
 Route::middleware(['auth'])->group(function(){
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::get('clients','ClientsController@index')->name('getAllClients');
-    Route::get('clients/{id}','ClientsController@get')->name('getClient');
-    Route::post('clients','ClientsController@add')->name('addClient');
-    Route::post('clients/{id}','ClientsController@edit')->name('editClient');
-    Route::get('clients/delete/{id}','ClientsController@delete')->name('deleteClient');
+    Route::get('clients','ClientsController@indexview')->name('getAllClientsweb');
+    Route::get('clients/create','ClientsController@createview')->name('getAllClientsweb');
+    Route::post('clients/store','ClientsController@store')->name('addClientweb');
+    Route::get('clients/edit/{id}','ClientsController@getview')->name('editClientweb');
+    Route::post('clients/edit/{id}','ClientsController@update')->name('editaClientweb');
+    Route::post('clients/edit_picture/{id}','ClientsController@update_picture')->name('editaClientweb');
+    Route::get('clients/delete/{id}','ClientsController@destroy')->name('deleteClientweb');
+    //Route::post('clients','ClientsController@indexview')->name('searchClientweb');
 });

@@ -37,27 +37,18 @@
                     @else
                         <li><a><i class="fa fa-calculator"></i> Administracion <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
-                                <li >
-                                    <a>
-                                        Proyectos
-                                        <span class="fa fa-chevron-down"></span>
-                                    </a>
+                                <li class="{{ active(url('/clients'))? 'current-page' : '' }}"><a href="{{ url('/clients') }}">Clientes</a></li>
+                                <li ><a>Proyectos<span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li  class="sub_menu {{ active(url('/proyectos'))? 'current-page' : '' }}"><a href="{{ url('/proyectos') }}">Listado de Proyectos</a>
-                                        </li>
-                                        <li class="sub_menu {{ active(url('/proyectos/create'))? 'current-page' : '' }}"><a href="{{ url('/proyectos/create') }}">Proyecto Nuevo</a>
-                                        </li>
-
+                                        <li  class="sub_menu {{ active(url('/proyectos'))? 'current-page' : '' }}"><a href="{{ url('/proyectos') }}">Listado de Proyectos</a></li>
+                                        <li class="sub_menu {{ active(url('/proyectos/create'))? 'current-page' : '' }}"><a href="{{ url('/proyectos/create') }}">Proyecto Nuevo</a></li>
                                     </ul>
                                 </li>
-
-
-
                             </ul>
                         </li>
                         <li><a><i class="fa fa-gear"></i> Configuracion <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
-                                <li class="{{ active(url('/clients'))? 'current-page' : '' }}"><a href="{{ url('/clients') }}">Clientes</a></li>
+
                                 <li class="{{ active(url('/departamentos'))? 'current-page' : '' }}"><a href="{{ url('/departamentos') }}">Departamentos</a></li>
                                 <li class="{{ active(url('/rubros'))? 'current-page' : '' }}"><a href="{{ url('/rubros') }}">Rubros</a></li>
                                 <li class="{{ active(url('/usuarios'))? 'current-page' : '' }}"><a href="{{ url('/usuarios') }}">Usuarios</a></li>
@@ -85,9 +76,12 @@
             <a data-toggle="tooltip" data-placement="top" title="Lock">
                 <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+            @guest
+            @else
+            <a data-toggle="tooltip" data-placement="top" title="Logout" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             </a>
+            @endguest
         </div>
         <!-- /menu footer buttons -->
     </div>

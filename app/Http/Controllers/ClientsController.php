@@ -38,9 +38,159 @@ class ClientsController extends Controller
         return $client;
     }
 
-    public function index(){
+    public function indexview(Request $request){
         $user = User::find(Auth::user()->id);
-        $clients = Clients::where('user_id', '=',$user->id)->paginate(10);
+
+        if($request->search){
+            $search=$request->search;
+        }else{
+            $search="";
+        }
+
+        $clients = Clients::where('user_id', '=',$user->id)
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('last_name', 'LIKE', '%'.$search.'%');
+            })
+            ->paginate(10);
         return view('clients.show')->with(compact('clients'));
     }
+
+    public function createview(){
+        return view('clients.create');
+    }
+
+    public function store(Request $request)
+    {
+
+        $messages =[
+            'name.required' => 'Es necesario ingresar un nombre para el cliente.',
+            'last_name.required' => 'Es necesario ingresar un apellido para el cliente.',
+            'email.required' => 'Es necesario ingresar un correo para el cliente.',
+            'dni.required' => 'Es necesario ingresar un número de identificación para el cliente.',
+            'phone.required' => 'Es necesario ingresar un teléfono para el cliente.',
+            'address.required' => 'Es necesario ingresar una dirección para el cliente.',
+
+        ];
+        $rules = [
+            'name' => 'required|min:2',
+            'last_name' => 'required|min:2',
+            'email' => 'required|max:200|unique:clients',
+            'dni' => 'required|unique:clients',
+            'address' => 'required',
+            'phone' => 'required'
+
+        ];
+        $this->validate($request,$rules,$messages);
+
+        if ($request->hasFile('profilepicture_filename')) {
+            $file = $request->file('profilepicture_filename');
+            $path = public_path('/images/clients');
+            $fileName = uniqid() .'-'. $file->getClientOriginalName();
+            $move = $file->move($path, $fileName);
+        }else{
+            $fileName=null;
+        }
+
+        $user = User::find(Auth::user()->id);
+        $client_request = $request->only('name','last_name','email','dni','phone','address');
+        $client_request['user_id']=$user->id;
+        $client_request['profilepicture_filename']=$fileName;
+        $client = Clients::create($client_request);
+
+        /*$clientes = new Clients();
+        $clientes->name = $request->input('name');
+        $clientes->last_name = $request->input('last_name');
+        $clientes->email = $request->input('email');
+        $clientes->dni = $request->input('dni');
+        $clientes->phone = $request->input('phone');
+        $clientes->address = $request->input('address');
+        $clientes->user_id = $request->input('descripcion');
+        $clientes->profilepicture_filename = $fileName;
+        $clientes->save();//insert*/
+
+        return redirect('/clients');
+
+    }
+    public function getview($id)
+    {
+        $clients = Clients::find($id);
+        return view('clients.edit')->with(compact('clients'));
+    }
+    public function update(Request $request, $id)
+    {
+        $messages =[
+            'name.required' => 'Es necesario ingresar un nombre para el cliente.',
+            'last_name.required' => 'Es necesario ingresar un apellido para el cliente.',
+            'email.required' => 'Es necesario ingresar un correo para el cliente.',
+            'dni.required' => 'Es necesario ingresar un número de identificación para el cliente.',
+            'phone.required' => 'Es necesario ingresar un teléfono para el cliente.',
+            'address.required' => 'Es necesario ingresar una dirección para el cliente.',
+
+        ];
+        $rules = [
+            'name' => 'required|min:2',
+            'last_name' => 'required|min:2',
+            'email' => 'required|max:200',
+            'dni' => 'required',
+            'address' => 'required',
+            'phone' => 'required'
+
+        ];
+        $this->validate($request,$rules,$messages);
+
+        if ($request->hasFile('profilepicture_filename')) {
+            $file = $request->file('profilepicture_filename');
+            $path = public_path('/images/clients');
+            $fileName = uniqid() .'-'. $file->getClientOriginalName();
+            $move = $file->move($path, $fileName);
+        }
+
+        $cliente = Clients::find($id);
+        $cliente->name = $request->input('name');
+        $cliente->last_name = $request->input('last_name');
+        $cliente->email = $request->input('email');
+        $cliente->dni = $request->input('dni');
+        $cliente->phone = $request->input('phone');
+        $cliente->address = $request->input('address');
+        $cliente->save();
+
+        return redirect('/clients');
+
+    }
+    public function update_picture(Request $request, $id)
+    {
+        $messages =[
+            'profilepicture_filename.mimes' => 'Es necesario subir un archivo de tipo imagen',
+            'profilepicture_filename.required' => 'Es necesario subir un archivo de tipo imagen',
+        ];
+        $rules = [
+            'profilepicture_filename' => 'required|mimes:jpeg,jpg,png',
+
+
+        ];
+        $this->validate($request,$rules,$messages);
+
+        if ($request->hasFile('profilepicture_filename')) {
+            $file = $request->file('profilepicture_filename');
+            $path = public_path('/images/clients');
+            $fileName = uniqid() .'-'. $file->getClientOriginalName();
+            $move = $file->move($path, $fileName);
+        }
+
+        $cliente = Clients::find($id);
+        $cliente->profilepicture_filename = $fileName;
+        $cliente->save();
+
+        return redirect('/clients');
+
+    }
+    public function destroy($id)
+    {
+        $cliente = Clients::find($id);
+        $cliente->delete();
+
+        return back();// formulario de registro
+    }
+
 }

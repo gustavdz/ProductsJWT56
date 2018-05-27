@@ -24,14 +24,19 @@ class AuthenticateController extends Controller
     public function authenticate(Request $request){
         $credentials = $request->only('email','password');
         try{
+            //en base a las credenciales genero un token
             if(!$token = JWTAuth::attempt($credentials)){
                 return response()->json(['error_message'=>'invalid_credential','status'=>'error'],401);
             }
 
+            //en base al token generado consulto el usuario
             $user_auth = JWTAuth::toUser($token);
+            //obtengo el token que se uso la ultima vez, si es primera vez viene null
             $last_token=$user_auth->api_token;
+            //grabo el nuevo token en el campo api_token que se creo en la tabla users
             $user_auth->api_token=$token;
             $user_auth->save();
+            //consulto los datos del usuario que acabo de actualizar y obtengo la info del usuario con su token generado
             $user = User::find($user_auth->id);
             $response['status']='success';
             $response['user_data']=$user;
