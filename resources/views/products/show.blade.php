@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('topnavbar','Clientes')
+@section('topnavbar','Productos')
 @section('body-class','nav-md  footer_fixed')
 
 @section('content')
@@ -8,13 +8,13 @@
             <div class="title_left">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-left top_search">
                     <div class="input-group">
-                        <h3>Clientes</h3>
+                        <h3>Productos</h3>
                     </div>
                 </div>
             </div>
 
             <div class="title_right">
-                <form method="get" action="{{ url('/clients') }}">
+                <form method="get" action="{{ url('/products') }}">
                     <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                         <div class="input-group">
                             <input type="text" name="search" id="search" class="form-control" placeholder="Search for...">
@@ -33,8 +33,8 @@
             <div class="col-md-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Agregar Cliente</h2>
-                        <a style="margin-left: 1%" href="{{ url('/clients/create') }}" type="button"  class=" btn btn-primary btn-sm btn-fill ">
+                        <h2>Agregar Producto</h2>
+                        <a style="margin-left: 1%" href="{{ url('/products/create') }}" type="button"  class=" btn btn-primary btn-sm btn-fill ">
                             <i class="fa fa-plus"></i> Nuevo
                         </a>
                         <div class="clearfix"></div>
@@ -58,22 +58,20 @@
 
                             <div class="clearfix "></div>
 
-                            @foreach($clients as $index => $client)
+                            @foreach($products as $index => $product)
                                 <div class="col-md-4 col-sm-4 col-xs-12 profile_details">
                                     <div class="well profile_view">
                                         <div class="col-sm-12">
                                             <h4 class="brief"><i>Cliente #{{$index+1}}</i></h4>
                                             <div class="left col-xs-7">
-                                                <h2>{{ $client->name }} <br>{{ $client->last_name }}</h2>
+                                                <h2>{{ $product->name }}</h2>
                                                 <ul class="list-unstyled">
-                                                    <li><i class="fa fa-envelope"></i> Email: <br>{{ $client->email }}</li>
-                                                    <li><i class="fa fa-building"></i> Address: <br>{{ $client->address }}</li>
-                                                    <li><i class="fa fa-phone"></i> Phone #: <br>{{ $client->phone }}</li>
-                                                    <li><i class="fas fa-address-card"></i> DNI #: <br>{{ $client->dni }}</li>
+                                                    <li><i class="fa fa-envelope"></i> Email: <br>{{ $product->detail }}</li>
+                                                    <li><i class="fa fa-building"></i> Address: <br>{{ $product->price }}</li>
                                                 </ul>
                                             </div>
                                             <div class="right col-xs-5 text-center">
-                                                <img src="{{ $client->profilepicture_filename}}" alt="..." class="img-circle img-responsive">
+                                                <img src="{{ $product->picture_filename}}" alt="..." class="img-circle img-responsive">
 
                                             </div>
                                         </div>
@@ -89,9 +87,9 @@
                                                 </p>
                                             </div>
                                             <div class="col-xs-12 col-sm-6 emphasis">
-                                                <a href="{{url('/clients/edit/'.$client->id)}}" class="btn btn-success btn-xs"> <i class="fa fa-user">
+                                                <a href="{{url('/products/edit/'.$product->id)}}" class="btn btn-success btn-xs"> <i class="fa fa-user">
                                                     </i> Editar</a>
-                                                <a href="{{url('/clients/delete/'.$client->id)}}" class="btn btn-danger btn-xs">
+                                                <a href="{{url('/products/delete/'.$product->id)}}" class="btn btn-danger btn-xs">
                                                     <i class="fa fa-trash"> </i> Eliminar
                                                 </a>
                                             </div>
@@ -101,7 +99,7 @@
                             @endforeach
 
                         </div>
-                        <div class="row">{{$clients->links()}}</div>
+                        <div class="row">{{$products->links()}}</div>
                     </div>
                 </div>
             </div>

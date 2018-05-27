@@ -22,7 +22,7 @@ class Products extends Model
     public function getPictureFilenameAttribute()
     {
         if (! $this->attributes['picture_filename']) {
-            return '/img/default-avatar.png';
+            return '/img/default-picture.jpg';
         }
 
         return '/images/products/'.$this->attributes['picture_filename'];

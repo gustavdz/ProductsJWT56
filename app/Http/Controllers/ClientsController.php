@@ -8,9 +8,9 @@ use JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Products_JWT\User;
 
-
 class ClientsController extends Controller
 {
+    //api
     public function getAll(){
         $user = User::find(Auth::user()->id);
         $clients = Clients::where('user_id', $user->id)->get();//->paginate();
@@ -37,6 +37,8 @@ class ClientsController extends Controller
         $client->delete();
         return $client;
     }
+
+    //web
 
     public function indexview(Request $request){
         $user = User::find(Auth::user()->id);
@@ -70,6 +72,7 @@ class ClientsController extends Controller
             'dni.required' => 'Es necesario ingresar un número de identificación para el cliente.',
             'phone.required' => 'Es necesario ingresar un teléfono para el cliente.',
             'address.required' => 'Es necesario ingresar una dirección para el cliente.',
+            'profilepicture_filename.mimes' => 'Es necesario subir un archivo de tipo imagen',
 
         ];
         $rules = [
@@ -78,7 +81,8 @@ class ClientsController extends Controller
             'email' => 'required|max:200|unique:clients',
             'dni' => 'required|unique:clients',
             'address' => 'required',
-            'phone' => 'required'
+            'phone' => 'required',
+            'profilepicture_filename' => 'mimes:jpeg,jpg,png',
 
         ];
         $this->validate($request,$rules,$messages);
@@ -97,17 +101,6 @@ class ClientsController extends Controller
         $client_request['user_id']=$user->id;
         $client_request['profilepicture_filename']=$fileName;
         $client = Clients::create($client_request);
-
-        /*$clientes = new Clients();
-        $clientes->name = $request->input('name');
-        $clientes->last_name = $request->input('last_name');
-        $clientes->email = $request->input('email');
-        $clientes->dni = $request->input('dni');
-        $clientes->phone = $request->input('phone');
-        $clientes->address = $request->input('address');
-        $clientes->user_id = $request->input('descripcion');
-        $clientes->profilepicture_filename = $fileName;
-        $clientes->save();//insert*/
 
         return redirect('/clients');
 
@@ -138,13 +131,6 @@ class ClientsController extends Controller
 
         ];
         $this->validate($request,$rules,$messages);
-
-        if ($request->hasFile('profilepicture_filename')) {
-            $file = $request->file('profilepicture_filename');
-            $path = public_path('/images/clients');
-            $fileName = uniqid() .'-'. $file->getClientOriginalName();
-            $move = $file->move($path, $fileName);
-        }
 
         $cliente = Clients::find($id);
         $cliente->name = $request->input('name');
