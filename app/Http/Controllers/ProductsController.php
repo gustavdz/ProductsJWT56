@@ -80,7 +80,7 @@ class ProductsController extends Controller
         $rules = [
             'name' => 'required|min:3',
             'detail' => 'required|max:200',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric|between:0,999999.99',
             'picture_filename' => 'mimes:jpeg,jpg,png|dimensions:ratio=2/2',
         ];
         $this->validate($request,$rules,$messages);
@@ -100,7 +100,8 @@ class ProductsController extends Controller
         $product_request['picture_filename']=$fileName;
         $product = Products::create($product_request);
 
-        return redirect('/products');
+        //return redirect('/products');
+        return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se agregó el producto correctamente','alert_type'=>'info']);
 
     }
     public function getview($id)

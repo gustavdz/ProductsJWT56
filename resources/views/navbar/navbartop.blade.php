@@ -20,7 +20,7 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-usermenu pull-right">
-                            <li><a href="#"> Profile</a></li>
+                            <li><a href="{{ route('editUserweb') }}"> Profile</a></li>
                             <li>
                                 <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();

@@ -102,7 +102,8 @@ class ClientsController extends Controller
         $client_request['profilepicture_filename']=$fileName;
         $client = Clients::create($client_request);
 
-        return redirect('/clients');
+        //return redirect('/clients');
+        return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se agregó el cliente correctamente','alert_type'=>'info']);
 
     }
     public function getview($id)
@@ -141,7 +142,7 @@ class ClientsController extends Controller
         $cliente->address = $request->input('address');
         $cliente->save();
 
-        return redirect('/clients');
+        return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se actualizaron los datos correctamente','alert_type'=>'info']);
 
     }
     public function update_picture(Request $request, $id)
@@ -149,10 +150,10 @@ class ClientsController extends Controller
         $messages =[
             'profilepicture_filename.mimes' => 'Es necesario subir un archivo de tipo imagen',
             'profilepicture_filename.required' => 'Es necesario subir un archivo de tipo imagen',
+            'profilepicture_filename.dimensions' => 'La imagen debe tener el mismo alto que ancho',
         ];
         $rules = [
-            'profilepicture_filename' => 'required|mimes:jpeg,jpg,png',
-
+            'profilepicture_filename' => 'required|mimes:jpeg,jpg,png|dimensions:ratio=2/2',
 
         ];
         $this->validate($request,$rules,$messages);
@@ -168,7 +169,7 @@ class ClientsController extends Controller
         $cliente->profilepicture_filename = $fileName;
         $cliente->save();
 
-        return redirect('/clients');
+        return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se actualizó la imagen correctamente','alert_type'=>'info']);
 
     }
     public function destroy($id)

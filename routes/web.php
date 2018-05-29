@@ -38,4 +38,15 @@ Route::middleware(['auth'])->group(function(){
     Route::post('products/edit/{id}','ProductsController@update')->name('updateProductweb');
     Route::post('products/edit_picture/{id}','ProductsController@update_picture')->name('editPicProductweb');
     Route::get('products/delete/{id}','ProductsController@destroy')->name('deleteProductweb');
+
+    Route::get('profile','UserController@getview')->name('editUserweb');
+    Route::post('profile/edit','UserController@update')->name('updateUserweb');
+    Route::post('profile/edit_picture','UserController@update_picture')->name('editPicUserweb');
+    Route::post('profile/edit_p12','UserController@update_p12')->name('updateP12web');
+    Route::post('profile/edit_password','UserController@update_password')->name('updatePasswordweb');
+
+    Route::post('empresas/edit/{id}','EmpresaController@update')->name('updateEmpresaweb');
+    Route::post('empresas/create','EmpresaController@store')->name('storeEmpresaweb');
+
+
 });

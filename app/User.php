@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password','profilepicture_filename','p12_filename','api_token','admin'
+        'name', 'username', 'email', 'password','profilepicture_filename','p12_filename','p12_password','api_token','admin'
     ];
 
     /**
@@ -76,6 +76,15 @@ class User extends Authenticatable
             return '/img/default-avatar.png';
         }
 
-        return $this->attributes['profilepicture_filename'];
+        return '/images/users/'.$this->attributes['profilepicture_filename'];
+    }
+
+    public function getP12FilenameAttribute()
+    {
+        if (! $this->attributes['p12_filename']) {
+            return 'No se ha cargado un archivo de firma digital.';
+        }
+
+        return $this->attributes['p12_filename'];
     }
 }

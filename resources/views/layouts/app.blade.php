@@ -38,12 +38,17 @@
     <link href="{{asset('css/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
 
+    <!-- PNotify -->
+    <link href="{{asset('js/pnotify/dist/pnotify.css')}}" rel="stylesheet">
+    <link href="{{asset('js/pnotify/dist/pnotify.buttons.css')}}" rel="stylesheet">
+
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @yield('style')
 </head>
-<body class="@yield('body-class')">
+<body class="@yield('body-class')" @yield('notification')>
 <div class="container body">
     <div class="main_container">
         
@@ -150,6 +155,10 @@
 <script src="{{asset('js/echarts/dist/echarts.min.js')}}"></script>
 <!-- validator -->
 <script src="{{asset('js/validator/validator.js')}}"></script>
+<!-- pnotify -->
+<script src="{{asset('js/pnotify/dist/pnotify.js')}}"></script>
+<script src="{{asset('js/pnotify/dist/pnotify.buttons.js')}}"></script>
+
 
 @yield('scripts')
 

@@ -1835,15 +1835,6 @@ if (typeof NProgress != 'undefined') {
 	  
 	  };
 	   
-	  	/* PNotify */
-			
-		function init_PNotify() {
-			
-			if( typeof (PNotify) === 'undefined'){ return; }
-			console.log('init_PNotify');
-		}; 
-	   
-	   
 	   /* CUSTOM NOTIFICATION */
 			
 		function init_CustomNotification() {
