@@ -33,7 +33,7 @@
             <section class="login_content">
                 <form method="POST" action="{{ route('register') }}">
                     {{ csrf_field() }}
-                    <h1>Create Account</h1>
+                    <h1>Registro de Usuario</h1>
                     <div class="{{ $errors->has('name') ? ' has-error' : '' }}">
                         <input id="name" name="name" type="text" value="{{ old('name') }}" class="form-control" placeholder="Name" required="" />
                         @if ($errors->has('name'))
@@ -75,14 +75,14 @@
                         @endif
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-default submit" >Create account</button>
+                        <button type="submit" class="btn btn-default submit" >Crear Cuenta</button>
                     </div>
 
                     <div class="clearfix"></div>
 
                     <div class="separator">
-                        <p class="change_link">Already a member ?
-                            <a href="{{ route('login') }}" class="to_register"> Log in </a>
+                        <p class="change_link">Ya creaste tu cuenta anteriormente?
+                            <a href="{{ route('login') }}" class="to_register"> Inicia Sesión </a>
                         </p>
 
                         <div class="clearfix"></div>

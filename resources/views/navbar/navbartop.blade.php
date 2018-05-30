@@ -20,12 +20,12 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-usermenu pull-right">
-                            <li><a href="{{ route('editUserweb') }}"> Profile</a></li>
+                            <li><a href="{{ route('editUserweb') }}"><i class="fas fa-user pull-right"></i> Perfil de Usuario</a></li>
                             <li>
                                 <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt pull-right"></i>  Log Out
+                                    <i class="fas fa-sign-out-alt pull-right"></i>  Cerrar Sesión
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

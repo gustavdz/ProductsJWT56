@@ -70,6 +70,13 @@ class User extends Authenticatable
         return $this->hasOne(empresas::class);
     }
 
+    public function comunicados(){
+        return $this->hasMany(comunicados::class);
+    }
+    public function comunicadoslecturas(){
+        return $this->hasMany(comunicadosLectura::class);
+    }
+
     public function getProfilepictureFilenameAttribute()
     {
         if (! $this->attributes['profilepicture_filename']) {

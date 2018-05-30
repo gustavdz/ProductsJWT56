@@ -32,7 +32,7 @@
             <section class="login_content">
                 <form method="POST" action="{{ route('login') }}">
                     {{ csrf_field() }}
-                    <h1>Login Form</h1>
+                    <h1>Inicio de Sesión</h1>
                     <div class="{{ $errors->has('email') ? ' has-error' : '' }}">
 
                             <input id="email" type="email" placeholder="Email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
@@ -58,15 +58,15 @@
                     </div>
 
                     <div>
-                        <button type="submit" class="btn btn-default submit" >Log in</button>
-                        <a class="reset_pass" href="{{ route('password.request') }}">Lost your password?</a>
+                        <button type="submit" class="btn btn-default submit" >Iniciar Sesión</button>
+                        <a class="reset_pass" href="{{ route('password.request') }}">Olvidaste tu contraseña?</a>
                     </div>
 
                     <div class="clearfix"></div>
 
                     <div class="separator">
-                        <p class="change_link">New to site?
-                            <a href="{{ route('register') }}" class="to_register"> Create Account </a>
+                        <p class="change_link">Nuevo en el sitio?
+                            <a href="{{ route('register') }}" class="to_register"> Crea tu cuenta </a>
                         </p>
 
                         <div class="clearfix"></div>
@@ -74,7 +74,7 @@
 
                         <div>
                             <img src="{{asset('img/logoEcuabill.png')}}" alt="..." >
-                            <p>©2016 All Rights Reserved to EcuaBill. Privacy and Terms</p>
+                            <p>©2018 All Rights Reserved to EcuaBill. Privacy and Terms</p>
                         </div>
                     </div>
                 </form>
