@@ -18,7 +18,7 @@ class CreateComunicadosLecturasTable extends Migration
             $table->integer('user_id')->unsigned();;
             $table->integer('comunicado_id')->unsigned();;
             $table->boolean('read')->default(false);
-            $table->date('read_date');
+            $table->date('read_date')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('comunicado_id')->references('id')->on('comunicados');
             $table->timestamps();
