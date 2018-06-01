@@ -67,7 +67,7 @@ class User extends Authenticatable
     }
 
     public function empresas(){
-        return $this->hasOne(empresas::class);
+        return $this->hasOne(Empresas::class);
     }
 
     public function comunicados(){
@@ -75,6 +75,10 @@ class User extends Authenticatable
     }
     public function comunicadoslecturas(){
         return $this->hasMany(comunicadosLectura::class);
+    }
+
+    public function comunicadoslecturas_comunicados($comunicado_id){
+        return Comunicados::where('id','=',$comunicado_id)->first();
     }
 
     public function getProfilepictureFilenameAttribute()

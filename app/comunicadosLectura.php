@@ -14,6 +14,7 @@ class comunicadosLectura extends Model
     public function users(){
         return $this->belongsTo(User::class);
     }
+
     public function comunicados(){
         return $this->belongsTo(Comunicados::class);
     }
