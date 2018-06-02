@@ -185,7 +185,7 @@
                                                             <div class="form-group {{ $errors->has('p12_password') ? ' has-error' : '' }}">
                                                                 <label for="p12_password" class="control-label col-md-3 col-sm-3 col-xs-12">Password del Certificado <span class="required">*</span></label>
                                                                 <div  class="col-md-6 col-sm-6 col-xs-12">
-                                                                    <input id="p12_password" data-validate-length-range="2" value="{{ decrypt($user->p12_password) }}" type="password" class="form-control col-md-7 col-xs-12" name="p12_password"  required="required">
+                                                                    <input id="p12_password" data-validate-length-range="2" type="password" class="form-control col-md-7 col-xs-12" name="p12_password"  required="required">
                                                                     @if ($errors->has('p12_password'))<span class="help-block"><strong>{{ $errors->first('p12_password') }}</strong></span>@endif
                                                                 </div>
                                                             </div>
