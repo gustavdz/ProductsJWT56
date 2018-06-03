@@ -48,8 +48,9 @@ Route::middleware(['auth'])->group(function(){
     Route::post('empresas/edit/{id}','EmpresaController@update')->name('updateEmpresaweb');
     Route::post('empresas/create','EmpresaController@store')->name('storeEmpresaweb');
 
-    Route::get('comunicados/create','ComunicadosController@createview')->name('createComunicadoweb');
-    Route::post('comunicados/store','ComunicadosController@store')->name('storeComunicadoweb');
-
+    Route::middleware(['admin'])->group(function(){
+        Route::get('comunicados/create','ComunicadosController@createview')->name('createComunicadoweb');
+        Route::post('comunicados/store','ComunicadosController@store')->name('storeComunicadoweb');
+    });
 
 });

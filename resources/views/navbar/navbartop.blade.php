@@ -40,7 +40,9 @@
                 <li role="presentation" class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-bell"></i>
+                        @if(Auth::user()->comunicadoslecturas()->count() > 0)
                         <span class="badge bg-green">{{Auth::user()->comunicadoslecturas()->count()}}</span>
+                        @endif
                     </a>
                     <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                         @foreach(Auth::user()->comunicadoslecturas()->get()->slice(0, 4) as $comunicadoslecturanoti)

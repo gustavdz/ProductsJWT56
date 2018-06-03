@@ -35,11 +35,11 @@
                     <h1>Inicio de Sesión</h1>
                     <div class="{{ $errors->has('email') ? ' has-error' : '' }}">
 
-                            <input id="email" type="email" placeholder="Email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                            <input id="username" type="text" placeholder="Username" class="form-control" name="username" value="{{ old('username') }}" required autofocus>
 
-                            @if ($errors->has('email'))
+                            @if ($errors->has('username'))
                                 <span class="help-block">
-                                                            <strong>{{ $errors->first('email') }}</strong>
+                                                            <strong>{{ $errors->first('username') }}</strong>
                                                         </span>
                             @endif
 
