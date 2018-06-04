@@ -16,6 +16,7 @@ class comunicadosLectura extends Model
     }
 
     public function comunicados(){
-        return $this->belongsTo(Comunicados::class);
+        //return $this->belongsToMany(Comunicados::class);
+        return $this->belongsToMany(Comunicados::class, 'comunicados_lecturas');
     }
 }

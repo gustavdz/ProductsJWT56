@@ -40,14 +40,14 @@
                 <li role="presentation" class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-bell"></i>
-                        @if(Auth::user()->comunicadoslecturas()->count() > 0)
-                        <span class="badge bg-green">{{Auth::user()->comunicadoslecturas()->count()}}</span>
+                        @if(Auth::user()->comunicadoslecturas()->where('read','=','0')->count() > 0)
+                        <span class="badge bg-green">{{Auth::user()->comunicadoslecturas()->where('read','=','0')->count()}}</span>
                         @endif
                     </a>
                     <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                        @foreach(Auth::user()->comunicadoslecturas()->get()->slice(0, 4) as $comunicadoslecturanoti)
+                        @foreach(Auth::user()->comunicadoslecturas()->where('read','=','0')->get()->slice(0, 4) as $comunicadoslecturanoti)
                         <li>
-                            <a>
+                            <a href="/comunicados/{{Auth::user()->comunicadoslecturas_comunicados($comunicadoslecturanoti->comunicado_id)->id}}">
                                 <span class="image"><img src="{{asset('img/logo.png')}}" alt="EcuaBill" /></span>
                                 <span>
                                     <span>{{Auth::user()->comunicadoslecturas_comunicados($comunicadoslecturanoti->comunicado_id)->title}}</span>
@@ -61,7 +61,7 @@
                         @endforeach
                         <li>
                             <div class="text-center">
-                                <a>
+                                <a href="/comunicados">
                                     <strong>Ver todos los comunicados </strong>
                                     <i class="fa fa-angle-right pull-right"></i>
                                 </a>

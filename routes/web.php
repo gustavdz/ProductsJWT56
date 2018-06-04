@@ -52,5 +52,7 @@ Route::middleware(['auth'])->group(function(){
         Route::get('comunicados/create','ComunicadosController@createview')->name('createComunicadoweb');
         Route::post('comunicados/store','ComunicadosController@store')->name('storeComunicadoweb');
     });
+    Route::get('comunicados','ComunicadosController@indexview')->name('indexComunicadoweb');
+    Route::get('comunicados/{id}','ComunicadosController@getview')->name('getComunicadoweb');
 
 });

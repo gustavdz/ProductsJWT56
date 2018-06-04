@@ -42,6 +42,8 @@
     <link href="{{asset('js/pnotify/dist/pnotify.css')}}" rel="stylesheet">
     <link href="{{asset('js/pnotify/dist/pnotify.buttons.css')}}" rel="stylesheet">
 
+    <!-- bootstrap-wysiwyg -->
+    <link href="{{asset('js/google-code-prettify/bin/prettify.min.css')}}" rel="stylesheet">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -158,6 +160,10 @@
 <!-- pnotify -->
 <script src="{{asset('js/pnotify/dist/pnotify.js')}}"></script>
 <script src="{{asset('js/pnotify/dist/pnotify.buttons.js')}}"></script>
+<!-- bootstrap-wysiwyg -->
+<script src="{{asset('js/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js')}}"></script>
+<script src="{{asset('js/jquery.hotkeys/jquery.hotkeys.js')}}"></script>
+<script src="{{asset('js/google-code-prettify/src/prettify.js')}}"></script>
 
 
 @yield('scripts')

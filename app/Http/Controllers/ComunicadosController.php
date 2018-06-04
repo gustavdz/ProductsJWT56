@@ -2,6 +2,7 @@
 
 namespace Products_JWT\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use JWTAuth;
 use Illuminate\Http\Request;
 use Products_JWT\Comunicados;
@@ -14,6 +15,7 @@ class ComunicadosController extends Controller
     public function createview(){
         return view('comunicados.create');
     }
+
     public function store(Request $request){
         $messages =[
             'title.required' => 'Es necesario ingresar un título para el comunicado.',
@@ -50,5 +52,29 @@ class ComunicadosController extends Controller
             }
         }
         return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se envió el comunicado correctamente a '.$contador.' usuarios, con '.$cont_error.' errores.','alert_type'=>'info']);
+    }
+
+    public function indexview(Request $request){
+        if($request->search){
+            $search=$request->search;
+        }else{
+            $search="";
+        }
+
+        $comunicados = Comunicados::
+            leftjoin('comunicados_lecturas', 'comunicados_lecturas.comunicado_id', '=', 'comunicados.id')
+            ->select('comunicados_lecturas.*', 'comunicados.title','comunicados.detail','comunicados.created_at as created','comunicados.updated_at as updated')
+            ->where('comunicados_lecturas.user_id',Auth::user()->id)
+            ->orderBy('comunicados_lecturas.read', 'ASC')
+            ->orderBy('comunicados_lecturas.created_at', 'DESC')
+            ->where(function ($query) use ($search) {
+                $query->where('title', 'LIKE', '%'.$search.'%')
+                    ->orWhere('detail', 'LIKE', '%'.$search.'%');
+            })->paginate(10);
+        return view('comunicados.show')->with(compact('comunicados'));
+    }
+
+    public function getview(Request $request, $id){
+
     }
 }
