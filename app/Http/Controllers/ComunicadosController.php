@@ -76,5 +76,15 @@ class ComunicadosController extends Controller
 
     public function getview(Request $request, $id){
 
+        $comunicado = comunicadosLectura::find($id);
+        $comunicado->read=1;
+        $comunicado->save();
+
+        $comunicados = Comunicados::
+        leftjoin('comunicados_lecturas', 'comunicados_lecturas.comunicado_id', '=', 'comunicados.id')
+            ->select('comunicados_lecturas.*', 'comunicados.title','comunicados.detail','comunicados.created_at as created','comunicados.updated_at as updated')
+            ->where('comunicados_lecturas.user_id',Auth::user()->id)
+            ->where('comunicados_lecturas.id',$id);
+        return view('comunicados.get')->with(compact('comunicados'));
     }
 }

@@ -47,7 +47,7 @@
                     <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                         @foreach(Auth::user()->comunicadoslecturas()->where('read','=','0')->get()->slice(0, 4) as $comunicadoslecturanoti)
                         <li>
-                            <a href="/comunicados/{{Auth::user()->comunicadoslecturas_comunicados($comunicadoslecturanoti->comunicado_id)->id}}">
+                            <a>
                                 <span class="image"><img src="{{asset('img/logo.png')}}" alt="EcuaBill" /></span>
                                 <span>
                                     <span>{{Auth::user()->comunicadoslecturas_comunicados($comunicadoslecturanoti->comunicado_id)->title}}</span>

@@ -14,7 +14,7 @@
                     <img src="{{ asset(Auth::user()->profilepicture_filename) }}" alt="..." class="img-circle profile_img">
                 </div>
                 <div class="profile_info">
-                    <span>Welcome,</span>
+                    <span>Bienvenido,</span>
                     <h2>{{ Auth::user()->name }}</h2>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
 
-                    <li class="{{ active(url('/home'))? 'current-page' : '' }}"><a href="{{ url('/') }}"><i class="fa fa-home"></i> Home </a>
+                    <li class="{{ active(url('/home'))? 'current-page' : '' }}"><a href="{{ url('/') }}"><i class="fa fa-dashboard"></i> Dashboard </a>
 
                     </li>
                     @guest
@@ -40,7 +40,7 @@
                         @if(Auth::user()->admin)
                             <li><a><i class="fa fa-calculator"></i> Administración <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{{ url('/comunicados/create') }}">Comunicados</a></li>
+                                    <li><a href="{{ url('/comunicados/create') }}">Nuevo comunicado</a></li>
                                 </ul>
                             </li>
                         @endif
@@ -56,7 +56,7 @@
 
         <!-- /menu footer buttons -->
         <div class="sidebar-footer hidden-small">
-            <a data-toggle="tooltip" data-placement="top" title="Settings">
+            <a data-toggle="tooltip" data-placement="top" title="Settings" href="{{ route('editUserweb') }}">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
             </a>
             <a data-toggle="tooltip" data-placement="top" title="FullScreen">
