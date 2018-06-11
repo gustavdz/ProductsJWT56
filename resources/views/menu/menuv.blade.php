@@ -37,6 +37,9 @@
                     @else
                         <li class="{{ active(url('/clients'))? 'current-page' : '' }}"><a href="{{ url('/clients') }}"><i class="fa fa-users"></i> Clientes </a></li>
                         <li class="{{ active(url('/products'))? 'current-page' : '' }}"><a href="{{ url('/products') }}"><i class="fa fa-briefcase"></i> Productos </a></li>
+                        <li class="{{ active(url('/comunicados'))? 'current-page' : '' }}"><a href="{{ url('/comunicados') }}"><i class="fa fa-bell"></i> Comunicados </a></li>
+                        <li class="{{ active(url('/proyectos'))? 'current-page' : '' }}"><a href="{{ url('/proyectos') }}"><i class="fa fa-tasks"></i> Proyectos </a></li>
+
                         @if(Auth::user()->admin)
                             <li><a><i class="fa fa-calculator"></i> Administración <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">

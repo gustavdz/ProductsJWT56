@@ -30,6 +30,8 @@ Route::middleware(['auth'])->group(function(){
     Route::post('clients/edit/{id}','ClientsController@update')->name('updateClientweb');
     Route::post('clients/edit_picture/{id}','ClientsController@update_picture')->name('editPicClientweb');
     Route::get('clients/delete/{id}','ClientsController@destroy')->name('deleteClientweb');
+    Route::get('/clients/modal', 'ClientsController@modal')->name('modalClientweb');
+    Route::get('/clients/verJson', 'ClientsController@verJson')->name('verJsonClientweb');
 
     Route::get('products','ProductsController@indexview')->name('getAllProductsweb');
     Route::get('products/create','ProductsController@createview')->name('getAllProductsweb');
@@ -54,5 +56,9 @@ Route::middleware(['auth'])->group(function(){
     });
     Route::get('comunicados','ComunicadosController@indexview')->name('indexComunicadoweb');
     Route::get('comunicados/{id}','ComunicadosController@getview')->name('getComunicadoweb');
+
+    Route::get('proyectos','ProyectosController@indexview')->name('indexProyectoweb');
+    Route::get('proyectos/create','ProyectosController@createview')->name('createProyectoweb');
+    Route::post('proyectos/store','ProyectosController@store')->name('addProyectoweb');
 
 });

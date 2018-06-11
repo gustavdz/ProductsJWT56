@@ -19,6 +19,10 @@ class Clients extends Model
         return $this->hasMany(cabfacturas::class);
     }
 
+    public function proyectos(){
+        return $this->hasMany(Proyectos::class);
+    }
+
     public function getProfilepictureFilenameAttribute()
     {
         if (! $this->attributes['profilepicture_filename']) {

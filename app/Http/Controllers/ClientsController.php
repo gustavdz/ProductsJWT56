@@ -180,4 +180,17 @@ class ClientsController extends Controller
         return back();// formulario de registro
     }
 
+    public function verJson()
+    {
+        $user = User::find(Auth::user()->id);
+
+        $clientes = Clients::where('user_id', '=',$user->id)->get();
+
+        return response()->json($clientes);// formulario de registro
+    }
+    public function modal()
+    {
+        return  view('clients.modal'); // formulario de registro
+    }
+
 }

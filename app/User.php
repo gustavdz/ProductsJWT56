@@ -73,6 +73,11 @@ class User extends Authenticatable
     public function comunicados(){
         return $this->hasMany(comunicados::class);
     }
+
+    public function proyectos(){
+        return $this->hasMany(Proyectos::class);
+    }
+
     public function comunicadoslecturas(){
         return $this->hasMany(comunicadosLectura::class);
     }

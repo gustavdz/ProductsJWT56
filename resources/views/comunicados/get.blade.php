@@ -1,10 +1,7 @@
 <div class="inbox-body">
     <div class="mail_heading row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <h4 style="margin-top: -5px">{{$comunicados->first()->title}}</h4>
-        </div>
-        <div class="col-md-4 text-right">
-            <p class="date"> {{$comunicados->first()->created_at}}</p>
         </div>
     </div>
     <div class="sender-info">
@@ -14,6 +11,11 @@
                 <span>{{env('MAIL_FROM_ADDRESS')}}</span> para
                 <strong>mí</strong>
                 <a class="sender-dropdown"><i class="fa fa-chevron-down"></i></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                Recibido el: <br><span class="date"> {{$comunicados->first()->created_at}}</span>
             </div>
         </div>
     </div>

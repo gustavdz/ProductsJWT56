@@ -33,7 +33,7 @@
                     @if($comunicados->count()>0)
                     <div class="row">
                         <div class="col-sm-3 mail_list_column">
-                            @if(Auth::user()->admin)<button id="compose" class="btn btn-sm btn-success btn-block" type="button">COMPOSE</button>@endif
+                            @if(Auth::user()->admin)<button id="compose" class="btn btn-sm btn-primary btn-block" type="button">Nuevo comunicado</button>@endif
                                 @foreach($comunicados as $index => $comunicado)
                                     <a href="javascript:cargar_comunicado({{$comunicado->id}},'lista_{{$comunicado->id}}');">
                                         <div class="mail_list">
@@ -60,11 +60,8 @@
                                     <div class="col-md-12">
                                         <p class="date"> Haga clic en el comunicado que desea leer.</p>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-12">
                                         <h4 style="margin-top: -5px">&nbsp;</h4>
-                                    </div>
-                                    <div class="col-md-4 text-right">
-                                        <p class="date"> &nbsp;</p>
                                     </div>
                                 </div>
                                 <div class="sender-info">
@@ -89,7 +86,7 @@
                     @else
                         <div class="row">
                             <div class="col-sm-3 mail_list_column">
-                                @if(Auth::user()->admin)<a class="btn btn-sm btn-success btn-block" href="comunicados/create" >Nuevo comunicado</a>@endif
+                                @if(Auth::user()->admin)<a class="btn btn-sm btn-primary btn-block" href="comunicados/create" >Nuevo comunicado</a>@endif
                                     <a href="#">
                                         <div class="mail_list">
                                             <div class="left">
