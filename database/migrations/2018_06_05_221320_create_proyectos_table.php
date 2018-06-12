@@ -20,6 +20,7 @@ class CreateProyectosTable extends Migration
             $table->string('observations',1000)->nullable();
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();
+            $table->string('paidform',1000)->nullable();
             $table->string('estado',1)->default('P');
             $table->integer('client_id')->unsigned();
             $table->foreign('client_id')->references('id')->on('clients');

@@ -59,6 +59,9 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('proyectos','ProyectosController@indexview')->name('indexProyectoweb');
     Route::get('proyectos/create','ProyectosController@createview')->name('createProyectoweb');
+    Route::get('proyectos/{id}/edit','ProyectosController@editview')->name('editProyectoweb');
+    Route::post('proyectos/{id}/delete','ProyectosController@destroy')->name('deleteProyectoweb');
+    Route::post('proyectos/{id}/update','ProyectosController@update')->name('updateProyectoweb');
     Route::post('proyectos/store','ProyectosController@store')->name('addProyectoweb');
 
 });

@@ -122,4 +122,19 @@
     </div>
 @endsection
 
-@section('scripts')@endsection
+@section('scripts')
+    @if (session()->has('notification'))
+        <script>
+            (function(){
+                if (!document.body.dataset.notification)
+                    return false;
+                new PNotify({
+                    title: document.body.dataset.notificationTitle,
+                    text: document.body.dataset.notificationMessage,
+                    type: document.body.dataset.notificationType,
+                    styling: 'bootstrap3'
+                });
+            })();
+        </script>
+    @endif
+@endsection

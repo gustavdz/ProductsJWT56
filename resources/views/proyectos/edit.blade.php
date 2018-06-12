@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('topnavbar','Proyecto Nuevo')
+@section('topnavbar','Editar Proyecto')
 @section('body-class','nav-md  footer_fixed')
 
 @section('content')
@@ -22,21 +22,21 @@
         <div class="col-md-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Agregar Nuevo Proyecto</h2>
+                    <h2>Actualizar Proyecto</h2>
 
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
                     <div class="row">
                         <div class="col-md-12 ">
-                            <form class="" method="post" role="form" action="{{url('/proyectos/store')}}">
+                            <form class="" method="post" role="form" action="{{url('/proyectos/'.$proyecto->id.'/update')}}">
                                 {{ csrf_field() }}
-                                <input id="client_id" type="hidden"  class="form-control" name="client_id" value="{{ old('client_id') }}">
+                                <input id="client_id" type="hidden"  class="form-control" name="client_id" value="{{ old('client_id',$proyecto->client_id) }}">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}">
                                             <label for="title">Nombre del Proyecto *</label>
-                                            <input id="title" type="text"  class="form-control" name="title" required value="{{ old('title') }}">
+                                            <input id="title" type="text"  class="form-control" name="title" required value="{{ old('title',$proyecto->title) }}">
                                             @if ($errors->has('title'))<span class="help-block"><strong>{{ $errors->first('title') }}</strong></span>@endif
                                         </div>
                                     </div>
@@ -44,7 +44,7 @@
                                         <div class="form-group {{ $errors->has('cliente') ? ' has-error' : '' }}">
                                             <label>Cliente *</label>
                                             <div class="input-group">
-                                                <input id="cliente" type="text" class="form-control" name="cliente" value="{{ old('cliente') }}" readonly>
+                                                <input id="cliente" type="text" class="form-control" name="cliente" value="{{ old('cliente',$proyecto->client->name.' '.$proyecto->client->last_name)}}" readonly>
                                                 <span class="input-group-btn {{ $errors->has('cliente') ? ' has-error' : '' }}">
                                                     <button class="btn btn-primary"  onclick="busquedaClientes()" type="button">Buscar</button>
                                                 </span>
@@ -57,7 +57,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group {{ $errors->has('detail') ? ' has-error' : '' }}">
                                             <label for="detail">Descripcion *</label>
-                                            <textarea id="detail" class="form-control" name="detail" rows="5" required>{{old('detail')}}</textarea>
+                                            <textarea id="detail" class="form-control" name="detail" rows="5" required>{{old('detail',$proyecto->detail)}}</textarea>
                                             @if ($errors->has('detail'))<span class="help-block"><strong>{{ $errors->first('detail') }}</strong></span>@endif
                                         </div>
                                     </div>
@@ -66,7 +66,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="paidform">Forma de Pago</label>
-                                            <textarea id="paidform" class="form-control" name="paidform" rows="5"></textarea>
+                                            <textarea id="paidform" class="form-control" name="paidform" rows="5">{{old('paidform',$proyecto->paidform)}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group ">
                                             <label for="observations">Observaciones</label>
-                                            <textarea id="observations" class="form-control" name="observations" rows="5" ></textarea>
+                                            <textarea id="observations" class="form-control" name="observations" rows="5" >{{old('observations',$proyecto->observations)}}</textarea>
                                         </div>
                                     </div>
                                 </div>

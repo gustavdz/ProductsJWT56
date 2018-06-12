@@ -31,37 +31,76 @@ class ProyectosController extends Controller
         return view('proyectos.create');
     }
 
+    public function editview(Request $request){
+        $proyecto = Proyectos::find($request->id);
+        return view('proyectos.edit')->with(compact('proyecto'));
+    }
+
+    public function destroy(Request $request,$id)
+    {
+        $proyecto = Proyectos::find($id);
+        $proyecto->delete();
+
+        return back()->with('notification',['title'=>'Notificación','message'=>'Se eliminó el proyecto correctamente','alert_type'=>'warning']);
+    }
+
     public function store(Request $request){
-        /*$messages =[
-            'name.required' => 'Es necesario ingresar un nombre para el cliente.',
-            'last_name.required' => 'Es necesario ingresar un apellido para el cliente.',
-            'email.required' => 'Es necesario ingresar un correo para el cliente.',
-            'dni.required' => 'Es necesario ingresar un número de identificación para el cliente.',
-            'phone.required' => 'Es necesario ingresar un teléfono para el cliente.',
-            'address.required' => 'Es necesario ingresar una dirección para el cliente.',
-            'profilepicture_filename.mimes' => 'Es necesario subir un archivo de tipo imagen',
+        $messages =[
+            'title.required' => 'Es necesario ingresar un nombre para el proyecto.',
+            'title.min' => 'El nombre del proyecto debe tener mínimo 6 caracteres.',
+            'cliente.required' => 'Es necesario seleccionar un cliente del proyecto.',
+            'cliente.min' => 'Es necesario seleccionar un cliente del proyecto.',
+            'detail.required' => 'Es necesario ingresar un detalle para el proyecto.',
+            'detail.min' => 'El detalle del proyecto debe tener mínimo 10 caracteres.',
+
 
         ];
         $rules = [
-            'name' => 'required|min:2',
-            'last_name' => 'required|min:2',
-            'email' => 'required|max:200|unique:clients',
-            'dni' => 'required|unique:clients',
-            'address' => 'required',
-            'phone' => 'required',
-            'profilepicture_filename' => 'mimes:jpeg,jpg,png',
+            'title' => 'required|min:6',
+            'cliente' => 'required|min:1',
+            'detail' => 'required|min:10',
 
         ];
-        $this->validate($request,$rules,$messages);*/
+        $this->validate($request,$rules,$messages);
 
         $user = User::find(Auth::user()->id);
-        $project_request = $request->only('title','detail','observations','client_id');
+        $project_request = $request->only('title','detail','observations','paidform','client_id');
         $project_request['user_id']=$user->id;
 
         $proyectos = Proyectos::create($project_request);
 
         //return redirect('/clients');
-        return redirect('/proyectos')->with('notification',['title'=>'Notificación','message'=>'Se agregó el cliente correctamente','alert_type'=>'info']);
+        return redirect('/proyectos')->with('notification',['title'=>'Notificación','message'=>'Se agregó el proyecto correctamente','alert_type'=>'info']);
+
+    }
+    public function update(Request $request,$id){
+        $messages =[
+            'title.required' => 'Es necesario ingresar un nombre para el proyecto.',
+            'title.min' => 'El nombre del proyecto debe tener mínimo 6 caracteres.',
+            'cliente.required' => 'Es necesario seleccionar un cliente del proyecto.',
+            'cliente.min' => 'Es necesario seleccionar un cliente del proyecto.',
+            'detail.required' => 'Es necesario ingresar un detalle para el proyecto.',
+            'detail.min' => 'El detalle del proyecto debe tener mínimo 10 caracteres.',
+
+
+        ];
+        $rules = [
+            'title' => 'required|min:6',
+            'cliente' => 'required|min:1',
+            'detail' => 'required|min:10',
+
+        ];
+        $this->validate($request,$rules,$messages);
+
+        $proyecto = Proyectos::find($id);
+        $proyecto->title = $request->input('title');
+        $proyecto->client_id = $request->input('client_id');
+        $proyecto->detail = $request->input('detail');
+        $proyecto->observations = $request->input('observations');
+        $proyecto->paidform = $request->input('paidform');
+        $proyecto->save();
+
+        return redirect('/proyectos')->with('notification',['title'=>'Notificación','message'=>'Se editó el proyecto correctamente','alert_type'=>'info']);
 
     }
 }

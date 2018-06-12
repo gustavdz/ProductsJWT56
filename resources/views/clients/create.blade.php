@@ -60,7 +60,7 @@
                             <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
                                 <label for="email" class="control-label col-md-3 col-sm-3 col-xs-12">Email <span class="required">*</span></label>
                                 <div  class="col-md-6 col-sm-6 col-xs-12">
-                                    <input id="email" type="text" class="form-control col-md-7 col-xs-12" value="{{ old('email') }}" name="email" required="required" >
+                                    <input id="email" type="email" class="form-control col-md-7 col-xs-12" value="{{ old('email') }}" name="email" required="required" >
                                     @if ($errors->has('email'))<span class="help-block"><strong>{{ $errors->first('email') }}</strong></span>@endif
                                 </div>
                             </div>

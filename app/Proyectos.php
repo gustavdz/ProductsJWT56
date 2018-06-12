@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Proyectos extends Model
 {
     Protected $table = 'proyectos';
-    Protected $fillable = array('id','title','detail','observations','fecha_inicio','fecha_fin','estado','client_id','user_id');
+    Protected $fillable = array('id','title','detail','observations','fecha_inicio','fecha_fin','paidform','estado','client_id','user_id');
     Protected $hidden = [];
 
     public function user(){
