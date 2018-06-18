@@ -7,6 +7,7 @@ use Products_JWT\Products;
 use JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Products_JWT\User;
+use Products_JWT\Http\Requests\ProductOwnershipRequest;
 
 class ProductsController extends Controller
 {
@@ -104,12 +105,12 @@ class ProductsController extends Controller
         return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se agregó el producto correctamente','alert_type'=>'info']);
 
     }
-    public function getview($id)
+    public function getview(ProductOwnershipRequest $request)
     {
-        $products = Products::find($id);
+        $products = Products::find($request->id);
         return view('products.edit')->with(compact('products'));
     }
-    public function update(Request $request, $id)
+    public function update(ProductOwnershipRequest $request, $id)
     {
         $messages =[
             'name.required' => 'Es necesario ingresar un nombre para el producto.',

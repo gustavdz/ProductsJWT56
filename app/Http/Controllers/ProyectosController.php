@@ -4,6 +4,7 @@ namespace Products_JWT\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Products_JWT\Http\Requests\ProjectOwnershipRequest;
 use Products_JWT\Proyectos;
 use Products_JWT\User;
 
@@ -31,14 +32,14 @@ class ProyectosController extends Controller
         return view('proyectos.create');
     }
 
-    public function editview(Request $request){
+    public function editview(ProjectOwnershipRequest $request){
         $proyecto = Proyectos::find($request->id);
         return view('proyectos.edit')->with(compact('proyecto'));
     }
 
-    public function destroy(Request $request,$id)
+    public function destroy(ProjectOwnershipRequest $request,$id)
     {
-        $proyecto = Proyectos::find($id);
+        $proyecto = Proyectos::find($request->id);
         $proyecto->delete();
 
         return back()->with('notification',['title'=>'Notificación','message'=>'Se eliminó el proyecto correctamente','alert_type'=>'warning']);
@@ -73,7 +74,7 @@ class ProyectosController extends Controller
         return redirect('/proyectos')->with('notification',['title'=>'Notificación','message'=>'Se agregó el proyecto correctamente','alert_type'=>'info']);
 
     }
-    public function update(Request $request,$id){
+    public function update(ProjectOwnershipRequest $request,$id){
         $messages =[
             'title.required' => 'Es necesario ingresar un nombre para el proyecto.',
             'title.min' => 'El nombre del proyecto debe tener mínimo 6 caracteres.',

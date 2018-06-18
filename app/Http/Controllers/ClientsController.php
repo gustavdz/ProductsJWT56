@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Products_JWT\Clients;
 use JWTAuth;
 use Illuminate\Support\Facades\Auth;
+use Products_JWT\Http\Requests\ClientOwnershipRequest;
 use Products_JWT\User;
 
 class ClientsController extends Controller
@@ -106,12 +107,12 @@ class ClientsController extends Controller
         return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se agregó el cliente correctamente','alert_type'=>'info']);
 
     }
-    public function getview($id)
+    public function getview(ClientOwnershipRequest $request, $id)
     {
-        $clients = Clients::find($id);
+        $clients = Clients::find($request->id);
         return view('clients.edit')->with(compact('clients'));
     }
-    public function update(Request $request, $id)
+    public function update(ClientOwnershipRequest $request, $id)
     {
         $messages =[
             'name.required' => 'Es necesario ingresar un nombre para el cliente.',
@@ -133,7 +134,7 @@ class ClientsController extends Controller
         ];
         $this->validate($request,$rules,$messages);
 
-        $cliente = Clients::find($id);
+        $cliente = Clients::find($request->id);
         $cliente->name = $request->input('name');
         $cliente->last_name = $request->input('last_name');
         $cliente->email = $request->input('email');
@@ -172,9 +173,9 @@ class ClientsController extends Controller
         return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se actualizó la imagen correctamente','alert_type'=>'info']);
 
     }
-    public function destroy($id)
+    public function destroy(ClientOwnershipRequest $request,$id)
     {
-        $cliente = Clients::find($id);
+        $cliente = Clients::find($request->id);
         $cliente->delete();
 
         return back();// formulario de registro
