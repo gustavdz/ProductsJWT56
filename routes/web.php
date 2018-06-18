@@ -64,4 +64,9 @@ Route::middleware(['auth'])->group(function(){
     Route::post('proyectos/{id}/update','ProyectosController@update')->name('updateProyectoweb');
     Route::post('proyectos/store','ProyectosController@store')->name('addProyectoweb');
 
+    Route::get('proyectos/{proyecto_id}/tasks','TaskController@indexview')->name('indexTaskweb');
+    Route::get('proyectos/{proyecto_id}/tasks/{{task_id}}/ver','TaskController@indexview')->name('indexTaskweb');
+    Route::get('proyectos/{proyecto_id}/tasks/{{task_id}}/edit','TaskController@indexview')->name('indexTaskweb');
+    Route::post('proyectos/{proyecto_id}/tasks/{{task_id}}/delete','TaskController@indexview')->name('indexTaskweb');
+
 });

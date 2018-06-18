@@ -18,6 +18,10 @@ class Proyectos extends Model
         return $this->belongsTo(Clients::class);
     }
 
+    public function tasks(){
+        return $this->hasMany(task::class);
+    }
+
     public function getEstadoDescripcionAttribute()
     {
         switch ($this->estado) {

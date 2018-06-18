@@ -82,6 +82,10 @@ class User extends Authenticatable
         return $this->hasMany(comunicadosLectura::class);
     }
 
+    public function tasks(){
+        return $this->hasMany(task::class);
+    }
+
     public function comunicadoslecturas_comunicados($comunicado_id){
         return Comunicados::where('id','=',$comunicado_id)->first();
     }

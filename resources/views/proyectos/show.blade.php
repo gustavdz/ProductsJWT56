@@ -94,6 +94,7 @@
                                             {{csrf_field()}}
                                             <a  href="{{url('/proyectos/'.$proyecto->id.'/ver')}}" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Ver </a>
                                             <a  href="{{url('/proyectos/'.$proyecto->id.'/edit')}}"   class="btn btn-dark btn-xs"><i class="fa fa-edit"></i> Editar </a>
+                                            <a  href="{{url('/proyectos/'.$proyecto->id.'/tasks')}}"   class="btn btn-success btn-xs"><i class="fa fa-tasks"></i> Tareas </a>
                                             <button id="delete" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Eliminar </button>
                                         </form>
                                     </td>

@@ -3,6 +3,7 @@
 namespace Products_JWT\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Products_JWT\Http\Requests\ClientOwnershipRequest;
 use Products_JWT\Products;
 use JWTAuth;
 use Illuminate\Support\Facades\Auth;
@@ -165,9 +166,9 @@ class ProductsController extends Controller
         return redirect('/products');
 
     }
-    public function destroy($id)
+    public function destroy(ProductOwnershipRequest $request, $id)
     {
-        $product = Products::find($id);
+        $product = Products::find($request->id);
         $product->delete();
 
         return back();

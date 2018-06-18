@@ -15,6 +15,16 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('title',150);
+            $table->string('detail',500)->nullable();
+            $table->integer('hours')->nullable()->unsigned();
+            $table->integer('points')->nullable()->unsigned();
+            $table->boolean('complete')->default(false);
+            $table->dateTime('complete_date')->nullable();
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('proyecto_id')->unsigned();
+            $table->foreign('proyecto_id')->references('id')->on('proyectos');
             $table->timestamps();
         });
     }
