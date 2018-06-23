@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('topnavbar','Proyectos')
+@section('topnavbar','Tareas')
 @section('body-class','nav-md  footer_fixed')
 @section('notification'){{ Session::has('notification') ? 'data-notification=true' : '' }} data-notification-type='{{ Session::get('notification')['alert_type']}}' data-notification-title='{{ Session::get('notification')['title']}}' data-notification-message='{{ Session::get('notification')['message'] }}'@endsection
 @section('content')
@@ -71,7 +71,6 @@
                                     <td>
                                         <form method="post"  role="form" action="{{url('/proyectos/'.$proyecto_id.'/tasks/'.$task->id.'/delete')}}">
                                             {{csrf_field()}}
-                                            <a  href="{{url('/proyectos/'.$proyecto_id.'/tasks/'.$task->id.'/ver')}}" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Ver </a>
                                             <a  href="{{url('/proyectos/'.$proyecto_id.'/tasks/'.$task->id.'/edit')}}"   class="btn btn-dark btn-xs"><i class="fa fa-edit"></i> Editar </a>
                                             <button id="delete" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Eliminar </button>
                                         </form>

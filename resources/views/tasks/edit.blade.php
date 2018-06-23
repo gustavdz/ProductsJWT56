@@ -8,7 +8,7 @@
         <div class="title_left">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-left top_search">
                 <div class="input-group">
-                    <h3>Proyectos</h3>
+                    <h3>Tareas</h3>
                 </div>
             </div>
         </div>
@@ -22,59 +22,32 @@
         <div class="col-md-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Actualizar Proyecto</h2>
+                    <h2>Actualizar Tarea</h2>
 
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
                     <div class="row">
                         <div class="col-md-12 ">
-                            <form class="" method="post" role="form" action="{{url('/proyectos/'.$proyecto->id.'/update')}}">
+
+                            <form class="" method="post" role="form" action="{{url('/proyectos/'.$task->proyecto_id.'/tasks/'.$task->id.'/update')}}">
                                 {{ csrf_field() }}
-                                <input id="client_id" type="hidden"  class="form-control" name="client_id" value="{{ old('client_id',$proyecto->client_id) }}">
+                                <input id="proyecto_id" type="hidden"  class="form-control" name="proyecto_id" value="{{ old('proyecto_id',$task->proyecto_id) }}">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}">
                                             <label for="title">Nombre del Proyecto *</label>
-                                            <input id="title" type="text"  class="form-control" name="title" required value="{{ old('title',$proyecto->title) }}">
+                                            <input id="title" type="text"  class="form-control" name="title" required value="{{ old('title',$task->title) }}">
                                             @if ($errors->has('title'))<span class="help-block"><strong>{{ $errors->first('title') }}</strong></span>@endif
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group {{ $errors->has('cliente') ? ' has-error' : '' }}">
-                                            <label>Cliente *</label>
-                                            <div class="input-group">
-                                                <input id="cliente" type="text" class="form-control" name="cliente" value="{{ old('cliente',$proyecto->client->name.' '.$proyecto->client->last_name)}}" readonly>
-                                                <span class="input-group-btn {{ $errors->has('cliente') ? ' has-error' : '' }}">
-                                                    <button class="btn btn-primary"  onclick="busquedaClientes()" type="button">Buscar</button>
-                                                </span>
-                                            </div>
-                                            @if ($errors->has('cliente'))<span class="help-block"><strong>{{ $errors->first('cliente') }}</strong></span>@endif
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group {{ $errors->has('detail') ? ' has-error' : '' }}">
                                             <label for="detail">Descripcion *</label>
-                                            <textarea id="detail" class="form-control" name="detail" rows="5" required>{{old('detail',$proyecto->detail)}}</textarea>
+                                            <textarea id="detail" class="form-control" name="detail" rows="5" required>{{old('detail',$task->detail)}}</textarea>
                                             @if ($errors->has('detail'))<span class="help-block"><strong>{{ $errors->first('detail') }}</strong></span>@endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="paidform">Forma de Pago</label>
-                                            <textarea id="paidform" class="form-control" name="paidform" rows="5">{{old('paidform',$proyecto->paidform)}}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group ">
-                                            <label for="observations">Observaciones</label>
-                                            <textarea id="observations" class="form-control" name="observations" rows="5" >{{old('observations',$proyecto->observations)}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -82,7 +55,7 @@
                                 <div class="row ">
                                     <div class="col-md-12 ">
                                         <div class="pull-right">
-                                            <a type="button" href="{{url('/proyectos')}}" class="btn btn-default  btn-fill " >Cancelar</a>
+                                            <a type="button" href="{{url('/proyectos/'.$task->proyecto_id.'/tasks/')}}" class="btn btn-default  btn-fill " >Cancelar</a>
                                             <button type="submit" class="btn btn-primary  btn-fill " >Guardar</button>
                                         </div>
 
@@ -100,65 +73,5 @@
 
 @section('scripts')
 <script>
-    function busquedaClientes()
-    {
-        $('#AceptarModal').addClass("clientesModal");
-        var div='';
-        $.ajax({
-            url:'{{ url('/clients/modal') }}',
-            type: 'GET',
-            dataType: 'HTML',
-            success: function(clientes){
-                $('.modal-body').empty();
-                $('#myModalLabel').text('Clientes');
-                $.ajax({
-                    url:'{{ url('/clients/verJson') }}',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(columnas){
-                        $('#tableClients').DataTable( {
-                            "paging": true,
-                            "bAutoWidth": true,
-                            "select": true,
-                            "ajax": {
-                                "url" : "/clients/verJson",
-                                "type" : "GET",
-                                "dataSrc": ""
-                            },
-                            "columns" : [ {
-                                "data" : "id"
-                            }, {
-                                "data": function(data){
-                                    return data.name+' '+data.last_name;
-                                }
-                            }, {
-                                "data" : "phone"
-                            }, {
-                                "data" : "email"
-                            } ]
-
-
-                        } );
-
-                    }
-                });
-
-                $('.modal-body').append(clientes);
-                $('.modalBase').modal('show');
-            }
-        });
-    }
-    $("#AceptarModal").on('click', function() {
-        if ($("#AceptarModal").hasClass('clientesModal')) {
-
-            var valuecliente = $("#tableClients tr.selected").find('td:nth-child(2)').html();
-            var valueid = $("#tableClients tr.selected").find('td:first').html();
-
-            $('#client_id').val(valueid);
-            $('#cliente').val(valuecliente);
-            $('#modalBase').modal('toggle');
-
-        }
-    });
 </script>
 @endsection

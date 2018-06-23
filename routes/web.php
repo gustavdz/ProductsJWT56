@@ -64,9 +64,12 @@ Route::middleware(['auth'])->group(function(){
     Route::post('proyectos/{id}/update','ProyectosController@update')->name('updateProyectoweb');
     Route::post('proyectos/store','ProyectosController@store')->name('addProyectoweb');
 
-    Route::get('proyectos/{proyecto_id}/tasks','TaskController@indexview')->name('indexTaskweb');
-    Route::get('proyectos/{proyecto_id}/tasks/{{task_id}}/ver','TaskController@indexview')->name('indexTaskweb');
-    Route::get('proyectos/{proyecto_id}/tasks/{{task_id}}/edit','TaskController@indexview')->name('indexTaskweb');
-    Route::post('proyectos/{proyecto_id}/tasks/{{task_id}}/delete','TaskController@indexview')->name('indexTaskweb');
+    Route::get('proyectos/{id}/tasks','TaskController@indexview')->name('indexTaskweb');
+    Route::get('proyectos/{proyecto_id}/tasks/create','TaskController@createview')->name('createTaskweb');
+    Route::post('proyectos/{proyecto_id}/tasks/store','TaskController@store')->name('storeTaskweb');
+    Route::get('proyectos/{proyecto_id}/tasks/{id}/ver','TaskController@showview')->name('getTaskweb');
+    Route::get('proyectos/{proyecto_id}/tasks/{id}/edit','TaskController@editview')->name('editTaskweb');
+    Route::post('proyectos/{proyecto_id}/tasks/{id}/delete','TaskController@destroy')->name('deleteTaskweb');
+    Route::post('proyectos/{proyecto_id}/tasks/{id}/update','TaskController@update')->name('updateTaskweb');
 
 });

@@ -15,7 +15,10 @@ class TaskOwnershipRequest extends FormRequest
     public function authorize()
     {
         $taskId = $this->route('id');
-        return task ::where('id', $taskId);
+        $projectId = $this->route('proyecto_id');
+        return task ::where('id', $taskId)
+            ->where('proyecto_id', $projectId)
+            ->where('user_id', $this->user()->id)->exists();
     }
 
     /**
