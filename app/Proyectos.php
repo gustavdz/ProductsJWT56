@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Proyectos extends Model
 {
     Protected $table = 'proyectos';
-    Protected $fillable = array('id','title','detail','observations','fecha_inicio','fecha_fin','paidform','estado','client_id','user_id');
+    Protected $fillable = array('id','title','detail','observations','fecha_inicio','fecha_fin','paidform','estado','last_state','client_id','user_id');
     Protected $hidden = [];
 
     public function user(){
@@ -68,6 +68,20 @@ class Proyectos extends Model
                 return "danger";
                 break;
         }
+
+    }
+
+    public function getPorcentAttribute(){
+
+        $total = $this->tasks()->count();
+        If ($total>0){
+            $done = $this->tasks()->where('complete','=',true)->count();
+            $porcent = ($done*100)/$total;
+            return $porcent;
+        }
+        return 0;
+
+
 
     }
 }

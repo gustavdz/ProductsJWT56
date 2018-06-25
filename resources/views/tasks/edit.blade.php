@@ -30,9 +30,9 @@
                     <div class="row">
                         <div class="col-md-12 ">
 
-                            <form class="" method="post" role="form" action="{{url('/proyectos/'.$task->proyecto_id.'/tasks/'.$task->id.'/update')}}">
+                            <form class="" method="post" role="form" action="{{url('/proyectos/'.$task->proyectos_id.'/tasks/'.$task->id.'/update')}}">
                                 {{ csrf_field() }}
-                                <input id="proyecto_id" type="hidden"  class="form-control" name="proyecto_id" value="{{ old('proyecto_id',$task->proyecto_id) }}">
+                                <input id="proyecto_id" type="hidden"  class="form-control" name="proyecto_id" value="{{ old('proyecto_id',$task->proyectos_id) }}">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}">
@@ -55,7 +55,7 @@
                                 <div class="row ">
                                     <div class="col-md-12 ">
                                         <div class="pull-right">
-                                            <a type="button" href="{{url('/proyectos/'.$task->proyecto_id.'/tasks/')}}" class="btn btn-default  btn-fill " >Cancelar</a>
+                                            <a type="button" href="{{url('/proyectos/'.$task->proyectos_id.'/tasks/')}}" class="btn btn-default  btn-fill " >Cancelar</a>
                                             <button type="submit" class="btn btn-primary  btn-fill " >Guardar</button>
                                         </div>
 

@@ -23,7 +23,7 @@ class CreateTasksTable extends Migration
             $table->dateTime('complete_date')->nullable();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('proyecto_id')->unsigned();
+            $table->integer('proyectos_id')->unsigned();
             $table->foreign('proyecto_id')->references('id')->on('proyectos');
             $table->timestamps();
         });

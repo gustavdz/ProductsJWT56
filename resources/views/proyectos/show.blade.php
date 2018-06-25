@@ -75,9 +75,9 @@
                                     </td>
                                     <td class="project_progress">
                                         <div class="progress progress_sm">
-                                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="0"></div>
+                                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{$proyecto->Porcent}}"></div>
                                         </div>
-                                        <small>0% Completado</small>
+                                        <small>{{$proyecto->Porcent}}% Completado</small>
                                     </td>
                                     <td>
                                         <div id="" style=" cursor: pointer; ">

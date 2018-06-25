@@ -17,7 +17,7 @@ class TaskOwnershipRequest extends FormRequest
         $taskId = $this->route('id');
         $projectId = $this->route('proyecto_id');
         return task ::where('id', $taskId)
-            ->where('proyecto_id', $projectId)
+            ->where('proyectos_id', $projectId)
             ->where('user_id', $this->user()->id)->exists();
     }
 

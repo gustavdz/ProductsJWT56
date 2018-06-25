@@ -71,5 +71,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('proyectos/{proyecto_id}/tasks/{id}/edit','TaskController@editview')->name('editTaskweb');
     Route::post('proyectos/{proyecto_id}/tasks/{id}/delete','TaskController@destroy')->name('deleteTaskweb');
     Route::post('proyectos/{proyecto_id}/tasks/{id}/update','TaskController@update')->name('updateTaskweb');
+    Route::get('proyectos/{proyecto_id}/tasks/{id}/complete','TaskController@complete')->name('completeTaskweb');
+    Route::get('proyectos/{proyecto_id}/tasks/{id}/incomplete','TaskController@incomplete')->name('incompleteTaskweb');
 
 });
