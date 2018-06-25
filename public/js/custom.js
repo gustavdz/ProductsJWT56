@@ -2526,7 +2526,12 @@ if (typeof NProgress != 'undefined') {
 				  keys: true
 				});
 
-				$('#datatable-responsive').DataTable();
+				$('#datatable-responsive').DataTable({
+                    "paging":   false,
+                    "ordering": false,
+                    "info":     false,
+					"filter":	false,
+				});
 
 				$('#datatable-scroller').DataTable({
 				  ajax: "js/datatables/json/scroller-demo.json",

@@ -44,78 +44,81 @@
                         <p>Listado de proyectos con sus respectivos departamentos asociados</p>
 
                         <!-- start project list -->
-                        <table class="table table-striped projects">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Nombre</th>
-                                <th>Cliente</th>
-                                <th>Progreso</th>
-                                <th>Fecha Inicio - Fecha Fin</th>
-                                <th>Estado</th>
-                                <th>Opciones</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($proyectos as $proyecto)
+                        <div class="col-md-12">
+                            <table id="datatable-responsive" class="table table-striped dt-responsive nowrap" cellspacing="0" width="100%">
+                                <thead>
                                 <tr>
-                                    <td>{{ $proyecto->id }}</td>
-                                    <td>
-                                        <a>{{ $proyecto->title }}</a>
-                                        <br />
-                                        <small>Creado {{ $proyecto->created_at }}</small>
-                                    </td>
-                                    <td>
-                                        <a>{{ $proyecto->client->name }} {{ $proyecto->client->last_name }}</a>
-                                        <br />
-                                        <small>Email: {{ $proyecto->client->email }}</small>
-                                        <br />
-                                        <small>Teléfono: {{ $proyecto->client->phone }}</small>
-                                    </td>
-                                    <td class="project_progress">
-                                        <div class="progress progress_sm">
-                                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{$proyecto->Porcent}}"></div>
-                                        </div>
-                                        <small>{{$proyecto->Porcent}}% Completado</small>
-                                    </td>
-                                    <td>
-                                        <div id="" style=" cursor: pointer; ">
-                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                                            <span>{{ $proyecto->fecha_inicio }} - {{ $proyecto->fecha_fin }}  </span>
-                                        </div>
-                                    </td>
-                                    <td>
-
-                                        <span class="label label-{{ $proyecto->EstadoEtiqueta }}">{{ $proyecto->EstadoDescripcion}}</span>
-                                    </td>
-                                    <td>
-                                        <form method="post"  role="form" action="{{url('/proyectos/'.$proyecto->id.'/delete')}}">
-                                            {{csrf_field()}}
-                                            <a  href="{{url('/proyectos/'.$proyecto->id.'/ver')}}" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Ver </a>
-                                            <a  href="{{url('/proyectos/'.$proyecto->id.'/edit')}}"   class="btn btn-dark btn-xs"><i class="fa fa-edit"></i> Editar </a>
-                                            <a  href="{{url('/proyectos/'.$proyecto->id.'/tasks')}}"   class="btn btn-success btn-xs"><i class="fa fa-tasks"></i> Tareas </a>
-                                            <button id="delete" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Eliminar </button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form method="post" action="{{url('/proformas/'.$proyecto->id.'/delete')}}">
-                                            {{csrf_field()}}
-                                            <a href="{{url('/proyectos/'.$proyecto->id.'/iniciar')}}"  class="btn btn-primary btn-xs"><i class="fa fa-flag-checkered"></i> Iniciar </a>
-                                            <a href="{{url('/proyectos/'.$proyecto->id.'/resultados')}}" class="btn btn-warning btn-xs"><i class="fa fa-paperclip"></i> E. Resultados </a>
-                                            <a href="{{url('/proyectos/'.$proyecto->id.'/proformas')}}"  class="btn btn-success btn-xs"><i class="fa fa-money"></i> Cotizaciones </a>
-                                            <a href="{{url('/proyectos/'.$proyecto->id.'/terminar')}}"  class="btn btn-danger btn-xs"><i class="fa fa-power-off"></i> Terminar </a>
-
-                                        </form>
-                                    </td>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Cliente</th>
+                                    <th>Progreso</th>
+                                    <th>Fecha Inicio - Fecha Fin</th>
+                                    <th>Estado</th>
+                                    <th>Opciones</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            @endforeach
+                                </thead>
+                                <tbody>
+                                @foreach($proyectos as $proyecto)
+                                    <tr>
+                                        <td>{{ $proyecto->id }}</td>
+                                        <td>
+                                            <a>{{ $proyecto->title }}</a>
+                                            <br />
+                                            <small>Creado {{ $proyecto->created_at }}</small>
+                                        </td>
+                                        <td>
+                                            <a>{{ $proyecto->client->name }} {{ $proyecto->client->last_name }}</a>
+                                            <br />
+                                            <small>Email: {{ $proyecto->client->email }}</small>
+                                            <br />
+                                            <small>Teléfono: {{ $proyecto->client->phone }}</small>
+                                        </td>
+                                        <td class="project_progress">
+                                            <div class="progress progress_sm">
+                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{$proyecto->Porcent}}"></div>
+                                            </div>
+                                            <small>{{$proyecto->Porcent}}% Completado</small>
+                                        </td>
+                                        <td>
+                                            <div id="" style=" cursor: pointer; ">
+                                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                                <span>{{ $proyecto->fecha_inicio }} - {{ $proyecto->fecha_fin }}  </span>
+                                            </div>
+                                        </td>
+                                        <td>
+
+                                            <span class="label label-{{ $proyecto->EstadoEtiqueta }}">{{ $proyecto->EstadoDescripcion}}</span>
+                                        </td>
+                                        <td>
+                                            <form method="post"  role="form" action="{{url('/proyectos/'.$proyecto->id.'/delete')}}">
+                                                {{csrf_field()}}
+                                                <a  href="{{url('/proyectos/'.$proyecto->id.'/ver')}}" target="_blank" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Ver"><i class="fa fa-eye "></i></a>
+                                                <a  href="{{url('/proyectos/'.$proyecto->id.'/edit')}}"   class="btn btn-dark btn-xs"  data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-edit"></i></a>
+                                                <a  href="{{url('/proyectos/'.$proyecto->id.'/tasks')}}"   class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="top" title="Tareas"><i class="fa fa-tasks"></i></a>
+                                                <button id="delete" type="submit" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fa fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="post" action="{{url('/proformas/'.$proyecto->id.'/delete')}}">
+                                                {{csrf_field()}}
+                                                <a href="{{url('/proyectos/'.$proyecto->id.'/iniciar')}}"  class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Iniciar"><i class="fa fa-flag-checkered"></i></a>
+                                                <a href="{{url('/proyectos/'.$proyecto->id.'/resultados')}}" class="btn btn-warning btn-xs"  data-toggle="tooltip" data-placement="top" title="Estado de Resultado"><i class="fa fa-paperclip"></i></a>
+                                                <a href="{{url('/proyectos/'.$proyecto->id.'/proformas')}}"  class="btn btn-success btn-xs"  data-toggle="tooltip" data-placement="top" title="Cotizaciones"><i class="fa fa-money"></i></a>
+                                                <a href="{{url('/proyectos/'.$proyecto->id.'/terminar')}}"  class="btn btn-danger btn-xs"  data-toggle="tooltip" data-placement="top" title="Terminar"><i class="fa fa-power-off"></i></a>
+
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
 
-                            </tbody>
-                        </table>
-                        <!-- end project list -->
-                        {{ $proyectos->links() }}
+                                </tbody>
+                            </table>
+                            <!-- end project list -->
+                            {{ $proyectos->links() }}
+                        </div>
+
                     </div>
                 </div>
             </div>
