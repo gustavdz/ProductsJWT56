@@ -2,6 +2,7 @@
 
 namespace Products_JWT\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Products_JWT\Http\Requests\ProjectOwnershipRequest;
@@ -37,6 +38,13 @@ class ProyectosController extends Controller
         return view('proyectos.edit')->with(compact('proyecto'));
     }
 
+    public function getview(ProjectOwnershipRequest $request){
+        $proyecto = Proyectos::find($request->id);
+        $proyecto->fecha_inicio = Carbon::parse($proyecto->fecha_inicio);
+        $proyecto->fecha_fin = Carbon::parse($proyecto->fecha_fin);
+        return view('proyectos.get')->with(compact('proyecto'));
+    }
+
     public function destroy(ProjectOwnershipRequest $request,$id)
     {
         $proyecto = Proyectos::find($request->id);
@@ -63,9 +71,13 @@ class ProyectosController extends Controller
 
         ];
         $this->validate($request,$rules,$messages);
+        $fecha_inicio=explode('-',$request->rangedate);
+        $fecha_fin=explode('-',$request->rangedate);
 
         $user = User::find(Auth::user()->id);
         $project_request = $request->only('title','detail','observations','paidform','client_id');
+        $project_request['fecha_inicio']=date("Ymd",strtotime(trim($fecha_inicio[0])));
+        $project_request['fecha_fin']=date("Ymd",strtotime(trim($fecha_fin[1])));
         $project_request['user_id']=$user->id;
 
         $proyectos = Proyectos::create($project_request);
@@ -92,6 +104,8 @@ class ProyectosController extends Controller
 
         ];
         $this->validate($request,$rules,$messages);
+        $fecha_inicio=explode('-',$request->rangedate);
+        $fecha_fin=explode('-',$request->rangedate);
 
         $proyecto = Proyectos::find($id);
         $proyecto->title = $request->input('title');
@@ -99,6 +113,8 @@ class ProyectosController extends Controller
         $proyecto->detail = $request->input('detail');
         $proyecto->observations = $request->input('observations');
         $proyecto->paidform = $request->input('paidform');
+        $proyecto['fecha_inicio']=date("Ymd",strtotime(trim($fecha_inicio[0])));
+        $proyecto['fecha_fin']=date("Ymd",strtotime(trim($fecha_fin[1])));
         $proyecto->save();
 
         return redirect('/proyectos')->with('notification',['title'=>'Notificación','message'=>'Se editó el proyecto correctamente','alert_type'=>'info']);

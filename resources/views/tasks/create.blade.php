@@ -4,7 +4,7 @@
 @section('notification'){{ Session::has('notification') ? 'data-notification=true' : '' }} data-notification-type='{{ Session::get('notification')['alert_type']}}' data-notification-title='{{ Session::get('notification')['title']}}' data-notification-message='{{ Session::get('notification')['message'] }}'@endsection
 @section('content')
     <div class="">
-        <div class="row">
+        <div class="row" style="margin-bottom: 45px;">
             <div class="col-md-12">
                 <div class="x_panel">
                     <div class="x_title">
@@ -53,7 +53,7 @@
                                     <button type="submit" class="btn btn-primary">
                                         Guardar
                                     </button>
-                                    <a href="{{ url('/') }}" style="margin-right: 10px" type="button" class="btn btn-default">
+                                    <a href="{{url('/proyectos/'.$proyecto_id.'/tasks/')}}" style="margin-right: 10px" type="button" class="btn btn-default">
                                         Cancelar
                                     </a>
                                 </div>

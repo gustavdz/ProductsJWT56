@@ -18,7 +18,7 @@
     </div>
 
     <div class="clearfix"></div>
-    <div class="row">
+    <div class="row" style="margin-bottom: 45px;">
         <div class="col-md-12">
             <div class="x_panel">
                 <div class="x_title">
@@ -63,10 +63,25 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="paidform">Forma de Pago</label>
-                                            <textarea id="paidform" class="form-control" name="paidform" rows="5">{{old('paidform',$proyecto->paidform)}}</textarea>
+                                            <input type="text" id="paidform" class="form-control" name="paidform" value="{{old('paidform',$proyecto->paidform)}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="rangedate">Fechas del Proyecto</label>
+                                            <fieldset>
+                                                <div class="control-group">
+                                                    <div class="controls">
+                                                        <div class="input-prepend input-group">
+                                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                                            <input type="text" name="rangedate" id="rangedate" class="form-control" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                         </div>
                                     </div>
                                 </div>
@@ -100,6 +115,17 @@
 
 @section('scripts')
 <script>
+    function init_daterangepicker_rangedate() {
+
+        if( typeof ($.fn.daterangepicker) === 'undefined'){ return; }
+        console.log('init_daterangepicker_rangedate');
+
+        $('#rangedate').daterangepicker(null, function(start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+
+    }
+    init_daterangepicker_rangedate();
     function busquedaClientes()
     {
         $('#AceptarModal').addClass("clientesModal");

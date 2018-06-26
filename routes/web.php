@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('comunicados/{id}','ComunicadosController@getview')->name('getComunicadoweb');
 
     Route::get('proyectos','ProyectosController@indexview')->name('indexProyectoweb');
+    Route::get('proyectos/{id}/ver','ProyectosController@getview')->name('getProyectoweb');
     Route::get('proyectos/create','ProyectosController@createview')->name('createProyectoweb');
     Route::get('proyectos/{id}/edit','ProyectosController@editview')->name('editProyectoweb');
     Route::post('proyectos/{id}/delete','ProyectosController@destroy')->name('deleteProyectoweb');

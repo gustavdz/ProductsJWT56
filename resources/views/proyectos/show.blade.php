@@ -93,7 +93,7 @@
                                         <td>
                                             <form method="post"  role="form" action="{{url('/proyectos/'.$proyecto->id.'/delete')}}">
                                                 {{csrf_field()}}
-                                                <a  href="{{url('/proyectos/'.$proyecto->id.'/ver')}}" target="_blank" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Ver"><i class="fa fa-eye "></i></a>
+                                                <a  href="{{url('/proyectos/'.$proyecto->id.'/ver')}}" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Ver"><i class="fa fa-eye "></i></a>
                                                 <a  href="{{url('/proyectos/'.$proyecto->id.'/edit')}}"   class="btn btn-dark btn-xs"  data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-edit"></i></a>
                                                 <a  href="{{url('/proyectos/'.$proyecto->id.'/tasks')}}"   class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="top" title="Tareas"><i class="fa fa-tasks"></i></a>
                                                 <button id="delete" type="submit" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fa fa-trash"></i></button>
@@ -103,7 +103,7 @@
                                             <form method="post" action="{{url('/proformas/'.$proyecto->id.'/delete')}}">
                                                 {{csrf_field()}}
                                                 <a href="{{url('/proyectos/'.$proyecto->id.'/iniciar')}}"  class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Iniciar"><i class="fa fa-flag-checkered"></i></a>
-                                                <a href="{{url('/proyectos/'.$proyecto->id.'/resultados')}}" class="btn btn-warning btn-xs"  data-toggle="tooltip" data-placement="top" title="Estado de Resultado"><i class="fa fa-paperclip"></i></a>
+                                                <a href="{{url('/proyectos/'.$proyecto->id.'/resultados')}}" class="btn btn-warning btn-xs"  data-toggle="tooltip" data-placement="top" title="Estado de Resultado"><i class="fa fa-balance-scale"></i></a>
                                                 <a href="{{url('/proyectos/'.$proyecto->id.'/proformas')}}"  class="btn btn-success btn-xs"  data-toggle="tooltip" data-placement="top" title="Cotizaciones"><i class="fa fa-money"></i></a>
                                                 <a href="{{url('/proyectos/'.$proyecto->id.'/terminar')}}"  class="btn btn-danger btn-xs"  data-toggle="tooltip" data-placement="top" title="Terminar"><i class="fa fa-power-off"></i></a>
 
