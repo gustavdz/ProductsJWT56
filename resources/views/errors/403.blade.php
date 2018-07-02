@@ -10,7 +10,7 @@
             <h2>Lo siento pero esta acción no esta autorizada </h2>
             <p>Esta acción que intenta realizar no esta autorizada para su usuario.</p>
             <div class="mid_center">
-                <a href="/">Volver al inicio</a>
+                <a href="{{ url()->previous() }}">Volver a la página anterior</a>
             </div>
         </div>
     </div>

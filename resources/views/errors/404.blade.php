@@ -11,7 +11,7 @@
             <p>Esta página que estas buscando no existe.
             </p>
             <div class="mid_center">
-                <a href="/">Volver al inicio</a>
+                <a href="{{ url()->previous() }}">Volver a la página anterior</a>
             </div>
         </div>
     </div>
