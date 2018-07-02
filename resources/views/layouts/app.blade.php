@@ -99,6 +99,7 @@
     gtag('js', new Date());
 
     gtag('config', 'UA-121710686-1');
+    gtag('set', {'user_id': '{{ Auth::user()->username }}'}); // Establezca el ID de usuario mediante el user_id con el que haya iniciado sesión.
 </script>
 
 
