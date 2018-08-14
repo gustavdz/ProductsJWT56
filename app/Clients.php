@@ -15,6 +15,10 @@ class Clients extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function proform(){
+        return $this->belongsTo(proform::class);
+    }
+
     public function cabfacturas(){
         return $this->hasMany(cabfacturas::class);
     }

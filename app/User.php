@@ -54,6 +54,10 @@ class User extends Authenticatable
         return $this->hasMany(Clients::class);
     }
 
+    public function proforms(){
+        return $this->hasMany(proform::class);
+    }
+
     public function products(){
         return $this->hasMany(Products::class);
     }

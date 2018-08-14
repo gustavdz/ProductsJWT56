@@ -10,9 +10,41 @@ use Products_JWT\User;
 
 class UserController extends Controller
 {
-    public function getview()
-    {
+    public function indexview(Request $request){
         $user = User::find(Auth::user()->id);
+
+        if($request->search){
+            $search=$request->search;
+        }else{
+            $search="";
+        }
+
+        $users = User::where('id', '!=',$user->id)
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('username', 'LIKE', '%'.$search.'%')
+                    ->orWhere('email', 'LIKE', '%'.$search.'%');
+            })
+            ->paginate(10);
+        return view('users.show')->with(compact('users'));
+    }
+
+    public function getemail(Request $request,$id)
+    {
+        if($request->search){
+            $search=$request->search;
+        }else{
+            $search="";
+        }
+
+        $user = User::find($id);
+
+        return view('users.email')->with(compact('user'));
+    }
+
+    public function getview(Request $request)
+    {
+        $user = $request->id;
         if($user->empresas()->count()<1){
             //'razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','telefono'
             $empresa['action']='create';

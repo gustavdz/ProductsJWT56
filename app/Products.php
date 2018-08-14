@@ -15,6 +15,10 @@ class Products extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function proformDetail(){
+        return $this->belongsTo(proformDetail::class);
+    }
+
     public function cabfacturas(){
         return $this->hasMany(cabfacturas::class);
     }

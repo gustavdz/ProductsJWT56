@@ -44,6 +44,7 @@
                             <li><a><i class="fa fa-calculator"></i> Administración <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li><a href="{{ url('/comunicados/create') }}">Nuevo comunicado</a></li>
+                                    <li><a href="{{ url('/users') }}">Listado de usuarios</a></li>
                                 </ul>
                             </li>
                         @endif
