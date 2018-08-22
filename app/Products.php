@@ -16,7 +16,7 @@ class Products extends Model
     }
 
     public function proformDetail(){
-        return $this->belongsTo(proformDetail::class);
+        return $this->hasMany(proformDetail::class);
     }
 
     public function cabfacturas(){

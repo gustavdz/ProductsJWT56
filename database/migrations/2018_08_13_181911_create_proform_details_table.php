@@ -20,6 +20,7 @@ class CreateProformDetailsTable extends Migration
             $table->decimal('price',8,2);
             $table->decimal('iva',8,2)->default('12.00');
             $table->decimal('total',8,2);
+            $table->integer('quantity')->default(1);
             $table->integer('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();

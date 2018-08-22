@@ -8,11 +8,11 @@ class proformDetail extends Model
 {
     //
     Protected $table = 'proform_details';
-    Protected $fillable = array('proform_id','price','iva','total','product_id');
+    Protected $fillable = array('proform_id','price','iva','total','quantity','product_id');
     protected $hidden = [];
 
-    public function Products(){
-        return $this->hasMany(Products::class);
+    public function product(){
+        return $this->belongsTo(Products::class);
     }
 
     public function proform(){

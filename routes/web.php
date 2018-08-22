@@ -77,4 +77,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('proyectos/{proyecto_id}/tasks/{id}/complete','TaskController@complete')->name('completeTaskweb');
     Route::get('proyectos/{proyecto_id}/tasks/{id}/incomplete','TaskController@incomplete')->name('incompleteTaskweb');
 
+    Route::get('proyectos/{id}/proforms/','ProyectosController@indexproformasview')->name('indexProformweb');
+    Route::get('proyectos/{id}/proforms/{proform_id}/ver','ProformController@getview')->name('getProformweb');
+    Route::get('proyectos/{id}/proforms/create','ProformController@createview')->name('createProformweb');
+
 });

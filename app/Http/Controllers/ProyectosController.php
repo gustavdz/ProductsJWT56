@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Products_JWT\Http\Requests\ProjectOwnershipRequest;
+use Products_JWT\proform;
 use Products_JWT\Proyectos;
 use Products_JWT\User;
 
@@ -27,6 +28,24 @@ class ProyectosController extends Controller
             })
             ->paginate(10);
         return view('proyectos.show')->with(compact('proyectos'));
+    }
+
+    public function indexproformasview(ProjectOwnershipRequest $request,$proyecto_id){
+        $user = User::find(Auth::user()->id);
+
+        if($request->search){
+            $search=$request->search;
+        }else{
+            $search="";
+        }
+
+        $proformas = proform::where('proyecto_id','=',$proyecto_id)
+            ->where(function ($query) use ($search) {
+                $query->where('company', 'LIKE', '%'.$search.'%')
+                    ->orWhere('DNI', 'LIKE', '%'.$search.'%');
+            })
+            ->paginate(10);
+        return view('proformas.show')->with(compact('proformas','proyecto_id'));
     }
 
     public function createview(){

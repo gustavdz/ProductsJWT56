@@ -16,7 +16,7 @@ class Clients extends Model
     }
 
     public function proform(){
-        return $this->belongsTo(proform::class);
+        return $this->hasMany(proform::class);
     }
 
     public function cabfacturas(){

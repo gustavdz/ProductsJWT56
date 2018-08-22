@@ -8,11 +8,11 @@ class proform extends Model
 {
     //
     Protected $table = 'proforms';
-    Protected $fillable = array('type','total','total_iva','company','DNI','observations','duration','paidform','client_id','user_id');
+    Protected $fillable = array('types','total','total_iva','company','DNI','observations','duration','paidform','client_id','proyecto_id','user_id');
     protected $hidden = [];
 
     public function client(){
-        return $this->hasMany(Clients::class);
+        return $this->belongsTo(Clients::class);
     }
 
     public function proformDetail(){
@@ -21,5 +21,22 @@ class proform extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function proyecto(){
+        return $this->belongsTo(Proyectos::class);
+    }
+
+    public function getTypeAttribute()
+    {
+        switch ($this->types) {
+            case 'P':
+                return "Proveedor";
+                break;
+            case 'C':
+                return "Cliente";
+                break;
+        }
+
     }
 }

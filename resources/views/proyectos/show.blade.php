@@ -104,7 +104,7 @@
                                                 {{csrf_field()}}
                                                 <a href="{{url('/proyectos/'.$proyecto->id.'/iniciar')}}"  class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Iniciar"><i class="fa fa-flag-checkered"></i></a>
                                                 <a href="{{url('/proyectos/'.$proyecto->id.'/resultados')}}" class="btn btn-warning btn-xs"  data-toggle="tooltip" data-placement="top" title="Estado de Resultado"><i class="fa fa-balance-scale"></i></a>
-                                                <a href="{{url('/proyectos/'.$proyecto->id.'/proformas')}}"  class="btn btn-success btn-xs"  data-toggle="tooltip" data-placement="top" title="Cotizaciones"><i class="fa fa-money"></i></a>
+                                                <a href="{{url('/proyectos/'.$proyecto->id.'/proforms')}}"  class="btn btn-success btn-xs"  data-toggle="tooltip" data-placement="top" title="Cotizaciones"><i class="fa fa-money"></i></a>
                                                 <a href="{{url('/proyectos/'.$proyecto->id.'/terminar')}}"  class="btn btn-danger btn-xs"  data-toggle="tooltip" data-placement="top" title="Terminar"><i class="fa fa-power-off"></i></a>
 
                                             </form>

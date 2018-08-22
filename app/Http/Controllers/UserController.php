@@ -42,10 +42,11 @@ class UserController extends Controller
         return view('users.email')->with(compact('user'));
     }
 
-    public function getview(Request $request)
+    public function getview()
     {
-        $user = $request->id;
-        if($user->empresas()->count()<1){
+        $user = User::find(Auth::user()->id);
+
+        if($user->empresas->count()<1){
             //'razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','telefono'
             $empresa['action']='create';
             $empresa['id']='';

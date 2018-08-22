@@ -22,6 +22,10 @@ class Proyectos extends Model
         return $this->hasMany(task::class);
     }
 
+    public function proforms(){
+        return $this->hasMany(proform::class);
+    }
+
     public function getEstadoDescripcionAttribute()
     {
         switch ($this->estado) {
