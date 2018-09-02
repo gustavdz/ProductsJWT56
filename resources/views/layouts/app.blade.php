@@ -45,6 +45,8 @@
     <!-- bootstrap-wysiwyg -->
     <link href="{{asset('js/google-code-prettify/bin/prettify.min.css')}}" rel="stylesheet">
 
+
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -69,12 +71,6 @@
     </div>
 </div>
 
-
-
-
-
-
-
 <script>
   /*  $('[data-toggle=confirmation]').confirmation({
         rootSelector: '[data-toggle=confirmation]',
@@ -90,6 +86,7 @@
 </script>
 
 @include('includes.modal')
+@yield('modal')
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-121710686-1"></script>
@@ -175,13 +172,12 @@
 <script src="{{asset('js/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js')}}"></script>
 <script src="{{asset('js/jquery.hotkeys/jquery.hotkeys.js')}}"></script>
 <script src="{{asset('js/google-code-prettify/src/prettify.js')}}"></script>
-
-
+<!-- typeahead-->
+<script src="{{asset('js/jquery.typeahead.min.js')}}"></script>
 @yield('scripts')
 
 <!--  Google Maps Plugin
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-
 -->
 
 </body>

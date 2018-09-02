@@ -12,7 +12,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="title_right">
                 <form method="get" action="{{ url('/proforms') }}">
                     <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -26,9 +25,7 @@
                 </form>
             </div>
         </div>
-
         <div class="clearfix"></div>
-
         <div class="row">
             <div class="col-md-12">
                 <div class="x_panel">
@@ -37,12 +34,13 @@
                         <a style="margin-left: 1%" href="{{ url('/proyectos/'.$proyecto_id.'/proforms/create') }}" type="button"  class=" btn btn-primary btn-sm btn-fill ">
                             <i class="fa fa-plus"></i> Nuevo
                         </a>
+                        <a style="margin-left: 1%" href="{{ url('/proyectos/') }}" type="button"  class=" btn btn-warning btn-sm btn-fill">
+                            <i class="fa fa-arrow-left"></i> Volver
+                        </a>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-
                         <p>Listado de proyectos con sus respectivos departamentos asociados</p>
-
                         <!-- start project list -->
                         <div class="col-md-12">
                             <table id="datatable-responsive" class="table table-striped dt-responsive nowrap" cellspacing="0" width="100%">
@@ -56,7 +54,6 @@
                                     <th>Forma de Pago</th>
                                     <th>Fecha Creación</th>
                                     <th>Opciones</th>
-
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -78,14 +75,11 @@
                                         </td>
                                     </tr>
                                 @endforeach
-
-
                                 </tbody>
                             </table>
                             <!-- end project list -->
                             {{ $proformas->links() }}
                         </div>
-
                     </div>
                 </div>
             </div>
