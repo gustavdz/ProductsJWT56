@@ -34,12 +34,15 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/clients/verJson', 'ClientsController@verJson')->name('verJsonClientweb');
 
     Route::get('products','ProductsController@indexview')->name('getAllProductsweb');
+    Route::get('products_json','ProductsController@getAllJSON')->name('getAllJSONProducts');
     Route::get('products/create','ProductsController@createview')->name('getAllProductsweb');
     Route::post('products/store','ProductsController@store')->name('addProductweb');
+    Route::post('products/storejson','ProductsController@storejson')->name('addProductjsonweb');
     Route::get('products/edit/{id}','ProductsController@getview')->name('editProductweb');
     Route::post('products/edit/{id}','ProductsController@update')->name('updateProductweb');
     Route::post('products/edit_picture/{id}','ProductsController@update_picture')->name('editPicProductweb');
     Route::get('products/delete/{id}','ProductsController@destroy')->name('deleteProductweb');
+    Route::get('products/modal', 'ProductsController@modal')->name('modalProductweb');
 
     Route::get('profile','UserController@getview')->name('editUserweb');
     Route::post('profile/edit','UserController@update')->name('updateUserweb');
