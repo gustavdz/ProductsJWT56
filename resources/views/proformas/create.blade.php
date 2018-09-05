@@ -127,9 +127,9 @@
                                 <tbody id="producto_tbody_detalle">
                                 <tr id="producto_tr_1">
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" onclick="delete_row(1)"><i class="far fa-trash-alt"></i> </button>
+                                        <button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" onclick="$(this).tooltip('hide');delete_row(1)"><i class="far fa-trash-alt"></i> </button>
                                     </td>
-                                    <td><input type="number" id="producto_cant_1" name="producto_cant_1" class="form-control" value="1" onchange="calculate_total(1);" /> </td>
+                                    <td><input type="number" id="producto_cant_1" name="producto_cant_1" class="form-control" value="1" onchange="calculate_total(1);" onkeyup="calculate_total(1);" /> </td>
                                     <td>
                                         <div class="typeahead__container">
                                             <div class="typeahead__field">
@@ -148,12 +148,12 @@
                                     <td>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
-                                            <input type="number" id="producto_price_1" name="producto_price_1" class="form-control" placeholder="0.00" min="0" pattern="^\d+(?:\.\d{1,2})?$" step=".25" onchange="setTwoNumberDecimal(this);calculate_total(1);" aria-label="Amount (to the nearest dollar)" readonly />
+                                            <input type="number" id="producto_price_1" name="producto_price_1" class="form-control" placeholder="0.00" min="0" pattern="^\d+(?:\.\d{1,2})?$" step=".25" onchange="setTwoNumberDecimal(this);calculate_total(1);" onkeyup="calculate_total(1);" aria-label="Amount (to the nearest dollar)" readonly />
                                         </div>
                                     </td>
                                     <td>
                                         <div class="input-group">
-                                            <select class="form-control" id="producto_iva_1" name="producto_iva_1">
+                                            <select class="form-control" id="producto_iva_1" name="producto_iva_1" data-iva="y" onchange="calculate_total(1)">
                                                 <option value="0">0%</option>
                                                 <option value="12" selected>12%</option>
                                             </select>
@@ -162,7 +162,7 @@
                                     <td>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
-                                            <input type="number" id="producto_total_1" name="producto_total_1" class="form-control" placeholder="0.00" min="0" max="100" pattern="^\d+(?:\.\d{1,2})?$" step=".25" aria-label="Amount (to the nearest dollar)" readonly/>
+                                            <input type="number" id="producto_total_1" name="producto_total_1" class="form-control" placeholder="0.00" min="0" max="100" pattern="^\d+(?:\.\d{1,2})?$" step=".25" aria-label="Amount (to the nearest dollar)" data-total="y" readonly/>
                                         </div>
                                     </td>
                                 </tr>
@@ -193,27 +193,31 @@
                         <div class="col-md-offset-3 col-md-3">
                             <div class="form-group">
                                 <label for="subtotal12">Subtotal 12%</label>
-                                <input type="text" class="form-control" name="subtotal12" id="subtotal12" readonly />
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control" name="subtotal12" id="subtotal12" readonly />
+                                </div>
                             </div>
                             <div class="form-group ">
                                 <label for="subtotal0">Subtotal 0%</label>
-                                <input type="text" class="form-control" name="subtotal0" id="subtotal0" readonly />
-                            </div>
-                            <div class="form-group ">
-                                <label for="dscto">Descuento</label>
-                                <input type="text" class="form-control" name="dscto" id="dscto" readonly />
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control" name="subtotal0" id="subtotal0" readonly />
+                                </div>
                             </div>
                             <div class="form-group ">
                                 <label for="iva">IVA</label>
-                                <input type="text" class="form-control" name="iva" id="iva" readonly />
-                            </div>
-                            <div class="form-group ">
-                                <label for="ice">ICE</label>
-                                <input type="text" class="form-control" name="ice" id="ice" readonly />
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control" name="iva" id="iva" readonly />
+                                </div>
                             </div>
                             <div class="form-group ">
                                 <label for="total" class="control-label">Total</label>
-                                <input type="text" class="form-control" name="total" id="total" readonly />
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control" name="total" id="total" readonly />
+                                </div>
                             </div>
                         </div>
 
@@ -291,12 +295,22 @@
     }
 
     function agrega_detalle(){
+        var row_count=0;
+        try {
+            if (parseInt($('#producto_tbody_detalle').children().last().attr('id').replace("producto_tr_",""))>=0){
+                row_count = parseInt($('#producto_tbody_detalle').children().last().attr('id').replace("producto_tr_","")) + 1;
+            }else{
+                row_count=1;
+            }
+        }catch (e) {
+            row_count=1;
+        }
 
         $('#products > tbody:last-child')
             .append('<tr id="producto_tr_'+row_count+'">' +
                 '<td class="text-center">\n' +
-                '                                        <button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" onclick="delete_row('+row_count+')"><i class="far fa-trash-alt"></i> </button>\n' +
-                '                                    </td><td><input type="number" id="producto_cant_'+row_count+'" name="producto_cant_'+row_count+'" class="form-control" value="1" onchange="calculate_total('+row_count+');" /> </td><td>\n' +
+                '                                        <button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" onclick="$(this).tooltip(\'hide\');delete_row('+row_count+')"><i class="far fa-trash-alt"></i> </button>\n' +
+                '                                    </td><td><input type="number" id="producto_cant_'+row_count+'" name="producto_cant_'+row_count+'" class="form-control" value="1" onchange="calculate_total('+row_count+');" onkeyup="calculate_total('+row_count+');" /> </td><td>\n' +
                 '                                        <div class="typeahead__container">\n' +
                 '                                            <div class="typeahead__field">\n' +
                 '                                                <div class="typeahead__query">\n' +
@@ -313,12 +327,12 @@
                 '                                    </td><td>\n' +
                 '                                        <div class="input-group">\n' +
                 '                                            <span class="input-group-addon">$</span>\n' +
-                '                                            <input type="number" id="producto_price_'+row_count+'" name="producto_price_'+row_count+'" class="form-control" placeholder="0.00" min="0" pattern="^\\d+(?:\\.\\d{1,2})?$" step=".25" onchange="setTwoNumberDecimal(this); calculate_total('+row_count+');" aria-label="Amount (to the nearest dollar)" readonly />\n' +
+                '                                            <input type="number" id="producto_price_'+row_count+'" name="producto_price_'+row_count+'" class="form-control" placeholder="0.00" min="0" pattern="^\\d+(?:\\.\\d{1,2})?$" step=".25" onchange="setTwoNumberDecimal(this); calculate_total('+row_count+');" onkeyup="calculate_total('+row_count+');" aria-label="Amount (to the nearest dollar)" readonly />\n' +
                 '                                        </div>\n' +
                 '                                    </td>\n' +
                 '                                    <td>\n' +
                 '                                        <div class="input-group">\n' +
-                '                                            <select class="form-control" id="producto_iva_'+row_count+'" name="producto_iva_'+row_count+'">\n' +
+                '                                            <select class="form-control" id="producto_iva_'+row_count+'" name="producto_iva_'+row_count+'" data-iva="y" onchange="calculate_total('+row_count+');">\n' +
                 '                                                <option value="0">0%</option>\n' +
                 '                                                <option value="12" selected>12%</option>\n' +
                 '                                            </select>\n' +
@@ -327,12 +341,12 @@
                 '                                    <td>\n' +
                 '                                        <div class="input-group">\n' +
                 '                                            <span class="input-group-addon">$</span>\n' +
-                '                                            <input type="number" id="producto_total_'+row_count+'" name="producto_total_'+row_count+'" class="form-control" placeholder="0.00" min="0" max="100" pattern="^\\d+(?:\\.\\d{1,2})?$" step=".25" aria-label="Amount (to the nearest dollar)" readonly/>\n' +
+                '                                            <input type="number" id="producto_total_'+row_count+'" name="producto_total_'+row_count+'" class="form-control" placeholder="0.00" min="0" max="100" pattern="^\\d+(?:\\.\\d{1,2})?$" step=".25" aria-label="Amount (to the nearest dollar)" data-total="y" readonly/>\n' +
                 '                                        </div>\n' +
                 '                                    </td></tr>');
 
         //var row_count= $('#products tbody tr').length + 1;
-        var row_count = parseInt($('#producto_tbody_detalle').children().last().attr('id').replace("producto_tr_","")) + 1;
+        //var row_count = parseInt($('#producto_tbody_detalle').children().last().attr('id').replace("producto_tr_","")) + 1;
         ini_typeahead("#producto_name_"+row_count);
     }
 
@@ -357,6 +371,7 @@
                     $("#producto_name_"+row_id).prop('readonly', true);
                     $("#producto_id_"+row_id).val(data.id);
                     $('#modalProducto').modal('hide');
+                    calculate_total(row_id);
                 }
             });
         });
@@ -399,7 +414,7 @@
                     $('#'+inpid).val(result.id);
                     $('#'+inp).prop('readonly', false);
                     $('#'+str).prop('readonly', true);
-                    $('#'+inptotal).val(result.price * $('#'+inpcant).val());
+                    calculate_total(row_index);
                     setTwoNumberDecimal(document.getElementById(inptotal));
                 },
                 onCancel: function(){
@@ -410,6 +425,8 @@
                     $('#'+inpdscto).val("");
                     $('#'+inp).prop('readonly', true);
                     $('#'+str).prop('readonly', false);
+                    calculate_total(row_index);
+                    setTwoNumberDecimal(document.getElementById(inptotal));
                 }
             }
         });
@@ -418,14 +435,47 @@
         $('#producto_tr_'+id).remove();
     }
     function calculate_total(id){
-        var total_rows=0;
+        var total_proform = 0;
         $("#producto_total_"+id).val($("#producto_cant_"+id).val() * $("#producto_price_"+id).val());
         setTwoNumberDecimal(document.getElementById('producto_total_'+id));
-        total_rows = count_rows('producto_tbody_detalle');
+        $('#subtotal12').val(calculate_12());
+        $('#subtotal0').val(calculate_0());
+        total_proform = parseFloat($('#subtotal12').val()) + parseFloat($('#subtotal0').val()) + parseFloat($('#iva').val( ));
+        $('#total').val(parseFloat(total_proform).toFixed(2));
 
     }
     function count_rows(tbody){
         return $('#'+tbody).children().length;
+    }
+
+    function calculate_12(){
+        var total_12=0;
+        var iva_12=0;
+        var total_iva=0;
+
+        $('#producto_tbody_detalle tr').each(function() {
+            iva_12 = $(this).find('[data-iva="y"]');
+            if(iva_12.val() == 12){
+                total_12= parseFloat(total_12) + parseFloat($(this).find('[data-total="y"]').val());
+            }
+        });
+        total_iva = total_12 * 0.12;
+        $('#iva').val(parseFloat(total_iva).toFixed(2));
+        return total_12;
+
+    }
+    function calculate_0(){
+        var total_0=0;
+        var iva_0=0;
+
+        $('#producto_tbody_detalle tr').each(function() {
+            iva_0 = $(this).find('[data-iva="y"]');
+            if(iva_0.val() == 0){
+                total_0=parseFloat(total_0)+parseFloat($(this).find('[data-total="y"]').val());
+            }
+        });
+        return total_0;
+
     }
 </script>
 @endsection
