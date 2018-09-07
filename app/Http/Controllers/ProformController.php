@@ -58,7 +58,11 @@ class ProformController extends Controller
 
         $user = User::find(Auth::user()->id);
         $proform_request['types']=$request->types;
-        $proform_request['total']=$request->subtotal12 + $request->subtotal0;
+        $proform_request['subtotal12']=$request->subtotal12;
+        $proform_request['subtotal0']=$request->subtotal0;
+        $proform_request['subtotal']=$request->subtotal0 + $request->subtotal12;
+        $proform_request['descuento']=$request->dscto;
+        $proform_request['total']=$request->subtotal12 + $request->subtotal0 + $request->iva;
         $proform_request['total_iva']=$request->iva;
         $proform_request['company']=$request->company;
         $proform_request['DNI']=$request->dni;
@@ -79,12 +83,13 @@ class ProformController extends Controller
             $detail_request['product_id'] = $product->Producto;
             $detail_request['quantity'] = $product->Cantidad;
             $detail_request['total'] = $product->Total;
+            $detail_request['descuento'] = $product->Descuento;
             $detail_request['proform_id'] = $proform->id;
 
             $proform_detalle = proformDetail::create($detail_request);
         }
 
-        return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se agregó el producto correctamente','alert_type'=>'info']);
+        return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se creó la proforma correctamente','alert_type'=>'info']);
 
     }
 }

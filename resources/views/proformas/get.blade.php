@@ -1,7 +1,20 @@
 @extends('layouts.app')
-@section('topnavbar','Proforma Detalle')
-@section('body-class','nav-md  footer_fixed')
+@section('topnavbar')
+    Proforma Detalle #{{str_pad($proform->id,5,0,STR_PAD_LEFT)}}
+@endsection
+@section('body-class','nav-md')
+@section('style')
+    <style>
+        @media print
+        {
+            .no-print, .no-print *
+            {
+                display: none !important;
+            }
+        }
+    </style>
 
+@endsection
 @section('content')
     <div class="">
         <div class="page-title">
@@ -85,10 +98,12 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 15%">Cantidad</th>
-                                            <th style="width: 55%">Producto</th>
-                                            <th style="width: 15%">Precio Unitario</th>
-                                            <th style="width: 15%">Subtotal</th>
+                                            <th width="10%">Cantidad</th>
+                                            <th width="30%">Producto</th>
+                                            <th width="15%">Precio Unitario</th>
+                                            <th width="15%">Subtotal</th>
+                                            <th width="15%">Descuento</th>
+                                            <th width="15%">Total</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -98,6 +113,8 @@
                                             <td>{{$detalle->product->name}}</td>
                                             <td>{{$detalle->price}}</td>
                                             <td>${{$detalle->price * $detalle->quantity}}</td>
+                                            <td>${{number_format(($detalle->descuento/100)*($detalle->price * $detalle->quantity),2)}}</td>
+                                            <td>${{$detalle->total}}</td>
                                         </tr>
                                         @endforeach
                                         </tbody>
@@ -110,8 +127,9 @@
                             <div class="row">
                                 <!-- accepted payments column -->
                                 <div class="col-xs-6">
-                                    <p class="lead">Forma de pago:</p>
-                                    {{$proform->paidform}}
+                                    <p> <span class="lead"><strong>Forma de pago:</strong></span></p>
+                                    <p class="lead">{{$proform->paidform}}</p>
+                                    <p class="lead"><strong>Observaciones</strong></p>
                                     <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                                         {{$proform->observations}}
                                     </p>
@@ -123,8 +141,16 @@
                                         <table class="table">
                                             <tbody>
                                             <tr>
-                                                <th>Subtotal:</th>
-                                                <td>$ {{number_format($proform->total,2,'.',',')}}</td>
+                                                <th>Subtotal 12%:</th>
+                                                <td>$ {{number_format($proform->subtotal12,2,'.',',')}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Subtotal 0%:</th>
+                                                <td>$ {{number_format($proform->subtotal0,2,'.',',')}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Descuento:</th>
+                                                <td>$ {{number_format($proform->descuento,2,'.',',')}}</td>
                                             </tr>
                                             <tr>
                                                 <th>IVA (12%)</th>
@@ -132,7 +158,7 @@
                                             </tr>
                                             <tr>
                                                 <th>Total:</th>
-                                                <td>$ {{number_format($proform->total_iva + $proform->total,2,'.',',')}}</td>
+                                                <td>$ {{number_format($proform->total,2,'.',',')}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -141,13 +167,12 @@
                                 <!-- /.col -->
                             </div>
                             <!-- /.row -->
-
                             <!-- this row will not appear when printing -->
                             <div class="row no-print">
                                 <div class="col-xs-12">
                                     <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
-                                    <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-                                    <a class="btn btn-default pull-right" href="{{url()->previous()}}"><i class="fa fa-download"></i> Cancelar</a>
+                                    <button class="btn btn-primary pull-right"><i class="fa fa-thumbs-up"></i> Aprobar</button>
+                                    <a class="btn btn-danger pull-right" href="{{url('/proyectos/'.$proform->proyecto->id.'/proforms/')}}"><i class="fa fa-ban"></i> Cancelar</a>
                                 </div>
                             </div>
                         </section>

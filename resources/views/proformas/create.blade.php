@@ -120,11 +120,12 @@
                             <div class="col-md-12">
                                 <table class="table table-bordered table-responsive table-full-width table-striped table-condensed" id="products">
                                     <thead>
-                                    <th width="10%">&nbsp;</th>
+                                    <th width="10%"></th>
                                     <th width="10%">Cantidad</th>
-                                    <th width="40%">Producto</th>
+                                    <th width="30%">Producto</th>
                                     <th width="15%">Precio</th>
-                                    <th width="10%">IVA</th>
+                                    <th width="12%">Descuento</th>
+                                    <th width="8%">IVA</th>
                                     <th width="15%">Total</th>
                                     </thead>
                                     <tbody id="producto_tbody_detalle">
@@ -153,6 +154,12 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
                                                 <input type="number" id="producto_price_1" name="producto_price_1" class="form-control" placeholder="0.00" min="0" pattern="^\d+(?:\.\d{1,2})?$" step=".25" onchange="setTwoNumberDecimal(this);calculate_total(1);" onkeyup="calculate_total(1);" aria-label="Amount (to the nearest dollar)" readonly />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" id="producto_dscto_1" name="producto_dscto_1" class="form-control" placeholder="0.00" min="0" max="100" pattern="^\d+(?:\.\d{1,2})?$" onchange="setTwoNumberDecimal(this);calculate_total(1);" onkeyup="calculate_total(1);" step=".25" data-dscto="y" readonly/>
+                                                <span class="input-group-addon">%</span>
                                             </div>
                                         </td>
                                         <td>
@@ -210,6 +217,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group ">
+                                    <label for="dscto">Descuento</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="text" class="form-control" name="dscto" id="dscto" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group ">
                                     <label for="iva">IVA</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>
@@ -234,7 +248,7 @@
         <div class="row">
             <div class="col-md-12 ">
                 <div class="pull-right">
-                    <a type="button" href="{{url()->previous()}}" class="btn btn-default  btn-fill " >Cancelar</a>
+                    <a type="button" href="{{url('/proyectos/'.$proyecto->id.'/proforms')}}" class="btn btn-default  btn-fill " >Cancelar</a>
                     <button type="button" class="btn btn-primary btn-fill" onclick="tablejson('products')">Guardar</button>
                 </div>
             </div>
@@ -246,6 +260,16 @@
 @section('scripts')
 
 <script>
+    function calculate_dscto() {
+        var dataindex=0;
+        var total_dscto=0;
+        var $rows = $('#producto_tbody_detalle tr').each(function(index) {
+            dataindex=$(this).attr("id").replace("producto_tr_","");
+            total_dscto = parseFloat(total_dscto) + (parseFloat($("#producto_cant_"+dataindex).val())*parseFloat($("#producto_price_"+dataindex).val())*(parseFloat($("#producto_dscto_"+dataindex).val())/100));
+        });
+        return total_dscto.toFixed(2);
+    }
+
     function tablejson (tableid){
         var dataindex=0;
         var myRows = [];
@@ -270,9 +294,12 @@
                                 myRows[index][$($headers[cellIndex]).html()] =$('#producto_price_'+dataindex).val();
                                 break;
                             case 4:
-                                myRows[index][$($headers[cellIndex]).html()] =$('#producto_iva_'+dataindex).val();
+                                myRows[index][$($headers[cellIndex]).html()] =$('#producto_dscto_'+dataindex).val();
                                 break;
                             case 5:
+                                myRows[index][$($headers[cellIndex]).html()] =$('#producto_iva_'+dataindex).val();
+                                break;
+                            case 6:
                                 myRows[index][$($headers[cellIndex]).html()] =$('#producto_total_'+dataindex).val();
                                 break;
                         }
@@ -400,9 +427,14 @@
                 '                                    </td><td>\n' +
                 '                                        <div class="input-group">\n' +
                 '                                            <span class="input-group-addon">$</span>\n' +
-                '                                            <input type="number" id="producto_price_'+row_count+'" name="producto_price_'+row_count+'" class="form-control" placeholder="0.00" min="0" pattern="^\\d+(?:\\.\\d{1,2})?$" step=".25" onchange="setTwoNumberDecimal(this); calculate_total('+row_count+');" onkeyup="calculate_total('+row_count+');" aria-label="Amount (to the nearest dollar)" readonly />\n' +
+                '                                            <input type="number" id="producto_price_'+row_count+'" name="producto_price_'+row_count+'" class="form-control" placeholder="0.00" min="0" pattern="^\\d+(?:\\.\\d{1,2})?$" step=".25" onchange="setTwoNumberDecimal(this); calculate_total('+row_count+');" onkeyup="calculate_total('+row_count+');" readonly />\n' +
                 '                                        </div>\n' +
-                '                                    </td>\n' +
+                '                                    </td><td>\n' +
+                '                                            <div class="input-group">\n' +
+                '                                                <input type="number" id="producto_dscto_'+row_count+'" name="producto_dscto_'+row_count+'" class="form-control" placeholder="0.00" min="0" max="100" pattern="^\\d+(?:\\.\\d{1,2})?$" onchange="setTwoNumberDecimal(this); calculate_total('+row_count+');" onkeyup="calculate_total('+row_count+');" step=".25" data-dscto="y" readonly/>\n' +
+                '                                                <span class="input-group-addon">%</span>\n' +
+                '                                            </div>\n' +
+                '                                        </td>' +
                 '                                    <td>\n' +
                 '                                        <div class="input-group">\n' +
                 '                                            <select class="form-control" id="producto_iva_'+row_count+'" name="producto_iva_'+row_count+'" data-iva="y" onchange="calculate_total('+row_count+');">\n' +
@@ -441,6 +473,7 @@
                     $("#producto_name_"+row_id).val($("#nameproduct").val());
                     $("#producto_price_"+row_id).val($("#priceproduct").val());
                     $("#producto_price_"+row_id).prop('readonly', false);
+                    $("#producto_dscto_"+row_id).prop('readonly', false);
                     $("#producto_name_"+row_id).prop('readonly', true);
                     $("#producto_id_"+row_id).val(data.id);
                     $('#modalProducto').modal('hide');
@@ -485,8 +518,10 @@
                     console.log( row_index );
                     $('#'+inp).val(result.price);
                     $('#'+inpid).val(result.id);
+                    $('#'+inpdscto).val(0);
                     $('#'+inp).prop('readonly', false);
                     $('#'+str).prop('readonly', true);
+                    $('#'+inpdscto).prop('readonly', false);
                     calculate_total(row_index);
                     setTwoNumberDecimal(document.getElementById(inptotal));
                 },
@@ -498,6 +533,7 @@
                     $('#'+inpdscto).val("");
                     $('#'+inp).prop('readonly', true);
                     $('#'+str).prop('readonly', false);
+                    $('#'+inpdscto).prop('readonly', true);
                     calculate_total(row_index);
                     setTwoNumberDecimal(document.getElementById(inptotal));
                 }
@@ -513,13 +549,13 @@
 
     }
     function calculate_total(id){
-        var total_proform = 0;
-
-        $("#producto_total_"+id).val($("#producto_cant_"+id).val() * $("#producto_price_"+id).val());
+        var total_tr = parseFloat($("#producto_cant_"+id).val()) * parseFloat($("#producto_price_"+id).val());
+        $("#producto_total_"+id).val(total_tr - ((total_tr * parseFloat($("#producto_dscto_"+id).val())/100)));
         setTwoNumberDecimal(document.getElementById('producto_total_'+id));
         $('#subtotal12').val(calculate_12());
         $('#subtotal0').val(calculate_0());
-        total_proform = parseFloat($('#subtotal12').val()) + parseFloat($('#subtotal0').val()) + parseFloat($('#iva').val( ));
+        $('#dscto').val(calculate_dscto());
+        var total_proform = parseFloat($('#subtotal12').val()) + parseFloat($('#subtotal0').val()) + parseFloat($('#iva').val( ));
         $('#total').val(parseFloat(total_proform).toFixed(2));
 
 
