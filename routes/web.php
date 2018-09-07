@@ -84,5 +84,6 @@ Route::middleware(['auth'])->group(function(){
     Route::get('proyectos/{id}/proforms/{proform_id}/ver','ProformController@getview')->name('getProformweb');
     Route::get('proyectos/{id}/proforms/create','ProformController@createview')->name('createProformweb');
     Route::post('proyectos/{id}/proforms/store','ProformController@store')->name('storeProformweb');
+    Route::post('proyectos/{id}/proforms/{proform_id}/delete','ProformController@delete')->name('deleteProformweb');
 
 });

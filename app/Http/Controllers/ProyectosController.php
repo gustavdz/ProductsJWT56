@@ -7,8 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Products_JWT\Http\Requests\ProjectOwnershipRequest;
 use Products_JWT\proform;
+use Products_JWT\proformDetail;
 use Products_JWT\Proyectos;
+use Products_JWT\task;
 use Products_JWT\User;
+use Illuminate\Support\Facades\DB;
+
 
 class ProyectosController extends Controller
 {
@@ -39,13 +43,15 @@ class ProyectosController extends Controller
             $search="";
         }
 
+        $proyecto = Proyectos::find($proyecto_id);
+
         $proformas = proform::where('proyecto_id','=',$proyecto_id)
             ->where(function ($query) use ($search) {
                 $query->where('company', 'LIKE', '%'.$search.'%')
                     ->orWhere('DNI', 'LIKE', '%'.$search.'%');
             })
             ->paginate(10);
-        return view('proformas.show')->with(compact('proformas','proyecto_id'));
+        return view('proformas.show')->with(compact('proformas','proyecto_id','proyecto'));
     }
 
     public function createview(){
@@ -66,9 +72,27 @@ class ProyectosController extends Controller
 
     public function destroy(ProjectOwnershipRequest $request,$id)
     {
-        $proyecto = Proyectos::find($request->id);
-        $proyecto->delete();
-
+        try{
+            DB::beginTransaction();
+            $tareas = task::where('proyectos_id','=',$request->id)->get();
+            foreach($tareas as $tarea) {
+                $tarea->delete();
+            }
+            $proformas = proform::where('proyecto_id','=',$request->id)->get();
+            foreach($proformas as $proforma){
+                $proformadetalles = proformDetail::where('proform_id','=',$proforma->id)->get();
+                foreach ($proformadetalles as $proformadetalle){
+                    $proformadetalle->delete();
+                }
+                $proforma->delete();
+            }
+            $proyecto = Proyectos::find($request->id);
+            $proyecto->delete();
+            DB::commit();
+        }catch (\Exception $e){
+            DB::rollBack();
+            return back()->with('notification',['title'=>'Notificación','message'=>'Ocurrió un error al eliminar el proyecto','alert_type'=>'danger']);
+        }
         return back()->with('notification',['title'=>'Notificación','message'=>'Se eliminó el proyecto correctamente','alert_type'=>'warning']);
     }
 

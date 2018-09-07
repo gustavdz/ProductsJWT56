@@ -24,6 +24,17 @@ class ProformController extends Controller
         return view('proformas.get')->with(compact('proform'));
     }
 
+    public function delete(ProformOwnershipRequest $request,$id,$proform_id){
+
+        $proform_details = proformDetail::where('proform_id','=',$request->proform_id);
+        $proform_details->delete();
+
+        $proform = proform::find($request->proform_id);
+        $proform->delete();
+
+        return back()->with('notification',['title'=>'Notificación','message'=>'Se eliminó la proforma correctamente','alert_type'=>'warning']);
+    }
+
     public function createview(ProjectOwnershipRequest $request){
         $proyecto = Proyectos::find($request->id);
         return view('proformas.create')->with(compact('proyecto'));
