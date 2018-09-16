@@ -19,7 +19,7 @@ class ClientsController extends Controller
     }
     public function add(Request $request){
         $user = User::find(Auth::user()->id);
-        $client_request = $request->only('name','last_name','email','dni','phone','address');
+        $client_request = $request->only('name','last_name','company','email','tipo_id','dni','phone','address');
         $client_request['user_id']=$user->id;
         $client = Clients::create($client_request);
         return $client;
@@ -98,7 +98,10 @@ class ClientsController extends Controller
         }
 
         $user = User::find(Auth::user()->id);
-        $client_request = $request->only('name','last_name','email','dni','phone','address');
+        $client_request = $request->only('name','last_name','company','email','tipo_id','dni','phone','address');
+        if ($request->input('company') == "" || $request->input('company')==null){
+            $client_request['company']=$request->input('name')." ".$request->input('last_name');
+        }
         $client_request['user_id']=$user->id;
         $client_request['profilepicture_filename']=$fileName;
         $client = Clients::create($client_request);
@@ -137,7 +140,13 @@ class ClientsController extends Controller
         $cliente = Clients::find($request->id);
         $cliente->name = $request->input('name');
         $cliente->last_name = $request->input('last_name');
+        if ($request->input('company') == "" || $request->input('company')==null){
+            $cliente->company=$request->input('name')." ".$request->input('last_name');
+        }else{
+            $cliente->company = $request->input('company');
+        }
         $cliente->email = $request->input('email');
+        $cliente->tipo_id = $request->input('tipo_id');
         $cliente->dni = $request->input('dni');
         $cliente->phone = $request->input('phone');
         $cliente->address = $request->input('address');

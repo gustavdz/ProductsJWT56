@@ -153,6 +153,22 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="form-group {{ $errors->has('logo') ? ' has-error' : '' }}">
+                                                        <label for="logo" class="control-label col-md-3 col-sm-3 col-xs-12">Logo <span class="required">*</span></label>
+                                                        <div  class="col-md-6 col-sm-6 col-xs-12">
+                                                            <input id="logo" type="file" class="form-control col-md-7 col-xs-12" name="logo" >
+                                                            @if ($errors->has('logo'))<span class="help-block"><strong>{{ $errors->first('logo') }}</strong></span>@endif
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        @if($empresa['logo']!= 'error')<label class="control-label col-md-8"><img src="{{ $empresa['logo']}}" width="50%"></label>
+                                                        @else
+                                                            <label class="control-label col-md-8">No ha cargado logo de empresa</label>
+                                                        @endif
+
+                                                    </div>
+
                                                     <div class="ln_solid"></div>
                                                     <div class="form-group">
                                                         <div class="col-md-6 col-md-offset-3">

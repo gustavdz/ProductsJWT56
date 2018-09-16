@@ -170,9 +170,14 @@
                             <!-- this row will not appear when printing -->
                             <div class="row no-print">
                                 <div class="col-xs-12">
-                                    <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
-                                    <button class="btn btn-primary pull-right"><i class="fa fa-thumbs-up"></i> Aprobar</button>
-                                    <a class="btn btn-danger pull-right" href="{{url('/proyectos/'.$proform->proyecto->id.'/proforms/')}}"><i class="fa fa-ban"></i> Cancelar</a>
+                                    <form method="post" id="frm_action" enctype="multipart/form-data" action="{{url('/proyectos/'.$proform->proyecto->id.'/proforms/'.$proform->id.'/sendSRI')}}">
+                                        {{ csrf_field() }}
+                                        <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+                                        <button class="btn btn-primary pull-right" onclick="submit_form('aprobar');"><i class="fa fa-thumbs-up"></i> Aprobar</button>
+                                        <button class="btn btn-success pull-right" onclick="submit_form('send');"><i class="fa fa-send"></i> Facturar</button>
+                                        <button class="btn btn-danger pull-right" onclick="submit_form('cancel');"><i class="fa fa-ban"></i> Rechazar</button>
+                                        <a class="btn btn-warning pull-left" href="{{url('/proyectos/'.$proform->proyecto->id.'/proforms/')}}"><i class="fa fa-arrow-left"></i> Volver</a>
+                                    </form>
                                 </div>
                             </div>
                         </section>
@@ -183,5 +188,26 @@
     </div>
 @endsection
 @section('scripts')
-
+<script>
+    function submit_form(option) {
+        switch(option){
+            case 'aprobar':
+                document.forms.frm_action.action='aprobar';
+                document.forms.frm_action.submit();
+                break;
+            case 'send':
+                document.forms.frm_action.action='sendSRI';
+                document.forms.frm_action.submit();
+                break;
+            case 'cancel':
+                document.forms.frm_action.action='cancel';
+                document.forms.frm_action.submit();
+                break;
+            default:
+                document.forms.frm_action.action='send';
+                document.forms.frm_action.submit();
+                break;
+        }
+    }
+</script>
 @endsection

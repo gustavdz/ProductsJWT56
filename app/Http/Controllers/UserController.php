@@ -56,6 +56,7 @@ class UserController extends Controller
             $empresa['direccion_sucursal']='';
             $empresa['ruc_empresa']='';
             $empresa['telefono']='';
+            $empresa['logo']='';
         }else{
             $empresa['action']='edit';
             $empresa['id']=$user->empresas->id;
@@ -65,6 +66,9 @@ class UserController extends Controller
             $empresa['direccion_sucursal']=$user->empresas->direccion_sucursal;
             $empresa['ruc_empresa']=$user->empresas->ruc_empresa;
             $empresa['telefono']=$user->empresas->telefono;
+            $empresa['logo']=$user->empresas->logo_filename;
+
+
         }
         return view('profile.edit')->with(compact('user','empresa'));
     }

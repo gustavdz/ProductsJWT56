@@ -71,6 +71,15 @@
                                         @if ($errors->has('last_name'))<span class="help-block"><strong>{{ $errors->first('last_name') }}</strong></span>@endif
                                     </div>
                                 </div>
+
+                                <div class="form-group {{ $errors->has('company') ? ' has-error' : '' }}">
+                                    <label for="company" class="control-label col-md-3 col-sm-3 col-xs-12">Razón Social o Empresa</label>
+                                    <div  class="col-md-6 col-sm-6 col-xs-12">
+                                        <input id="company" value="{{ $clients->company }}" type="text" class="form-control col-md-7 col-xs-12" name="company" >
+                                        @if ($errors->has('company'))<span class="help-block"><strong>{{ $errors->first('company') }}</strong></span>@endif
+                                    </div>
+                                </div>
+
                                 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email" class="control-label col-md-3 col-sm-3 col-xs-12">Email <span class="required">*</span></label>
                                     <div  class="col-md-6 col-sm-6 col-xs-12">
@@ -78,6 +87,19 @@
                                         @if ($errors->has('email'))<span class="help-block"><strong>{{ $errors->first('email') }}</strong></span>@endif
                                     </div>
                                 </div>
+                                <div class="form-group {{ $errors->has('tipo_id') ? ' has-error' : '' }}">
+                                    <label for="tipo_id" class="control-label col-md-3 col-sm-3 col-xs-12">Tipo de identificación <span class="required">*</span></label>
+                                    <div  class="col-md-6 col-sm-6 col-xs-12">
+                                        <select id="tipo_id" name="tipo_id" class="form-control">
+                                            <option value="CI" @if($clients->tipo_id == 'CI') selected @endif>Cédula</option>
+                                            <option value="RUC" @if($clients->tipo_id == 'RUC') selected @endif>RUC</option>
+                                            <option value="PAS" @if($clients->tipo_id == 'PAS') selected @endif>Pasaporte</option>
+                                            <option value="PLC" @if($clients->tipo_id == 'PLC') selected @endif>Placa</option>
+                                        </select>
+                                        @if ($errors->has('tipo_id'))<span class="help-block"><strong>{{ $errors->first('tipo_id') }}</strong></span>@endif
+                                    </div>
+                                </div>
+
                                 <div class="form-group {{ $errors->has('dni') ? ' has-error' : '' }}">
                                     <label for="dni" class="control-label col-md-3 col-sm-3 col-xs-12">DNI/CI <span class="required">*</span></label>
                                     <div  class="col-md-6 col-sm-6 col-xs-12">

@@ -18,7 +18,7 @@ class EmpresaController extends Controller
     }
     public function add(Request $request){
         $user = User::find(Auth::user()->id);
-        $empresa_request = $request->only('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','telefono');
+        $empresa_request = $request->only('razon_social','nombre_comercial','logo','direccion_matriz','direccion_sucursal','ruc_empresa','telefono');
         $empresa_request['user_id']=$user->id;
         $empresa = Empresas::create($empresa_request);
         return $empresa;
@@ -72,7 +72,16 @@ class EmpresaController extends Controller
         }
 
         $empresa = $this->get($id);
-        $empresa -> fill($request->all())->save();
+
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $path = public_path('/logo/users');
+            $fileName = $file->getClientOriginalName();
+            $move = $file->move($path, $fileName);
+        }
+        $empresa -> fill($request->all());
+        $empresa->logo = $fileName;
+        $empresa->save();
 
         return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se actualizaron los datos correctamente','alert_type'=>'info']);
     }
@@ -112,7 +121,15 @@ class EmpresaController extends Controller
         }
 
         $user = User::find(Auth::user()->id);
-        $empresa_request = $request->only('razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','telefono');
+        $empresa_request = $request->only('razon_social','nombre_comercial','logo','direccion_matriz','direccion_sucursal','ruc_empresa','telefono');
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $path = public_path('/logo/users');
+            $fileName = $file->getClientOriginalName();
+            $move = $file->move($path, $fileName);
+        }
+        $empresa_request['logo'] = $fileName;
+
         $empresa_request['user_id']=$user->id;
         $empresa = Empresas::create($empresa_request);
 

@@ -3,7 +3,9 @@
     <tr>
         <th>id</th>
         <th>Nombre</th>
-        <th>Telefono</th>
+        <th>Razón Social</th>
+        <th>DNI</th>
+        <th>Teléfono</th>
         <th>Correo</th>
 
     </tr>

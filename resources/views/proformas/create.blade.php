@@ -82,14 +82,14 @@
                                     <div class="col-md-4">
                                         <div class="form-group {{ $errors->has('company') ? ' has-error' : '' }}">
                                             <label for="company">Empresa *</label>
-                                            <input type="text" id="company" name="company" class="form-control" autocomplete="off"/>
+                                            <input type="text" id="company" name="company" class="form-control" autocomplete="off" readonly/>
                                             @if ($errors->has('company'))<span class="help-block"><strong>{{ $errors->first('company') }}</strong></span>@endif
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group {{ $errors->has('dni') ? ' has-error' : '' }}">
                                             <label for="dni">DNI *</label>
-                                            <input type="text" id="dni" name="dni" class="form-control" autocomplete="off"/>
+                                            <input type="text" id="dni" name="dni" class="form-control" autocomplete="off" readonly/>
                                             @if ($errors->has('dni'))<span class="help-block"><strong>{{ $errors->first('dni') }}</strong></span>@endif
                                         </div>
                                     </div>
@@ -195,7 +195,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group ">
-                                    <label for="observations">Observaciones</label>
+                                    <label for="observations">Información adicional</label>
                                     <textarea id="observations" class="form-control" name="observations" rows="5" ></textarea>
                                 </div>
                             </div>
@@ -369,6 +369,10 @@
                                     return data.name+' '+data.last_name;
                                 }
                             }, {
+                                "data" : "company"
+                            }, {
+                                "data" : "dni"
+                            }, {
                                 "data" : "phone"
                             }, {
                                 "data" : "email"
@@ -384,10 +388,14 @@
             if ($("#AceptarModal").hasClass('clientesModal')) {
 
                 var valuecliente = $("#tableClients tr.selected").find('td:nth-child(2)').html();
+                var valuecompany = $("#tableClients tr.selected").find('td:nth-child(3)').html();
+                var valuedni = $("#tableClients tr.selected").find('td:nth-child(4)').html();
                 var valueid = $("#tableClients tr.selected").find('td:first').html();
 
                 $('#client_id').val(valueid);
                 $('#cliente').val(valuecliente);
+                $('#dni').val(valuedni);
+                $('#company').val(valuecompany);
                 $('#modalBase').modal('toggle');
 
             }

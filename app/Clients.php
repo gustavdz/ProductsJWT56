@@ -8,7 +8,7 @@ class Clients extends Model
 {
     //
     Protected $table = 'clients';
-    Protected $fillable = array('name','last_name','email','dni','client_vip','phone','profilepicture_filename','address','user_id');
+    Protected $fillable = array('name','last_name','company','email','tipo_id','dni','client_vip','phone','profilepicture_filename','address','user_id');
     protected $hidden = [];
 
     public function user(){
