@@ -199,7 +199,7 @@ class ProformController extends Controller
             
 
             //$mensaje_adicional = '<br><div align="center"<div class="callout callout-success"><h4><i class="fa fa-envelope"></i>&nbsp;</h4><p><i class="fa fa-check"></i>&nbsp;Documento electrónico enviado al e-mail del titular.</p></div>';
-            $procesarComprobanteElectronico = new ProcesarComprobanteElectronico('http://localhost:8080/MasterOffline/ProcesarComprobanteElectronico?wsdl');
+            $procesarComprobanteElectronico = new ProcesarComprobanteElectronico('http://localhost:8080/MasterOffline/ProcesarComprobanteElectronico?wsdl', array('soap_version' => SOAP_1_1, 'trace' => true));
             $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
             //dd($procesarComprobanteElectronico);
             dd($res);
