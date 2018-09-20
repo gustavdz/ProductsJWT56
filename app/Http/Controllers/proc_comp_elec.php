@@ -334,9 +334,20 @@ class ProcesarComprobanteElectronico extends SoapClient
                                     'procesarComprobanteClaveContingenciaResponse' => 'procesarComprobanteClaveContingenciaResponse',
                                    );
 
-    public function __construct()
+    public function __construct($ambiente="1")
     {
-        $wsdl = "http://localhost:8080/MasterOffline/ProcesarComprobanteElectronico?wsdl";
+        switch($ambiente){
+            case "1":
+                $wsdl = "http://localhost:8080/MasterOffline_desa/ProcesarComprobanteElectronico?wsdl";
+                break;
+            case "2":
+                $wsdl = "http://localhost:8080/MasterOffline_prod/ProcesarComprobanteElectronico?wsdl";
+                break;
+            default:
+                $wsdl = "http://localhost:8080/MasterOffline_desa/ProcesarComprobanteElectronico?wsdl";
+                break;
+        }
+
         $options = array();
 		foreach(self::$classmap as $key => $value) {
 		  if(!isset($options['classmap'][$key])) {

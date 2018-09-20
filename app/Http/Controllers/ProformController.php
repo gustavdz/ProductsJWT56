@@ -17,16 +17,6 @@ use Products_JWT\User;
 use JWTAuth;
 use ErrorException;
 
-/*use Products_JWT\campoAdicional;
-use Products_JWT\configAplicacion;
-use Products_JWT\configCorreo;
-use Products_JWT\detalleFactura;
-use Products_JWT\factura;
-use Products_JWT\impuesto;
-use Products_JWT\pago;
-use Products_JWT\procesarComprobante;
-use Products_JWT\ProcesarComprobanteElectronico;
-use Products_JWT\totalImpuesto;*/
 include("proc_comp_elec.php");
 
 class ProformController extends Controller
@@ -200,7 +190,7 @@ class ProformController extends Controller
             $procesarComprobante->envioSRI = false;
             var_dump($procesarComprobante);
 
-            $procesarComprobanteElectronico = new \ProcesarComprobanteElectronico();
+            $procesarComprobanteElectronico = new \ProcesarComprobanteElectronico($factura->ambiente);
             $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
             var_dump($res);
 
