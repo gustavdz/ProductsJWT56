@@ -6,25 +6,28 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Products_JWT\campoAdicional;
 use Products_JWT\Clients;
+use Products_JWT\Empresas;
+use Products_JWT\Http\Requests\ProformOwnershipRequest;
+use Products_JWT\Http\Requests\ProjectOwnershipRequest;
+use Products_JWT\proform;
+use Products_JWT\proformDetail;
+use Products_JWT\Proyectos;
+use Products_JWT\User;
+use JWTAuth;
+use ErrorException;
+
+/*use Products_JWT\campoAdicional;
 use Products_JWT\configAplicacion;
 use Products_JWT\configCorreo;
 use Products_JWT\detalleFactura;
-use Products_JWT\Empresas;
 use Products_JWT\factura;
-use Products_JWT\Http\Requests\ProformOwnershipRequest;
-use Products_JWT\Http\Requests\ProjectOwnershipRequest;
 use Products_JWT\impuesto;
 use Products_JWT\pago;
 use Products_JWT\procesarComprobante;
 use Products_JWT\ProcesarComprobanteElectronico;
-use Products_JWT\proform;
-use Products_JWT\proformDetail;
-use Products_JWT\Proyectos;
-use Products_JWT\totalImpuesto;
-use Products_JWT\User;
-use JWTAuth;
+use Products_JWT\totalImpuesto;*/
+include("proc_comp_elec.php");
 
 class ProformController extends Controller
 {
@@ -41,15 +44,15 @@ class ProformController extends Controller
         $user = User::find(Auth::user()->id);
         $perfil = Empresas::where('user_id', $user->id)->first();
         $client = Clients::where('id', $proform->client_id)->first();
-        //try{
+        try{
 
-            $factura = new factura();
+            $factura = new \facturaSRI();
 
             $factura->ambiente=1; //string //[1,Prueba][2,Produccion]
             $factura->codDoc="01"; // string //[01, Factura] [04, Nota Credito] [05, Nota Debito] [06, Guia Remision] [07, Guia de Retencion]
             $factura->tipoEmision="1"; // string //[1,Emision Normal][2,Emision Por Indisponibilidad del sistema
-            $factura->configAplicacion = new configAplicacion(); // configAplicacion
-            $factura->configCorreo= new configCorreo(); // configCorreo
+            $factura->configAplicacion = new \configAplicacion(); // configAplicacion
+            $factura->configCorreo= new \configCorreo(); // configCorreo
             $factura->dirEstablecimiento = $perfil->direccion_sucursal;
             $factura->dirMatriz = $perfil->direccion_matriz;
             $factura->nombreComercial = $perfil->nombre_comercial;
@@ -96,7 +99,7 @@ class ProformController extends Controller
 
             $impuestosCabecera = array();
             if($proform->subtotal12 > 0)
-            {	$totalIVA12 = new totalImpuesto();
+            {	$totalIVA12 = new \totalImpuesto();
                 $totalIVA12->codigo = "2"; // [2, IVA][3,ICE][5, IRBPNR]
                 $totalIVA12->codigoPorcentaje = "2"; // IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
                 $totalIVA12->baseImponible = number_format($proform->subtotal12, 2, '.', ''); // Suma de los impuesto del mismo cod y % (0.00)
@@ -104,7 +107,7 @@ class ProformController extends Controller
                 $impuestosCabecera[] = $totalIVA12;
             }
             if($proform->subtotal0 > 0)
-            {	$totalIVA0 = new totalImpuesto();
+            {	$totalIVA0 = new \totalImpuesto();
                 $totalIVA0->codigo = "2"; // [2, IVA][3,ICE][5, IRBPNR]
                 $totalIVA0->codigoPorcentaje = "0"; // IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
                 $totalIVA0->baseImponible = number_format($proform->subtotal0, 2, '.', ''); // Suma de los impuesto del mismo cod y % (0.00)
@@ -126,7 +129,7 @@ class ProformController extends Controller
             21 "ENDOSO DE TITULOS";*/
 
             $pagos = array();
-            $pago = new pago();
+            $pago = new \pago();
             $pago->formaPago = "20";
             $pago->total = $proform->total;
             $pagos [] = $pago;
@@ -140,7 +143,7 @@ class ProformController extends Controller
 
 
             foreach ($detalleFact as $linea)
-            {	$detalleFactura = new detalleFactura();
+            {	$detalleFactura = new \detalleFactura();
                 $detalleFactura->codigoPrincipal = "".$linea->product->id; // Codigo del Producto
                 //$detalleFactura->codigoAuxiliar = ""; // Opcional
                 $detalleFactura->descripcion = $linea->product->name.' - '.$linea->product->detail; // Nombre del producto
@@ -152,7 +155,7 @@ class ProformController extends Controller
                 // 6.1.- Impuesto del detalle [2, IVA][3,ICE][5, IRBPNR]
                 //IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
                 $impuestoDetalle = array();
-                $impuesto = new impuesto(); // Impuesto del detalle
+                $impuesto = new \impuesto(); // Impuesto del detalle
                 $impuesto->codigo = "2";
                 switch($linea->iva){
                     case 12:
@@ -185,29 +188,25 @@ class ProformController extends Controller
 
             // 7.- Campos adicionales de la factura
             $camposAdicionales = array();
-            $campoAdicional = new campoAdicional();
+            $campoAdicional = new \campoAdicional();
             $campoAdicional->nombre = "Observación: ";
             $campoAdicional->valor = $proform->observations;
             $camposAdicionales[] = $campoAdicional;
 
             $factura->infoAdicional = $camposAdicionales;
 
-            $procesarComprobante = new procesarComprobante();
+            $procesarComprobante = new \procesarComprobante();
             $procesarComprobante->comprobante = $factura;
             $procesarComprobante->envioSRI = false;
             var_dump($procesarComprobante);
-            
 
-            //$mensaje_adicional = '<br><div align="center"<div class="callout callout-success"><h4><i class="fa fa-envelope"></i>&nbsp;</h4><p><i class="fa fa-check"></i>&nbsp;Documento electrónico enviado al e-mail del titular.</p></div>';
-            $procesarComprobanteElectronico = new ProcesarComprobanteElectronico('http://localhost:8080/MasterOffline/ProcesarComprobanteElectronico?wsdl', array('soap_version' => SOAP_1_1, 'trace' => true));
+            $procesarComprobanteElectronico = new \ProcesarComprobanteElectronico();
             $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
-            //dd($procesarComprobanteElectronico);
-            dd($res);
+            var_dump($res);
 
-        //}catch (\ErrorException $exception){
-        //    echo $exception->getMessage();
-        //}
-
+        }catch ( ErrorException $exception){
+            echo $exception->getMessage();
+        }
 
     }
 
