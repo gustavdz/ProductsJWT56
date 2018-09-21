@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('topnavbar','Editar Cliente')
+@section('topnavbar','Editar Perfil')
 @section('body-class','nav-md ')
 @section('notification'){{ Session::has('notification') ? 'data-notification=true' : '' }} data-notification-type='{{ Session::get('notification')['alert_type']}}' data-notification-title='{{ Session::get('notification')['title']}}' data-notification-message='{{ Session::get('notification')['message'] }}'@endsection
 @section('content')
@@ -55,6 +55,8 @@
                                             <li><a href="#empresa" data-toggle="tab">Empresa</a>
                                             </li>
                                             <li><a href="#digital_sign" data-toggle="tab">Firma Digital</a>
+                                            </li>
+                                            <li><a href="#fact_fields" data-toggle="tab">Datos de Factura</a>
                                             </li>
                                             <li><a href="#password" data-toggle="tab">Password</a>
                                             </li>
@@ -205,6 +207,73 @@
                                                                     @if ($errors->has('p12_password'))<span class="help-block"><strong>{{ $errors->first('p12_password') }}</strong></span>@endif
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="ln_solid"></div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-6 col-md-offset-3">
+                                                                <button type="submit" class="btn btn-primary">
+                                                                    Guardar
+                                                                </button>
+                                                                <a href="{{ url('/home') }}" style="margin-right: 10px" type="button" class="btn btn-default">
+                                                                    Cancelar
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {{ csrf_field() }}
+                                                </form>
+                                            </div>
+                                            <div class="tab-pane" id="fact_fields">
+                                                <p class="lead">Datos de Factura</p>
+                                                <form class="form-horizontal" method="post" role="form" action="{{url('/empresas/'.$empresa['id'].'/savecaja')}}" enctype="multipart/form-data">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+
+                                                            <div class="item form-group {{ $errors->has('ambiente') ? ' has-error' : '' }}">
+                                                                <label for="ambiente" class="control-label col-md-3 col-sm-3 col-xs-12">Ambiente <span class="required">*</span></label>
+                                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                    <select name="ambiente" id="ambiente" class="form-control">
+                                                                        <option value="1" @if($empresa['ambiente'] == 1) selected @endif>Pruebas</option>
+                                                                        <option value="2" @if($empresa['ambiente'] == 2) selected @endif>Producción</option>
+                                                                    </select>
+                                                                    @if ($errors->has('ambiente'))<span class="help-block"><strong>{{ $errors->first('ambiente') }}</strong></span>@endif
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="item form-group {{ $errors->has('secuencial_fact') ? ' has-error' : '' }}">
+                                                                <label for="secuencial_fact" class="control-label col-md-3 col-sm-3 col-xs-12">Secuencial de Factura <span class="required">*</span></label>
+                                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                    <input id="secuencial_fact" name="secuencial_fact" class="form-control" value="{{$empresa['secuencial_fact']}}">
+                                                                    @if ($errors->has('secuencial_fact'))<span class="help-block"><strong>{{ $errors->first('secuencial_fact') }}</strong></span>@endif
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="item form-group {{ $errors->has('secuencial_nc') ? ' has-error' : '' }}">
+                                                                <label for="secuencial_nc" class="control-label col-md-3 col-sm-3 col-xs-12">Secuencial de Nota de Crédito <span class="required">*</span></label>
+                                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                    <input id="secuencial_nc" name="secuencial_nc" class="form-control" value="{{$empresa['secuencial_nc']}}">
+                                                                    @if ($errors->has('secuencial_nc'))<span class="help-block"><strong>{{ $errors->first('secuencial_nc') }}</strong></span>@endif
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="item form-group {{ $errors->has('prefijo_sucursal') ? ' has-error' : '' }}">
+                                                                <label for="prefijo_sucursal" class="control-label col-md-3 col-sm-3 col-xs-12">Prefijo de la Sucursal <span class="required">*</span></label>
+                                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                    <input id="prefijo_sucursal" name="prefijo_sucursal" class="form-control" value="{{$empresa['prefijo_sucursal']}}">
+                                                                    @if ($errors->has('prefijo_sucursal'))<span class="help-block"><strong>{{ $errors->first('prefijo_sucursal') }}</strong></span>@endif
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="item form-group {{ $errors->has('prefijo_emision') ? ' has-error' : '' }}">
+                                                                <label for="prefijo_emision" class="control-label col-md-3 col-sm-3 col-xs-12">Prefijo de Punto de Emisión <span class="required">*</span></label>
+                                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                    <input id="prefijo_emision" name="prefijo_emision" class="form-control" value="{{$empresa['prefijo_emision']}}">
+                                                                    @if ($errors->has('prefijo_emision'))<span class="help-block"><strong>{{ $errors->first('prefijo_emision') }}</strong></span>@endif
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="row">

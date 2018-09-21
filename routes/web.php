@@ -51,6 +51,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('profile/edit_password','UserController@update_password')->name('updatePasswordweb');
 
     Route::post('empresas/edit/{id}','EmpresaController@update')->name('updateEmpresaweb');
+    Route::post('empresas/{id}/savecaja','EmpresaController@update_caja')->name('updateEmpresacajaweb');
     Route::post('empresas/create','EmpresaController@store')->name('storeEmpresaweb');
 
     Route::middleware(['admin'])->group(function(){

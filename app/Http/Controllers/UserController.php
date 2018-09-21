@@ -47,7 +47,6 @@ class UserController extends Controller
         $user = User::find(Auth::user()->id);
 
         if($user->empresas->count()<1){
-            //'razon_social','nombre_comercial','direccion_matriz','direccion_sucursal','ruc_empresa','telefono'
             $empresa['action']='create';
             $empresa['id']='';
             $empresa['razon_social']='';
@@ -57,6 +56,11 @@ class UserController extends Controller
             $empresa['ruc_empresa']='';
             $empresa['telefono']='';
             $empresa['logo']='';
+            $empresa['ambiente']='';
+            $empresa['secuencial_fact']='';
+            $empresa['secuencial_nc']='';
+            $empresa['prefijo_sucursal']='';
+            $empresa['prefijo_emision']='';
         }else{
             $empresa['action']='edit';
             $empresa['id']=$user->empresas->id;
@@ -67,6 +71,11 @@ class UserController extends Controller
             $empresa['ruc_empresa']=$user->empresas->ruc_empresa;
             $empresa['telefono']=$user->empresas->telefono;
             $empresa['logo']=$user->empresas->logo_filename;
+            $empresa['ambiente']=$user->empresas->ambiente;
+            $empresa['secuencial_fact']=$user->empresas->secuencial_fact;
+            $empresa['secuencial_nc']=$user->empresas->secuencial_nc;
+            $empresa['prefijo_sucursal']=$user->empresas->prefijo_sucursal;
+            $empresa['prefijo_emision']=$user->empresas->prefijo_emision;
 
 
         }
@@ -160,6 +169,7 @@ class UserController extends Controller
         return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se actualizó la imagen correctamente','alert_type'=>'info']);
 
     }
+
     public function update_p12(Request $request)
     {
 

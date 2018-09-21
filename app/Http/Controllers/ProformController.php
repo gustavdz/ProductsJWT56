@@ -38,7 +38,7 @@ class ProformController extends Controller
 
             $factura = new \facturaSRI();
 
-            $factura->ambiente=1; //string //[1,Prueba][2,Produccion]
+            $factura->ambiente=$perfil->ambiente; //string //[1,Prueba][2,Produccion]
             $factura->codDoc="01"; // string //[01, Factura] [04, Nota Credito] [05, Nota Debito] [06, Guia Remision] [07, Guia de Retencion]
             $factura->tipoEmision="1"; // string //[1,Emision Normal][2,Emision Por Indisponibilidad del sistema
             $factura->configAplicacion = new \configAplicacion(); // configAplicacion
@@ -51,11 +51,11 @@ class ProformController extends Controller
             if($perfil->contribuyenteEspecial<>null || $perfil->contribuyenteEspecial<>''){
                 $factura->contribuyenteEspecial = $perfil->contribuyenteEspecial;
             }
-            $factura->establecimiento = '001';
+            $factura->establecimiento = $perfil->prefijo_sucursal;
             $factura->fechaEmision = date("d/m/Y");
             $factura->obligadoContabilidad = 'NO';
-            $factura->ptoEmision='001';
-            $factura->secuencial='000000001';
+            $factura->ptoEmision=$perfil->prefijo_emision;
+            $factura->secuencial=str_pad($perfil->secuencial_fact,9,"0",STR_PAD_LEFT);
 
             $factura->configAplicacion->dirFirma=public_path('/cert/users/').$user->p12_filename;
             $factura->configAplicacion->dirAutorizados=public_path('/docauth/');
@@ -192,6 +192,16 @@ class ProformController extends Controller
 
             $procesarComprobanteElectronico = new \ProcesarComprobanteElectronico($factura->ambiente);
             $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
+
+            if( $procesarComprobante->envioSRI == false )
+            {   if($res->return->estadoComprobante == "FIRMADO")
+                {	$procesarComprobante = new \procesarComprobante();
+                    $procesarComprobante->comprobante = $factura;
+                    $procesarComprobante->envioSRI = true;
+                    $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
+                }
+            }
+
             var_dump($res);
 
         }catch ( ErrorException $exception){

@@ -85,7 +85,47 @@ class EmpresaController extends Controller
 
         return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se actualizaron los datos correctamente','alert_type'=>'info']);
     }
+    public function update_caja(Request $request,$id)
+    {
+        $messages =[
+            'secuencial_fact.required' => 'Es necesario ingresar el número para la siguiente factura a emitir',
+            'secuencial_fact.min'=> 'El número de la secuencia debe ser mayor a 0.',
+            'secuencial_fact.integer'=> 'El número de la secuencia debe ser un entero.',
 
+            'secuencial_nc.required' => 'Es necesario ingresar el número para la siguiente nota de crédito a emitir',
+            'secuencial_nc.min'=> 'El número de la secuencia debe ser mayor a 0.',
+            'secuencial_nc.integer'=> 'El número de la secuencia debe ser un entero.',
+
+            'prefijo_sucursal.required' => 'Es necesario ingresar el prefijo correspondiente a la sucursal',
+            'prefijo_sucursal.min'=> 'El prefijo debe tener 3 dígitos. Complete con 0 a la izquierda en caso de ser necesario',
+            'prefijo_emision.required' => 'Es necesario ingresar el prefijo correspondiente a la sucursal',
+            'prefijo_emision.min'=> 'El prefijo debe tener 3 dígitos. Complete con 0 a la izquierda en caso de ser necesario',
+
+
+
+        ];
+        $rules = [
+            'secuencial_fact' => 'required|integer|min:1',
+            'secuencial_nc' => 'required|integer|min:1',
+            'prefijo_sucursal' => 'required|min:3|max:3',
+            'prefijo_emision' => 'required|min:3|max:3',
+
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()){
+            return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Ocurrió un error al guardar la información, intente de nuevo','alert_type'=>'error'])
+                ->with('errors',$validator->errors());;
+        }
+
+        $empresa = $this->get($id);
+
+        $empresa -> fill($request->only('ambiente','secuencial_fact','secuencial_nc','prefijo_sucursal','prefijo_emision'));
+        $empresa->save();
+
+        return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se actualizaron los datos correctamente','alert_type'=>'info']);
+    }
     public function store(Request $request)
     {
         $messages =[
