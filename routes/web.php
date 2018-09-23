@@ -87,4 +87,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('proyectos/{id}/proforms/store','ProformController@store')->name('storeProformweb');
     Route::post('proyectos/{id}/proforms/{proform_id}/delete','ProformController@delete')->name('deleteProformweb');
     Route::post('proyectos/{id}/proforms/{proform_id}/sendSRI','ProformController@sendSRI')->name('createInvoiceweb');
+    Route::post('proyectos/{id}/proforms/{proform_id}/resendSRI','ProformController@resendSRI')->name('createInvoiceweb');
+
+    //Route::get('mail/send', 'MailController@send_factura')->name('sendFacturamail');
 });
