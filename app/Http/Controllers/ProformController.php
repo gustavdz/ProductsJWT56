@@ -15,7 +15,7 @@ use Products_JWT\proformDetail;
 use Products_JWT\Proyectos;
 use Products_JWT\User;
 use JWTAuth;
-use ErrorException;
+use Exception;
 
 include("proc_comp_elec.php");
 
@@ -30,298 +30,338 @@ class ProformController extends Controller
     }
 
     public function autorizar_factura_al_SRI($proform_id){
-        $estadoFac = 'P';
-        $cuantas='solo una';
-        $enviar_sri=1;
-        $enviar_al_titular=1;
+        try{
+            $proform = proform::find($proform_id);
+            $user = User::find(Auth::user()->id);
+            $perfil = Empresas::where('user_id', $user->id)->first();
+            $client = Clients::where('id', $proform->client_id)->first();
+
+            $tipo_id="";//[04, RUC][05,Cedula][06, Pasaporte][07, Consumidor final][08, Exterior][09, Placa]
+            if($client->tipo_id == "CI"){
+                $tipo_id="05";
+            }elseif ($client->tipo_id == "RUC"){
+                $tipo_id="04";
+            }elseif ($client->tipo_id == "PAS"){
+                $tipo_id="06";
+            }elseif ($client->tipo_id == "PLC"){
+                $tipo_id="09";
+            }else{
+                $tipo_id="07";
+            }
 
 
-        $mensaje_adicional = "";
+            // 1.- Creo el objeto que interactua con el servicio web
+            $procesarComprobanteElectronico = new \ProcesarComprobanteElectronico($perfil->ambiente);
 
-        $proform = proform::find($proform_id);
-        $user = User::find(Auth::user()->id);
-        $perfil = Empresas::where('user_id', $user->id)->first();
-        $client = Clients::where('id', $proform->client_id)->first();
+            // 2.- Configuración de variables del sistema de facturación electrónica
+            $configAplicacion = new \configAplicacion();
+            $configAplicacion->dirFirma=public_path('/cert/users/').$user->p12_filename;
+            $configAplicacion->dirAutorizados=public_path('/docauth/');
+            $configAplicacion->dirLogo=public_path($perfil->logo_filename);
+            $configAplicacion->passFirma=decrypt($user->p12_password);
 
-        $tipo_id="";//[04, RUC][05,Cedula][06, Pasaporte][07, Consumidor final][08, Exterior][09, Placa]
-        if($client->tipo_id == "CI"){
-            $tipo_id="05";
-        }elseif ($client->tipo_id == "RUC"){
-            $tipo_id="04";
-        }elseif ($client->tipo_id == "PAS"){
-            $tipo_id="06";
-        }elseif ($client->tipo_id == "PLC"){
-            $tipo_id="09";
-        }else{
-            $tipo_id="07";
+
+            if($client->email != '')
+            {	$configCorreo = new \configCorreo();
+                $configCorreo->correoAsunto="Notificación de documento electrónico generado";
+                $configCorreo->correoHost="smtp.zoho.com";
+                $configCorreo->correoPass="Gustav0DZ123";
+                $configCorreo->correoPort="465";
+                $configCorreo->correoRemitente="info@ecuabill.com";
+                $configCorreo->sslHabilitado=true;
+            }
+            $comprobantesPendientes = new \comprobantePendiente();
+            $comprobantesPendientes->ambiente = $perfil->ambiente; //[1,Prueba][2,Produccion]
+            $comprobantesPendientes->codDoc = "01"; //[01, Factura] [04, Nota Credito] [05, Nota Debito] [06, Guia Remision] [07, Guia de Retencion]
+            $comprobantesPendientes->configAplicacion =  $configAplicacion;
+            if($client->email != ''){
+                $comprobantesPendientes->configCorreo =  $configCorreo;
+            }
+            $comprobantesPendientes->establecimiento = $perfil->prefijo_sucursal; // [Numero Establecimiento SRI]
+            $comprobantesPendientes->fechaEmision = date("d/m/Y");
+            $comprobantesPendientes->ptoEmision = $perfil->prefijo_emision; //[pto de emision ] **
+            $comprobantesPendientes->ruc = $perfil->ruc_empresa; //[Ruc]
+            $comprobantesPendientes->secuencial = str_pad($proform->secuencial,9,"0",STR_PAD_LEFT); // [Secuencia desde 1 (9)]
+            //$comprobantesPendientes->secuencial = str_pad($perfil->secuencial_fact,9,"0",STR_PAD_LEFT); // [Secuencia desde 1 (9)]
+            $comprobantesPendientes->tipoEmision = "1"; //[1,Emision Normal][2,Emision Por Indisponibilidad del sistema
+
+            $procesarComprobante = new \procesarComprobantePendiente();
+            $procesarComprobante->comprobantePendiente = $comprobantesPendientes;
+            $res = $procesarComprobanteElectronico->procesarComprobantePendiente($procesarComprobante);
+
+            $proform->status_sri=$res->return->estadoComprobante;
+
+            $proform->numero_autorizacion=$res->return->numeroAutorizacion;
+            $proform->clave_acceso=$res->return->claveAcceso;
+
+            if($res->return->estadoComprobante == 'AUTORIZADO'){
+                $proform->fecha_autorizacion=$res->return->fechaAutorizacion;
+                $proform->mensaje_resp="OK";
+            }else{
+                $proform->mensaje_resp=$res->return->mensajes->mensaje;
+            }
+            $proform->save();
+
+            $data=array();
+            $data['status']="OK";
+            $data['respuesta']=$res;
+            return $data;
+        }catch(Exception $e){
+            $data['status']="ERROR";
+            $data['respuesta']=$e->getMessage();
+            return $data;
         }
-
-
-        // 1.- Creo el objeto que interactua con el servicio web
-        $procesarComprobanteElectronico = new \ProcesarComprobanteElectronico($perfil->ambiente);
-
-        // 2.- Configuración de variables del sistema de facturación electrónica
-        $configAplicacion = new \configAplicacion();
-        $configAplicacion->dirFirma=public_path('/cert/users/').$user->p12_filename;
-        $configAplicacion->dirAutorizados=public_path('/docauth/');
-        $configAplicacion->dirLogo=public_path($perfil->logo_filename);
-        $configAplicacion->passFirma=decrypt($user->p12_password);
-
-
-        if($client->email != '')
-        {	$configCorreo = new \configCorreo();
-            $configCorreo->correoAsunto="Notificación de documento electrónico generado";
-            $configCorreo->correoHost="smtp.zoho.com";
-            $configCorreo->correoPass="Gustav0DZ123";
-            $configCorreo->correoPort="465";
-            $configCorreo->correoRemitente="info@ecuabill.com";
-            $configCorreo->sslHabilitado=true;
-        }
-        $comprobantesPendientes = new \comprobantePendiente();
-        $comprobantesPendientes->ambiente = $perfil->ambiente; //[1,Prueba][2,Produccion]
-        $comprobantesPendientes->codDoc = "01"; //[01, Factura] [04, Nota Credito] [05, Nota Debito] [06, Guia Remision] [07, Guia de Retencion]
-        $comprobantesPendientes->configAplicacion =  $configAplicacion;
-        if($client->email != ''){
-            $comprobantesPendientes->configCorreo =  $configCorreo;
-        }
-        $comprobantesPendientes->establecimiento = $perfil->prefijo_sucursal; // [Numero Establecimiento SRI]
-        $comprobantesPendientes->fechaEmision = date("d/m/Y");
-        $comprobantesPendientes->ptoEmision = $perfil->prefijo_emision; //[pto de emision ] **
-        $comprobantesPendientes->ruc = $perfil->ruc_empresa; //[Ruc]
-        $comprobantesPendientes->secuencial = str_pad($perfil->secuencial_fact,9,"0",STR_PAD_LEFT); // [Secuencia desde 1 (9)]
-        $comprobantesPendientes->tipoEmision = "1"; //[1,Emision Normal][2,Emision Por Indisponibilidad del sistema
-
-        $procesarComprobante = new \procesarComprobantePendiente();
-        $procesarComprobante->comprobantePendiente = $comprobantesPendientes;
-        $res = $procesarComprobanteElectronico->procesarComprobantePendiente($procesarComprobante);
-
-        return $res;
-
     }
 
     public function enviar_factura_al_SRI($proform_id)
     {
-        $estadoFac = 'P';
-        $cuantas='solo una';
-        $ruta_documentosAutorizados=public_path('/docauth');
-        $enviar_sri=1;
-        $enviar_al_titular=1;
+        try{
+            $enviar_sri=1;
 
+            $mensaje_adicional = "";
 
-        $mensaje_adicional = "";
+            $proform = proform::find($proform_id);
+            $user = User::find(Auth::user()->id);
+            $perfil = Empresas::where('user_id', $user->id)->first();
+            $client = Clients::where('id', $proform->client_id)->first();
 
-        $proform = proform::find($proform_id);
-        $user = User::find(Auth::user()->id);
-        $perfil = Empresas::where('user_id', $user->id)->first();
-        $client = Clients::where('id', $proform->client_id)->first();
-
-        $tipo_id="";//[04, RUC][05,Cedula][06, Pasaporte][07, Consumidor final][08, Exterior][09, Placa]
-        if($client->tipo_id == "CI"){
-            $tipo_id="05";
-        }elseif ($client->tipo_id == "RUC"){
-            $tipo_id="04";
-        }elseif ($client->tipo_id == "PAS"){
-            $tipo_id="06";
-        }elseif ($client->tipo_id == "PLC"){
-            $tipo_id="09";
-        }else{
-            $tipo_id="07";
-        }
-
-
-        // 1.- Creo el objeto que interactua con el servicio web
-        $procesarComprobanteElectronico = new \ProcesarComprobanteElectronico($perfil->ambiente);
-
-        // 2.- Configuración de variables del sistema de facturación electrónica
-        $configAplicacion = new \configAplicacion();
-        $configAplicacion->dirFirma=public_path('/cert/users/').$user->p12_filename;
-        $configAplicacion->dirAutorizados=public_path('/docauth/');
-        $configAplicacion->dirLogo=public_path($perfil->logo_filename);
-        $configAplicacion->passFirma=decrypt($user->p12_password);
-
-
-        if($client->email != '')
-        {	$configCorreo = new \configCorreo();
-            $configCorreo->correoAsunto="Notificación de documento electrónico generado";
-            $configCorreo->correoHost="smtp.zoho.com";
-            $configCorreo->correoPass="Gustav0DZ123";
-            $configCorreo->correoPort="465";
-            $configCorreo->correoRemitente="info@ecuabill.com";
-            $configCorreo->sslHabilitado=true;
-        }
-
-        // 3.- Cabecera de la factura
-        $factura = new \facturaSRI();
-
-        $factura->configAplicacion =  $configAplicacion;
-        $factura->configCorreo =  $configCorreo;
-
-        $factura->ambiente=$perfil->ambiente; //string //[1,Prueba][2,Produccion]
-        $factura->codDoc="01"; // string //[01, Factura] [04, Nota Credito] [05, Nota Debito] [06, Guia Remision] [07, Guia de Retencion]
-        $factura->tipoEmision="1"; // string //[1,Emision Normal][2,Emision Por Indisponibilidad del sistema
-
-        $factura->dirEstablecimiento = $perfil->direccion_sucursal;
-        $factura->dirMatriz = $perfil->direccion_matriz;
-        $factura->nombreComercial = $perfil->nombre_comercial;
-        $factura->razonSocial = $perfil->razon_social;
-        $factura->ruc = $perfil->ruc_empresa;
-        if($perfil->contribuyenteEspecial<>null || $perfil->contribuyenteEspecial<>''){
-            $factura->contribuyenteEspecial = $perfil->contribuyenteEspecial;
-        }
-        $factura->establecimiento = $perfil->prefijo_sucursal;
-        $factura->fechaEmision = date("d/m/Y");
-        $factura->obligadoContabilidad = 'NO';
-        $factura->ptoEmision=$perfil->prefijo_emision;
-        $factura->secuencial=str_pad($perfil->secuencial_fact,9,"0",STR_PAD_LEFT);
-        $factura->tipoIdentificacionComprador=$tipo_id;
-        $factura->identificacionComprador=$client->dni;
-        $factura->razonSocialComprador=$client->company;
-        $factura->totalSinImpuestos=number_format($proform->subtotal,2,'.','');
-        $factura->totalDescuento=number_format($proform->descuento,2,'.','');
-
-        // 4.- Impuestos de la cabecera
-        $impuestosCabecera = array();
-        if($proform->subtotal12 > 0)
-        {	$totalIVA12 = new \totalImpuesto();
-            $totalIVA12->codigo = "2"; // [2, IVA][3,ICE][5, IRBPNR]
-            $totalIVA12->codigoPorcentaje = "2"; // IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
-            $totalIVA12->baseImponible = number_format($proform->subtotal12, 2, '.', ''); // Suma de los impuesto del mismo cod y % (0.00)
-            $totalIVA12->valor = number_format($proform->total_iva, 2, '.', ''); // Suma de los impuesto del mismo cod y % aplicado el % (0.00)
-            $impuestosCabecera[] = $totalIVA12;
-        }
-        if($proform->subtotal0 > 0)
-        {	$totalIVA0 = new \totalImpuesto();
-            $totalIVA0->codigo = "2"; // [2, IVA][3,ICE][5, IRBPNR]
-            $totalIVA0->codigoPorcentaje = "0"; // IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
-            $totalIVA0->baseImponible = number_format($proform->subtotal0, 2, '.', ''); // Suma de los impuesto del mismo cod y % (0.00)
-            $totalIVA0->valor = number_format(0, 2, '.', ''); // Suma de los impuesto del mismo cod y % aplicado el % (0.00)
-            $impuestosCabecera[] = $totalIVA0;
-        }
-
-        // 5.- Totales de la cabecera
-        $factura->totalConImpuesto = $impuestosCabecera; //Agrega el impuesto a la factura
-        $factura->propina = "0.00"; // Propina
-        $factura->importeTotal = number_format($proform->total,2,'.',''); // Total de Productos + impuestos
-        $factura->moneda = "DOLAR";
-
-        // 5.5.- Forma de pago
-        /*01 "SIN UTILIZACION DEL SISTEMA FINANCIERO";
-        16 "TARJETA DE DEBITO" --EFECTIVO;
-        17 "DINERO ELECTRONICO";
-        18 "TARJETA PREPAGO";
-        19 "TARJETA DE CREDITO" --TARJETA CREDITO;
-        20 "OTROS CON UTILIZACION DEL SISTEMA FINANCIERO";
-        21 "ENDOSO DE TITULOS";*/
-
-        $pagos = array();
-        $pago = new \pago();
-        $pago->formaPago = "20";
-        $pago->total = $proform->total;
-        $pagos [] = $pago;
-        $factura->pagos = $pagos;
-
-        // 6.- Detalle de la factura
-        $detalle = array();
-        $detalleFact= proformDetail::with('proform')->where('proform_id','=',$proform_id)->get();
-
-        foreach ($detalleFact as $linea)
-        {	$detalleFactura = new \detalleFactura();
-            $detalleFactura->codigoPrincipal = "".$linea->product->id; // Codigo del Producto
-            //$detalleFactura->codigoAuxiliar = ""; // Opcional
-            $detalleFactura->descripcion = $linea->product->name.' - '.$linea->product->detail; // Nombre del producto
-            $detalleFactura->cantidad = number_format($linea->quantity, 2, '.', ''); // Cantidad
-            $detalleFactura->precioUnitario = number_format($linea->price, 2, '.', ''); // Valor unitario
-            $detalleFactura->descuento = number_format($linea->descuento, 2, '.', ''); // Descuento u
-            $detalleFactura->precioTotalSinImpuesto = "".(number_format($linea->quantity, 2, '.', '')*number_format($linea->price, 2, '.', '')); // Valor sin impuesto
-
-            // 6.1.- Impuesto del detalle [2, IVA][3,ICE][5, IRBPNR]
-            //IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
-            $impuestoDetalle = array();
-            $impuesto = new \impuesto(); // Impuesto del detalle
-            $impuesto->codigo = "2";
-            switch($linea->iva){
-                case 12:
-                    $impuesto->codigoPorcentaje = "2";
-                    $impuesto->tarifa = "12";
-                    $impuesto->baseImponible = number_format($detalleFactura->precioTotalSinImpuesto, 2, '.', '');
-                    $impuesto->valor = number_format((($detalleFactura->precioTotalSinImpuesto*12)/100),2,'.','');
-                    break;
-                case 0:
-                    $impuesto->codigoPorcentaje = "0";
-                    $impuesto->tarifa = "0";
-                    $impuesto->baseImponible = number_format($detalleFactura->precioTotalSinImpuesto, 2, '.', '');
-                    $impuesto->valor = 0;
-                    break;
-                default:
-                    $impuesto->codigoPorcentaje = "2";
-                    $impuesto->tarifa = "12";
-                    $impuesto->baseImponible = number_format($detalleFactura->precioTotalSinImpuesto, 2, '.', '');
-                    $impuesto->valor = number_format((($detalleFactura->precioTotalSinImpuesto*12)/100),2,'.','');
-                    break;
+            $tipo_id="";//[04, RUC][05,Cedula][06, Pasaporte][07, Consumidor final][08, Exterior][09, Placa]
+            if($client->tipo_id == "CI"){
+                $tipo_id="05";
+            }elseif ($client->tipo_id == "RUC"){
+                $tipo_id="04";
+            }elseif ($client->tipo_id == "PAS"){
+                $tipo_id="06";
+            }elseif ($client->tipo_id == "PLC"){
+                $tipo_id="09";
+            }else{
+                $tipo_id="07";
             }
-            $impuestoDetalle[] = $impuesto;
-            // Agrego el impuesto al detalle
-            $detalleFactura->impuestos = $impuestoDetalle;
-            // Agrego el detalle
-            $detalle[] = $detalleFactura;
-        }
-        // Agrego los detalles a la factura
-        $factura->detalles = $detalle;
 
-        $camposAdicionales = array();
 
-        // 7.- Campos adicionales de la factura
-        $camposAdicionales = array();
-        $campoAdicional = new \campoAdicional();
-        $campoAdicional->nombre = "Observación: ";
-        $campoAdicional->valor = $proform->observations;
-        $camposAdicionales[] = $campoAdicional;
+            // 1.- Creo el objeto que interactua con el servicio web
+            $procesarComprobanteElectronico = new \ProcesarComprobanteElectronico($perfil->ambiente);
 
-        $factura->infoAdicional = $camposAdicionales;
+            // 2.- Configuración de variables del sistema de facturación electrónica
+            $configAplicacion = new \configAplicacion();
+            $configAplicacion->dirFirma=public_path('/cert/users/').$user->p12_filename;
+            $configAplicacion->dirAutorizados=public_path('/docauth/');
+            $configAplicacion->dirLogo=public_path($perfil->logo_filename);
+            $configAplicacion->passFirma=decrypt($user->p12_password);
 
-        $procesarComprobante = new \procesarComprobante();
-        $procesarComprobante->comprobante = $factura;
-        $procesarComprobante->envioSRI = false;
-        $mensaje=array();
-        $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
-        $mensaje[0]=$res;
-        if ($client->email != ''){
-            $facturastring='FAC'.$procesarComprobante->comprobante->establecimiento.'-'.$procesarComprobante->comprobante->ptoEmision.'-'.$procesarComprobante->comprobante->secuencial;
-            $email = new MailController();
-            $email->send_factura($client->name.' '.$client->lastname
-                ,$facturastring
-                ,[
-                    public_path('docauth/'.$client->dni.'/'.$facturastring.'.pdf')
-                    ,public_path('docauth/'.$client->dni.'/'.$facturastring.'.xml')
-                ]
-                ,$client->email
-            );
-        }
-        $mensajes = array();
 
-        if( $enviar_sri == 1 ) {
+            if($client->email != '')
+            {	$configCorreo = new \configCorreo();
+                $configCorreo->correoAsunto="Notificación de documento electrónico generado";
+                $configCorreo->correoHost="smtp.zoho.com";
+                $configCorreo->correoPass="Gustav0DZ123";
+                $configCorreo->correoPort="465";
+                $configCorreo->correoRemitente="info@ecuabill.com";
+                $configCorreo->sslHabilitado=true;
+            }
+
+            // 3.- Cabecera de la factura
+            $factura = new \facturaSRI();
+
+            $factura->configAplicacion =  $configAplicacion;
+            $factura->configCorreo =  $configCorreo;
+
+            $factura->ambiente=$perfil->ambiente; //string //[1,Prueba][2,Produccion]
+            $factura->codDoc="01"; // string //[01, Factura] [04, Nota Credito] [05, Nota Debito] [06, Guia Remision] [07, Guia de Retencion]
+            $factura->tipoEmision="1"; // string //[1,Emision Normal][2,Emision Por Indisponibilidad del sistema
+
+            $factura->dirEstablecimiento = $perfil->direccion_sucursal;
+            $factura->dirMatriz = $perfil->direccion_matriz;
+            $factura->nombreComercial = $perfil->nombre_comercial;
+            $factura->razonSocial = $perfil->razon_social;
+            $factura->ruc = $perfil->ruc_empresa;
+            if($perfil->contribuyenteEspecial<>null || $perfil->contribuyenteEspecial<>''){
+                $factura->contribuyenteEspecial = $perfil->contribuyenteEspecial;
+            }
+            $factura->obligadoContabilidad = 'NO';
+            $factura->establecimiento = $perfil->prefijo_sucursal;
+            $factura->fechaEmision = date("d/m/Y");
+            $factura->ptoEmision=$perfil->prefijo_emision;
+            $factura->secuencial=str_pad($perfil->secuencial_fact,9,"0",STR_PAD_LEFT);
+
+
+            $factura->tipoIdentificacionComprador=$tipo_id;
+            $factura->identificacionComprador=$client->dni;
+            $factura->razonSocialComprador=$client->company;
+            $factura->totalSinImpuestos=number_format($proform->subtotal,2,'.','');
+            $factura->totalDescuento=number_format($proform->descuento,2,'.','');
+
+            // 4.- Impuestos de la cabecera
+            $impuestosCabecera = array();
+            if($proform->subtotal12 > 0)
+            {	$totalIVA12 = new \totalImpuesto();
+                $totalIVA12->codigo = "2"; // [2, IVA][3,ICE][5, IRBPNR]
+                $totalIVA12->codigoPorcentaje = "2"; // IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
+                $totalIVA12->baseImponible = number_format($proform->subtotal12, 2, '.', ''); // Suma de los impuesto del mismo cod y % (0.00)
+                $totalIVA12->valor = number_format($proform->total_iva, 2, '.', ''); // Suma de los impuesto del mismo cod y % aplicado el % (0.00)
+                $impuestosCabecera[] = $totalIVA12;
+            }
+            if($proform->subtotal0 > 0)
+            {	$totalIVA0 = new \totalImpuesto();
+                $totalIVA0->codigo = "2"; // [2, IVA][3,ICE][5, IRBPNR]
+                $totalIVA0->codigoPorcentaje = "0"; // IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
+                $totalIVA0->baseImponible = number_format($proform->subtotal0, 2, '.', ''); // Suma de los impuesto del mismo cod y % (0.00)
+                $totalIVA0->valor = number_format(0, 2, '.', ''); // Suma de los impuesto del mismo cod y % aplicado el % (0.00)
+                $impuestosCabecera[] = $totalIVA0;
+            }
+
+            // 5.- Totales de la cabecera
+            $factura->totalConImpuesto = $impuestosCabecera; //Agrega el impuesto a la factura
+            $factura->propina = "0.00"; // Propina
+            $factura->importeTotal = number_format($proform->total,2,'.',''); // Total de Productos + impuestos
+            $factura->moneda = "DOLAR";
+
+            // 5.5.- Forma de pago
+            /*01 "SIN UTILIZACION DEL SISTEMA FINANCIERO";
+            16 "TARJETA DE DEBITO" --EFECTIVO;
+            17 "DINERO ELECTRONICO";
+            18 "TARJETA PREPAGO";
+            19 "TARJETA DE CREDITO" --TARJETA CREDITO;
+            20 "OTROS CON UTILIZACION DEL SISTEMA FINANCIERO";
+            21 "ENDOSO DE TITULOS";*/
+
+            $pagos = array();
+            $pago = new \pago();
+            $pago->formaPago = "20";
+            $pago->total = $proform->total;
+            $pagos [] = $pago;
+            $factura->pagos = $pagos;
+
+            // 6.- Detalle de la factura
+            $detalle = array();
+            $detalleFact= proformDetail::with('proform')->where('proform_id','=',$proform_id)->get();
+
+            foreach ($detalleFact as $linea)
+            {	$detalleFactura = new \detalleFactura();
+                $detalleFactura->codigoPrincipal = "".$linea->product->id; // Codigo del Producto
+                //$detalleFactura->codigoAuxiliar = ""; // Opcional
+                $detalleFactura->descripcion = $linea->product->name.' - '.$linea->product->detail; // Nombre del producto
+                $detalleFactura->cantidad = number_format($linea->quantity, 2, '.', ''); // Cantidad
+                $detalleFactura->precioUnitario = number_format($linea->price, 2, '.', ''); // Valor unitario
+                $detalleFactura->descuento = number_format((number_format($linea->descuento)/100)*(number_format($linea->quantity,2,'.',',')*number_format($linea->price, 2, '.', '')),2,'.',','); // Descuento u
+                $detalleFactura->precioTotalSinImpuesto = (number_format($linea->quantity, 2, '.', '')*number_format($linea->price, 2, '.', ''))-$detalleFactura->descuento; // Valor sin impuesto
+
+                // 6.1.- Impuesto del detalle [2, IVA][3,ICE][5, IRBPNR]
+                //IVA -> [0, 0%][2, 12%][3, 14%][6, No objeto de impuesto][7, Exento de IVA] ICE->[Tabla 19]
+                $impuestoDetalle = array();
+                $impuesto = new \impuesto(); // Impuesto del detalle
+                $impuesto->codigo = "2";
+                switch($linea->iva){
+                    case 12:
+                        $impuesto->codigoPorcentaje = "2";
+                        $impuesto->tarifa = "12";
+                        $impuesto->baseImponible = number_format($detalleFactura->precioTotalSinImpuesto, 2, '.', '');
+                        $impuesto->valor = number_format((($detalleFactura->precioTotalSinImpuesto*12)/100),2,'.','');
+                        break;
+                    case 0:
+                        $impuesto->codigoPorcentaje = "0";
+                        $impuesto->tarifa = "0";
+                        $impuesto->baseImponible = number_format($detalleFactura->precioTotalSinImpuesto, 2, '.', '');
+                        $impuesto->valor = 0;
+                        break;
+                    default:
+                        $impuesto->codigoPorcentaje = "2";
+                        $impuesto->tarifa = "12";
+                        $impuesto->baseImponible = number_format($detalleFactura->precioTotalSinImpuesto, 2, '.', '');
+                        $impuesto->valor = number_format((($detalleFactura->precioTotalSinImpuesto*12)/100),2,'.','');
+                        break;
+                }
+                $impuestoDetalle[] = $impuesto;
+                // Agrego el impuesto al detalle
+                $detalleFactura->impuestos = $impuestoDetalle;
+                // Agrego el detalle
+                $detalle[] = $detalleFactura;
+            }
+            // Agrego los detalles a la factura
+            $factura->detalles = $detalle;
+
+            // 7.- Campos adicionales de la factura
+            $camposAdicionales = array();
+            $campoAdicional = new \campoAdicional();
+            $campoAdicional->nombre = "Observación: ";
+            if($proform->observations == null || $proform->observations==""){
+                $info_adicional="N-A";
+            }else{
+                $info_adicional=$proform->observations;
+            }
+            $campoAdicional->valor = $info_adicional;
+            $camposAdicionales[] = $campoAdicional;
+
+            $factura->infoAdicional = $camposAdicionales;
+
+            $procesarComprobante = new \procesarComprobante();
+            $procesarComprobante->comprobante = $factura;
+            $procesarComprobante->envioSRI = false;
+            $data=array();
+            $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
+
             if($res->return->estadoComprobante == "FIRMADO"){
-                $procesarComprobante->envioSRI = true;
-                $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
-                $mensaje[1]=$res;
+                $proform->status_sri="PROCESANDOSE";
+                $proform->save();
+            }else{
+                $data['status']="ERROR";
+                $data['respuesta']="NO SE LOGRO FIRMAR EL COMPROBANTE";
+                return $data;
             }
-        }
-        $mensajes[0]=$procesarComprobante;
-        $mensajes[1]=$mensaje;
-        $data=array();
-        $data[]=$mensajes;
-        return $data;
+            if ($client->email != ''){
+                $facturastring='FAC'.$procesarComprobante->comprobante->establecimiento.'-'.$procesarComprobante->comprobante->ptoEmision.'-'.$procesarComprobante->comprobante->secuencial;
+                $email = new MailController();
+                $email->send_factura($client->name.' '.$client->lastname
+                    ,$facturastring
+                    ,[
+                        public_path('docauth/'.$client->dni.'/'.$facturastring.'.pdf')
+                        ,public_path('docauth/'.$client->dni.'/'.$facturastring.'.xml')
+                    ]
+                    ,$client->email
+                );
+            }
 
+            if( $enviar_sri == 1 ) {
+                if($res->return->estadoComprobante == "FIRMADO"){
+                    $procesarComprobante->envioSRI = true;
+                    $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
+                    $proform->secuencial=$factura->secuencial;
+                    $proform->prefijo_emision=$factura->ptoEmision;
+                    $proform->fecha_envio=date('Y-m-d H:i:s');
+                    $proform->prefijo_establecimiento=$factura->establecimiento;
+                    $proform->status_sri=$res->return->estadoComprobante;
+                    $proform->numero_autorizacion=$res->return->numeroAutorizacion;
+                    if($res->return->estadoComprobante == 'AUTORIZADO'){
+                        $proform->fecha_autorizacion=$res->return->fechaAutorizacion;
+                        $proform->mensaje_resp="OK";
+                    }else{
+                        $proform->mensaje_resp=$res->return->mensajes->mensaje;
+                    }
+                    $proform->save();
+
+                    $perfil->secuencial_fact=$perfil->secuencial_fact+1;
+                    $perfil->save();
+                }
+            }
+            $data['status']="OK";
+            $data['respuesta']=$res;
+            return $data;
+        }catch(Exception $e){
+            $data['status']="ERROR";
+            $data['respuesta']=$e->getMessage();
+            return $data;
+        }
     }
+
     public function sendSRI(ProformOwnershipRequest $request,$id,$proform_id){
         $data = $this->enviar_factura_al_SRI($proform_id);
-        var_dump($data);
+        return redirect()->route('indexProformweb',['id' => $id])->with('notification',['title'=>'Notificación','message'=>$data['respuesta']->return->estadoComprobante,'alert_type'=>'info']);
 
     }
 
     public function resendSRI(ProformOwnershipRequest $request,$id,$proform_id){
         $data = $this->autorizar_factura_al_SRI($proform_id);
-        var_dump($data);
+        return redirect()->route('indexProformweb',['id' => $id])->with('notification',['title'=>'Notificación','message'=>$data['respuesta']->return->estadoComprobante,'alert_type'=>'info']);
 
     }
 
@@ -383,6 +423,8 @@ class ProformController extends Controller
         $proform_request['paidform']=$request->paidform;
         $proform_request['client_id']=$request->client_id;
         $proform_request['user_id']=$user->id;
+        $proform_request['status']="NO PAGADA";
+        $proform_request['status_sri']="NO ENVIADA";
         $proform_request['proyecto_id']=$id;
 
         $proform = proform::create($proform_request);
@@ -401,7 +443,10 @@ class ProformController extends Controller
             $proform_detalle = proformDetail::create($detail_request);
         }
 
-        return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se creó la proforma correctamente','alert_type'=>'info']);
+        $proyecto = Proyectos::find($id);
 
+        //return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se creó la proforma correctamente','alert_type'=>'info']);
+        //return view('proformas.show')->with(compact('proyecto','proyecto_id'));
+        return redirect()->route('indexProformweb',['id' => $proyecto->id])->with('notification',['title'=>'Notificación','message'=>'Se creó la proforma correctamente','alert_type'=>'info']);
     }
 }

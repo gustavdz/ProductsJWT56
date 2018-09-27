@@ -341,7 +341,7 @@ class ProcesarComprobanteElectronico extends SoapClient
                 $wsdl = "http://localhost:8080/MasterOffline_desa/ProcesarComprobanteElectronico?wsdl";
                 break;
             case "2":
-                $wsdl = "http://localhost:8080/MasterOffline/ProcesarComprobanteElectronico?wsdl";
+                $wsdl = "http://localhost:8080/MasterOffline_prod/ProcesarComprobanteElectronico?wsdl";
                 break;
             default:
                 $wsdl = "http://localhost:8080/MasterOffline_desa/ProcesarComprobanteElectronico?wsdl";

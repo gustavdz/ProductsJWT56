@@ -174,9 +174,20 @@
                                         {{ csrf_field() }}
                                         <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
                                         <button class="btn btn-primary pull-right" onclick="submit_form('aprobar');"><i class="fa fa-thumbs-up"></i> Aprobar</button>
-                                        <button class="btn btn-success pull-right" onclick="submit_form('send');"><i class="fa fa-send"></i> Facturar</button>
+                                        @if($proform->types =='C')
+                                            @switch($proform->status_sri)
+                                                @case ('AUTORIZADO')
+                                                @break
+                                                @case ('NO ENVIADA')
+                                                    <button class="btn btn-success pull-right" onclick="submit_form('send');"><i class="fa fa-send"></i> Facturar</button>
+                                                @break
+                                                @default
+                                                    <button class="btn btn-success pull-right" onclick="submit_form('resend');"><i class="fa fa-send"></i> Obetner Estado</button>
+                                            @endswitch
+
+                                        @endif
                                         <button class="btn btn-danger pull-right" onclick="submit_form('cancel');"><i class="fa fa-ban"></i> Rechazar</button>
-                                        <a class="btn btn-warning pull-left" href="{{url('/proyectos/'.$proform->proyecto->id.'/proforms/')}}"><i class="fa fa-arrow-left"></i> Volver</a>
+                                        <a class="btn btn-warning pull-left" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i> Volver</a>
                                     </form>
                                 </div>
                             </div>
@@ -197,6 +208,10 @@
                 break;
             case 'send':
                 document.forms.frm_action.action='sendSRI';
+                document.forms.frm_action.submit();
+                break;
+            case 'resend':
+                document.forms.frm_action.action='resendSRI';
                 document.forms.frm_action.submit();
                 break;
             case 'cancel':

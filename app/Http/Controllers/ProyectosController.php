@@ -50,7 +50,8 @@ class ProyectosController extends Controller
                 $query->where('company', 'LIKE', '%'.$search.'%')
                     ->orWhere('DNI', 'LIKE', '%'.$search.'%');
             })
-            ->paginate(10);
+            ->orderBy('id', 'desc')
+            ->paginate(5);
         return view('proformas.show')->with(compact('proformas','proyecto_id','proyecto'));
     }
 

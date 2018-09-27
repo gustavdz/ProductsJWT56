@@ -1,7 +1,18 @@
 @extends('layouts.app')
 @section('topnavbar','Proformas')
-@section('body-class','nav-md  footer_fixed')
+@section('body-class','nav-md ')
 @section('notification'){{ Session::has('notification') ? 'data-notification=true' : '' }} data-notification-type='{{ Session::get('notification')['alert_type']}}' data-notification-title='{{ Session::get('notification')['title']}}' data-notification-message='{{ Session::get('notification')['message'] }}'@endsection
+@section('style')
+    <style>
+        div.tooltip-inner {
+            max-width: 350px;
+        }
+        .hover_color:hover{
+            cursor: help;
+            color:green;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="">
         <div class="page-title">
@@ -51,10 +62,10 @@
                                     <th>Tipo</th>
                                     <th>Cliente</th>
                                     <th>Duración</th>
-                                    <th>Forma de Pago</th>
                                     <th>Observación</th>
                                     <th>Total</th>
                                     <th>Fecha Creación</th>
+                                    <th>Estado SRI</th>
                                     <th>Opciones</th>
                                 </tr>
                                 </thead>
@@ -62,16 +73,20 @@
                                 @foreach($proformas as $proforma)
                                     <tr>
                                         <td>{{ $proforma->id }}</td>
-                                        <td>{{ $proforma->type }}</td>
-                                        <td>{{ $proforma->company }} - {{ $proforma->DNI }}
+                                        <td><small>{{ $proforma->type }}</small></td>
+                                        <td>{{ $proforma->company }}
+                                            <br><small>CI/RUC: {{ $proforma->DNI }}</small>
                                             <br><small>{{$proforma->client->name}} {{$proforma->client->lastname}}</small>
                                             <br><small>{{$proforma->client->email}} {{$proforma->client->phone}}</small>
                                         </td>
-                                        <td>{{ $proforma->duration }}</td>
-                                        <td>{{ $proforma->paidform }}</td>
-                                        <td>{{ str_limit($proforma->observations,25,'...') }}</td>
-                                        <td>$ {{ $proforma->total }}</td>
-                                        <td>{{ $proforma->created_at }}</td>
+                                        <td><small>{{ $proforma->duration }}</small></td>
+                                        <td><small>{{ str_limit($proforma->observations,25,'...') }}</small></td>
+                                        <td><small>$ {{ $proforma->total }}</small></td>
+                                        <td><small>{{ $proforma->created_at }}</small></td>
+                                        <td><small>{{ $proforma->status_sri }}</small><br>
+                                            <small class="hover_color" data-toggle="tooltip" title="Autorización: {{$proforma->numero_autorizacion}}" >NA:{{ str_limit($proforma->numero_autorizacion,10,'...') }}</small><br>
+                                            <small>{{ $proforma->fecha_autorizacion }}</small>
+                                        </td>
                                         <td>
                                             <form method="post"  role="form" action="{{url('/proyectos/'.$proyecto_id.'/proforms/'.$proforma->id.'/delete')}}">
                                                 {{csrf_field()}}
@@ -105,7 +120,19 @@
                     type: document.body.dataset.notificationType,
                     styling: 'bootstrap3'
                 });
+
+                $('.tt_large').tooltip({
+                    template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner large"></div></div>'
+                });
+
             })();
+            $(document).ready(function () {
+                $("a").tooltip({
+                    'selector': '',
+                    'placement': 'top',
+                    'container':'body'
+                });
+            });
         </script>
     @endif
 @endsection

@@ -248,7 +248,7 @@
         <div class="row">
             <div class="col-md-12 ">
                 <div class="pull-right">
-                    <a type="button" href="{{url('/proyectos/'.$proyecto->id.'/proforms')}}" class="btn btn-default  btn-fill " >Cancelar</a>
+                    <a type="button" href="{{url()->previous()}}" class="btn btn-default  btn-fill " >Cancelar</a>
                     <button type="button" class="btn btn-primary btn-fill" onclick="tablejson('products')">Guardar</button>
                 </div>
             </div>

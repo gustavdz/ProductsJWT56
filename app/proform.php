@@ -8,7 +8,7 @@ class proform extends Model
 {
     //
     Protected $table = 'proforms';
-    Protected $fillable = array('types','subtotal12','subtotal0','subtotal','descuento','total','total_iva','company','DNI','observations','duration','paidform','client_id','proyecto_id','user_id','status','status_sri');
+    Protected $fillable = array('types','subtotal12','subtotal0','subtotal','descuento','total','total_iva','company','DNI','observations','duration','paidform','client_id','proyecto_id','user_id','status','status_sri','mensaje_resp','numero_autorizacion','clave_acceso','fecha_envio','fecha_autorizacion','prefijo_establecimiento','prefijo_emision','secuencial');
     protected $hidden = [];
 
     public function client(){
