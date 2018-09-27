@@ -7,7 +7,7 @@
                 </button>
                 <h4 class="modal-title" id="myModalLabel"></h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modalbodycli">
 
             </div>
             <div class="modal-footer">
