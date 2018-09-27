@@ -158,6 +158,10 @@
                                     return data.name+' '+data.last_name;
                                 }
                             }, {
+                                "data" : "company"
+                            },{
+                                "data" : "dni"
+                            },{
                                 "data" : "phone"
                             }, {
                                 "data" : "email"
