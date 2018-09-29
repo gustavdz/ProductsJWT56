@@ -12,6 +12,17 @@
                 display: none !important;
             }
         }
+        .overlay {
+            background-color:#EFEFEF;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            top: 0px;
+            left: 0px;
+            opacity: .5; /* in FireFox */
+            filter: alpha(opacity=50); /* in IE */
+        }
     </style>
 
 @endsection
@@ -179,10 +190,10 @@
                                                 @case ('AUTORIZADO')
                                                 @break
                                                 @case ('NO ENVIADA')
-                                                    <button class="btn btn-success pull-right" onclick="submit_form('send');"><i class="fa fa-send"></i> Facturar</button>
+                                                    <button class="btn btn-success pull-right" onclick="disableScreen();submit_form('send');"><i class="fa fa-send"></i> Facturar</button>
                                                 @break
                                                 @default
-                                                    <button class="btn btn-success pull-right" onclick="submit_form('resend');"><i class="fa fa-send"></i> Obetner Estado</button>
+                                                    <button class="btn btn-success pull-right" onclick="disableScreen();submit_form('resend');"><i class="fa fa-send"></i> Obetner Estado</button>
                                             @endswitch
 
                                         @endif
@@ -223,6 +234,14 @@
                 document.forms.frm_action.submit();
                 break;
         }
+    }
+
+    function disableScreen() {
+        // creates <div class="overlay"></div> and
+        // adds it to the DOM
+        var div= document.createElement("div");
+        div.className += "overlay";
+        document.body.appendChild(div);
     }
 </script>
 @endsection

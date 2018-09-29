@@ -60,16 +60,16 @@ class ProformController extends Controller
             $configAplicacion->dirLogo=public_path($perfil->logo_filename);
             $configAplicacion->passFirma=decrypt($user->p12_password);
 
-
             if($client->email != '')
             {	$configCorreo = new \configCorreo();
                 $configCorreo->correoAsunto="Notificación de documento electrónico generado";
-                $configCorreo->correoHost="smtp.zoho.com";
-                $configCorreo->correoPass="Gustav0DZ123";
-                $configCorreo->correoPort="465";
-                $configCorreo->correoRemitente="info@ecuabill.com";
+                $configCorreo->correoHost=env('MAIL_HOST');
+                $configCorreo->correoPass= env('MAIL_PASSWORD');  //"vNr3224e9Mrf";
+                $configCorreo->correoPort=env('MAIL_PORT');
+                $configCorreo->correoRemitente=env('MAIL_USERNAME');
                 $configCorreo->sslHabilitado=true;
             }
+
             $comprobantesPendientes = new \comprobantePendiente();
             $comprobantesPendientes->ambiente = $perfil->ambiente; //[1,Prueba][2,Produccion]
             $comprobantesPendientes->codDoc = "01"; //[01, Factura] [04, Nota Credito] [05, Nota Debito] [06, Guia Remision] [07, Guia de Retencion]
@@ -153,10 +153,10 @@ class ProformController extends Controller
             if($client->email != '')
             {	$configCorreo = new \configCorreo();
                 $configCorreo->correoAsunto="Notificación de documento electrónico generado";
-                $configCorreo->correoHost="smtp.zoho.com";
-                $configCorreo->correoPass="Gustav0DZ123";
-                $configCorreo->correoPort="465";
-                $configCorreo->correoRemitente="info@ecuabill.com";
+                $configCorreo->correoHost=env('MAIL_HOST');
+                $configCorreo->correoPass= env('MAIL_PASSWORD');  //"vNr3224e9Mrf";
+                $configCorreo->correoPort=env('MAIL_PORT');
+                $configCorreo->correoRemitente=env('MAIL_USERNAME');
                 $configCorreo->sslHabilitado=true;
             }
 
@@ -355,7 +355,8 @@ class ProformController extends Controller
 
     public function sendSRI(ProformOwnershipRequest $request,$id,$proform_id){
         $data = $this->enviar_factura_al_SRI($proform_id);
-        return redirect()->route('indexProformweb',['id' => $id])->with('notification',['title'=>'Notificación','message'=>$data['respuesta']->return->estadoComprobante,'alert_type'=>'info']);
+        var_dump($data);
+        //return redirect()->route('indexProformweb',['id' => $id])->with('notification',['title'=>'Notificación','message'=>$data['respuesta']->return->estadoComprobante,'alert_type'=>'info']);
 
     }
 
