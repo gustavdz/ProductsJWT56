@@ -46,7 +46,7 @@ class UserController extends Controller
     {
         $user = User::find(Auth::user()->id);
 
-        if($user->empresas->count()<1){
+        if($user->empresas->count()<1 or $user->empresas==null){
             $empresa['action']='create';
             $empresa['id']='';
             $empresa['razon_social']='';
