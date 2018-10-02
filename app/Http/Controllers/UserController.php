@@ -45,7 +45,8 @@ class UserController extends Controller
     public function getview()
     {
         $user = User::find(Auth::user()->id);
-        var_dump($user->empresas);
+        var_dump($user);
+
         /*if($user->empresas->count()<1 or $user->empresas==null){
             $empresa['action']='create';
             $empresa['id']='';
@@ -79,7 +80,7 @@ class UserController extends Controller
 
 
         }*/
-        return view('profile.edit')->with(compact('user','empresa'));
+        //return view('profile.edit')->with(compact('user','empresa'));
     }
     public function update(Request $request)
     {
