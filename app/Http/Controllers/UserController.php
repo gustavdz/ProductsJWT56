@@ -45,9 +45,24 @@ class UserController extends Controller
     public function getview()
     {
         $user = User::find(Auth::user()->id);
-        var_dump($user->empresas->count());
-
-        /*if($user->empresas->count()<1 or $user->empresas==null){
+        if($user->empresas!=null){
+            if($user->empresas->count() > 0){
+                $empresa['action']='edit';
+                $empresa['id']=$user->empresas->id;
+                $empresa['razon_social']=$user->empresas->razon_social;
+                $empresa['nombre_comercial']=$user->empresas->nombre_comercial;
+                $empresa['direccion_matriz']=$user->empresas->direccion_matriz;
+                $empresa['direccion_sucursal']=$user->empresas->direccion_sucursal;
+                $empresa['ruc_empresa']=$user->empresas->ruc_empresa;
+                $empresa['telefono']=$user->empresas->telefono;
+                $empresa['logo']=$user->empresas->logo_filename;
+                $empresa['ambiente']=$user->empresas->ambiente;
+                $empresa['secuencial_fact']=$user->empresas->secuencial_fact;
+                $empresa['secuencial_nc']=$user->empresas->secuencial_nc;
+                $empresa['prefijo_sucursal']=$user->empresas->prefijo_sucursal;
+                $empresa['prefijo_emision']=$user->empresas->prefijo_emision;
+            }
+        }else{
             $empresa['action']='create';
             $empresa['id']='';
             $empresa['razon_social']='';
@@ -62,25 +77,8 @@ class UserController extends Controller
             $empresa['secuencial_nc']='';
             $empresa['prefijo_sucursal']='';
             $empresa['prefijo_emision']='';
-        }else{
-            $empresa['action']='edit';
-            $empresa['id']=$user->empresas->id;
-            $empresa['razon_social']=$user->empresas->razon_social;
-            $empresa['nombre_comercial']=$user->empresas->nombre_comercial;
-            $empresa['direccion_matriz']=$user->empresas->direccion_matriz;
-            $empresa['direccion_sucursal']=$user->empresas->direccion_sucursal;
-            $empresa['ruc_empresa']=$user->empresas->ruc_empresa;
-            $empresa['telefono']=$user->empresas->telefono;
-            $empresa['logo']=$user->empresas->logo_filename;
-            $empresa['ambiente']=$user->empresas->ambiente;
-            $empresa['secuencial_fact']=$user->empresas->secuencial_fact;
-            $empresa['secuencial_nc']=$user->empresas->secuencial_nc;
-            $empresa['prefijo_sucursal']=$user->empresas->prefijo_sucursal;
-            $empresa['prefijo_emision']=$user->empresas->prefijo_emision;
-
-
-        }*/
-        //return view('profile.edit')->with(compact('user','empresa'));
+        }
+        return view('profile.edit')->with(compact('user','empresa'));
     }
     public function update(Request $request)
     {
