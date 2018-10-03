@@ -13,7 +13,7 @@
             {
                 display: none !important;
             }
-            #div_table_detail{
+            .div_table_detail{
                 page-break-after: always;
             }
         }
@@ -110,9 +110,9 @@
                             <!-- /.row -->
 
                             <!-- Table row -->
-                            <div class="row" id="div_table_detail">
+                            <div class="row div_table_detail">
                                 <div class="col-xs-12 table">
-                                    <table class="table table-striped">
+                                    <table class="table table-striped" style="page-break-after: always;">
                                         <thead>
                                         <tr>
                                             <th width="10%">Cantidad</th>
