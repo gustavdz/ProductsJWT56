@@ -13,6 +13,9 @@
             {
                 display: none !important;
             }
+            #div_table_detail{
+                page-break-after: always;
+            }
         }
 
         .overlay {
@@ -107,7 +110,7 @@
                             <!-- /.row -->
 
                             <!-- Table row -->
-                            <div class="row">
+                            <div class="row" id="div_table_detail">
                                 <div class="col-xs-12 table">
                                     <table class="table table-striped">
                                         <thead>
