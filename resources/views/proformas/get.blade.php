@@ -29,7 +29,7 @@
 @section('content')
     <div class="">
         <div class="page-title">
-            <div class="title_left">
+            <div class="title_left no-print">
                 <h3>Proforma #{{str_pad($proform->id,5,0,STR_PAD_LEFT)}}</h3>
             </div>
 
