@@ -7,13 +7,13 @@
     <style>
         @media print
         {
-            @page {size: A4 landscape;  max-height:100%;  max-width:100%;}
+            @page {size: A4 portrait;  max-height:100%;  max-width:100%;}
 
             .no-print, .no-print *
             {
                 display: none !important;
             }
-            
+
             html, body {
                 height:100%;
                 margin: 0 !important;
