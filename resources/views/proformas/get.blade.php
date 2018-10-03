@@ -88,7 +88,8 @@
                                         Para
                                     @endif
                                     <address>
-                                        <strong>{{$proform->client->name}} {{$proform->client->lastname}}</strong>
+                                        <strong>{{$proform->client->company}}</strong>
+                                        <br>{{$proform->client->name}} {{$proform->client->last_name}}
                                         <br>{{$proform->client->address}}
                                         <br>Teléfono: {{$proform->client->phone}}
                                         <br>Email: {{$proform->client->email}}
