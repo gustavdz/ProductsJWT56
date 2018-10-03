@@ -186,7 +186,7 @@
                                 <div class="col-xs-12">
                                     <form method="post" id="frm_action" enctype="multipart/form-data" action="{{url('/proyectos/'.$proform->proyecto->id.'/proforms/'.$proform->id.'/sendSRI')}}">
                                         {{ csrf_field() }}
-                                        <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+                                        <button type="button" class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
                                         <button class="btn btn-primary pull-right" onclick="submit_form('aprobar');"><i class="fa fa-thumbs-up"></i> Aprobar</button>
                                         @if($proform->types =='C')
                                             @switch($proform->status_sri)
