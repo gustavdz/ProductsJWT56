@@ -13,8 +13,8 @@
             {
                 display: none !important;
             }
-            .div_table_detail{
-                page-break-after: always;
+            .page_break{
+                page-break-before: always;
             }
         }
 
@@ -110,9 +110,9 @@
                             <!-- /.row -->
 
                             <!-- Table row -->
-                            <div class="row div_table_detail">
+                            <div class="row">
                                 <div class="col-xs-12 table">
-                                    <table class="table table-striped" style="page-break-after: always;">
+                                    <table class="table table-striped">
                                         <thead>
                                         <tr>
                                             <th width="10%">Cantidad</th>
@@ -140,7 +140,7 @@
                                 <!-- /.col -->
                             </div>
                             <!-- /.row -->
-
+                            <div class="page_break"></div>
                             <div class="row">
                                 <!-- accepted payments column -->
                                 <div class="col-xs-6">
