@@ -121,7 +121,7 @@
                                         @foreach($proform->proformDetail as $detalle)
                                         <tr>
                                             <td>{{$detalle->quantity}}</td>
-                                            <td>{{$detalle->product->name}}</td>
+                                            <td>{{$detalle->product->name}} {{$detalle->product->detail}}</td>
                                             <td>{{$detalle->price}}</td>
                                             <td>${{$detalle->price * $detalle->quantity}}</td>
                                             <td>${{number_format(($detalle->descuento/100)*($detalle->price * $detalle->quantity),2)}}</td>
