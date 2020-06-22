@@ -299,6 +299,8 @@ class ProformController extends Controller
             $procesarComprobante->envioSRI = false;
             $data=array();
             $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
+            var_dump($factura);
+            var_dump($res);
 
             if($res->return->estadoComprobante == "FIRMADO"){
                 $proform->status_sri="PROCESANDOSE";
@@ -355,7 +357,7 @@ class ProformController extends Controller
 
     public function sendSRI(ProformOwnershipRequest $request,$id,$proform_id){
         $data = $this->enviar_factura_al_SRI($proform_id);
-        var_dump($data);
+        //var_dump($data);
         //return redirect()->route('indexProformweb',['id' => $id])->with('notification',['title'=>'Notificación','message'=>$data['respuesta']->return->estadoComprobante,'alert_type'=>'info']);
 
     }
