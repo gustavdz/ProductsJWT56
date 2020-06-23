@@ -88,6 +88,8 @@ Route::middleware(['auth'])->group(function(){
     Route::post('proyectos/{id}/proforms/{proform_id}/delete','ProformController@delete')->name('deleteProformweb');
     Route::post('proyectos/{id}/proforms/{proform_id}/sendSRI','ProformController@sendSRI')->name('createInvoiceweb');
     Route::post('proyectos/{id}/proforms/{proform_id}/resendSRI','ProformController@resendSRI')->name('createInvoiceweb');
+    Route::post('proyectos/{id}/proforms/{proform_id}/aprobar','ProformController@approve')->name('approveProformweb');
+    Route::post('proyectos/{id}/proforms/{proform_id}/cancel','ProformController@reject')->name('rejectProformweb');
 
     //Route::get('mail/send', 'MailController@send_factura')->name('sendFacturamail');
 });

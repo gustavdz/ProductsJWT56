@@ -7,7 +7,7 @@ Estimado (a),
 
 Su comprobante, {{$info->factura}} ha sido generado con éxito y se encuentra disponible para su descarga y visualización.
 
-También puede ingresar a <a href="config('app.url')">app.ecuabill.com</a> para consultar  todos sus documentos emitidos.
+También puede ingresar a <a href="{{config('app.url')}}">app.ecuabill.com</a> para consultar  todos sus documentos emitidos.
 
 
 @component('mail::button', ['url' => config('app.url') ])

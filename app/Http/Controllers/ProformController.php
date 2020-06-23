@@ -82,7 +82,6 @@ class ProformController extends Controller
             $comprobantesPendientes->ptoEmision = $perfil->prefijo_emision; //[pto de emision ] **
             $comprobantesPendientes->ruc = $perfil->ruc_empresa; //[Ruc]
             $comprobantesPendientes->secuencial = str_pad($proform->secuencial,9,"0",STR_PAD_LEFT); // [Secuencia desde 1 (9)]
-            //$comprobantesPendientes->secuencial = str_pad($perfil->secuencial_fact,9,"0",STR_PAD_LEFT); // [Secuencia desde 1 (9)]
             $comprobantesPendientes->tipoEmision = "1"; //[1,Emision Normal][2,Emision Por Indisponibilidad del sistema
 
             $procesarComprobante = new \procesarComprobantePendiente();
@@ -154,7 +153,7 @@ class ProformController extends Controller
             {	$configCorreo = new \configCorreo();
                 $configCorreo->correoAsunto="Notificación de documento electrónico generado";
                 $configCorreo->correoHost=env('MAIL_HOST');
-                $configCorreo->correoPass= env('MAIL_PASSWORD');  //"vNr3224e9Mrf";
+                $configCorreo->correoPass= env('MAIL_PASSWORD');
                 $configCorreo->correoPort=env('MAIL_PORT');
                 $configCorreo->correoRemitente=env('MAIL_USERNAME');
                 $configCorreo->sslHabilitado=true;
@@ -299,8 +298,8 @@ class ProformController extends Controller
             $procesarComprobante->envioSRI = false;
             $data=array();
             $res = $procesarComprobanteElectronico->procesarComprobante($procesarComprobante);
-            var_dump($factura);
-            var_dump($res);
+            // var_dump($factura);
+            // var_dump($res);
 
             if($res->return->estadoComprobante == "FIRMADO"){
                 $proform->status_sri="PROCESANDOSE";
@@ -333,6 +332,7 @@ class ProformController extends Controller
                     $proform->prefijo_establecimiento=$factura->establecimiento;
                     $proform->status_sri=$res->return->estadoComprobante;
                     $proform->numero_autorizacion=$res->return->numeroAutorizacion;
+                    $proform->clave_acceso=$res->return->claveAcceso;
                     if($res->return->estadoComprobante == 'AUTORIZADO'){
                         $proform->fecha_autorizacion=$res->return->fechaAutorizacion;
                         $proform->mensaje_resp="OK";
@@ -358,7 +358,7 @@ class ProformController extends Controller
     public function sendSRI(ProformOwnershipRequest $request,$id,$proform_id){
         $data = $this->enviar_factura_al_SRI($proform_id);
         //var_dump($data);
-        //return redirect()->route('indexProformweb',['id' => $id])->with('notification',['title'=>'Notificación','message'=>$data['respuesta']->return->estadoComprobante,'alert_type'=>'info']);
+        return redirect()->route('indexProformweb',['id' => $id])->with('notification',['title'=>'Notificación','message'=>$data['respuesta']->return->estadoComprobante,'alert_type'=>'info']);
 
     }
 
@@ -383,6 +383,7 @@ class ProformController extends Controller
         $proyecto = Proyectos::find($request->id);
         return view('proformas.create')->with(compact('proyecto'));
     }
+
     public function store(Request $request,$id){
 
         $messages =[
@@ -426,7 +427,7 @@ class ProformController extends Controller
         $proform_request['paidform']=$request->paidform;
         $proform_request['client_id']=$request->client_id;
         $proform_request['user_id']=$user->id;
-        $proform_request['status']="NO PAGADA";
+        $proform_request['status']="PENDIENTE";
         $proform_request['status_sri']="NO ENVIADA";
         $proform_request['proyecto_id']=$id;
 
@@ -451,5 +452,35 @@ class ProformController extends Controller
         //return redirect()->back()->with('notification',['title'=>'Notificación','message'=>'Se creó la proforma correctamente','alert_type'=>'info']);
         //return view('proformas.show')->with(compact('proyecto','proyecto_id'));
         return redirect()->route('indexProformweb',['id' => $proyecto->id])->with('notification',['title'=>'Notificación','message'=>'Se creó la proforma correctamente','alert_type'=>'info']);
+    }
+
+    public function approve(ProformOwnershipRequest $request){
+        $proform = proform::find($request->proform_id);
+        $proform->status = 'APROBADA';
+        $proform->save();
+
+        $proform->fecha_creacion = Carbon::parse($proform->created_at);
+        /*$notification = array(
+            'title' => "Notificación",
+            'message' => "Se aprobó la proforma correctamente",
+            'alert_type'=>'info'
+        );*/
+        return redirect()->route('getProformweb',['id' => $proform->proyecto_id, 'proform_id' => $proform->id ])->with('notification',['title'=>'Notificación','message'=>'Se aprobó la proforma correctamente','alert_type'=>'info']);
+        //return view('proformas.get')->with(compact('proform','notification'));
+    }
+
+    public function reject(ProformOwnershipRequest $request){
+        $proform = proform::find($request->proform_id);
+        $proform->status = 'RECHAZADA';
+        $proform->save();
+
+        $proform->fecha_creacion = Carbon::parse($proform->created_at);
+        /*$notification = array(
+            'title' => "Notificación",
+            'message' => "Se rechazó la proforma correctamente",
+            'alert_type'=>'info'
+        );*/
+        return redirect()->route('getProformweb',['id' => $proform->proyecto_id, 'proform_id' => $proform->id ])->with('notification',['title'=>'Notificación','message'=>'Se rechazó la proforma correctamente','alert_type'=>'warning']);
+        //return view('proformas.get')->with(compact('proform','notification'));
     }
 }

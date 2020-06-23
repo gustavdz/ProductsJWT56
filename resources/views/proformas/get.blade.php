@@ -1,8 +1,7 @@
 @extends('layouts.app')
-@section('topnavbar')
-    Proforma Detalle #{{str_pad($proform->id,5,0,STR_PAD_LEFT)}}
-@endsection
+@section('topnavbar')Proforma Detalle #{{str_pad($proform->id,5,0,STR_PAD_LEFT)}}@endsection
 @section('body-class','nav-md')
+@section('notification'){{ Session::has('notification') ? 'data-notification=true' : '' }} data-notification-type='{{ Session::get('notification')['alert_type']}}' data-notification-title='{{ Session::get('notification')['title']}}' data-notification-message='{{ Session::get('notification')['message'] }}'@endsection
 @section('style')
     <style>
         @media print
@@ -191,20 +190,31 @@
                                     <form method="post" id="frm_action" enctype="multipart/form-data" action="{{url('/proyectos/'.$proform->proyecto->id.'/proforms/'.$proform->id.'/sendSRI')}}">
                                         {{ csrf_field() }}
                                         <button type="button" class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
-                                        <button class="btn btn-primary pull-right" onclick="submit_form('aprobar');"><i class="fa fa-thumbs-up"></i> Aprobar</button>
+                                        @if($proform->status_sri == 'NO ENVIADA')
+                                            @if($proform->status=='PENDIENTE')
+                                                <button class="btn btn-primary pull-right" onclick="submit_form('aprobar');"><i class="fa fa-thumbs-up"></i> Aprobar</button>
+                                            @endif
+                                        @endif
                                         @if($proform->types =='C')
                                             @switch($proform->status_sri)
                                                 @case ('AUTORIZADO')
                                                 @break
                                                 @case ('NO ENVIADA')
-                                                    <button class="btn btn-success pull-right" onclick="disableScreen();submit_form('send');"><i class="fa fa-send"></i> Facturar</button>
+                                                    @if($proform->status=='APROBADA')
+                                                        <button class="btn btn-success pull-right" onclick="disableScreen();submit_form('send');"><i class="fa fa-send"></i> Facturar</button>
+                                                    @endif
                                                 @break
                                                 @default
-                                                    <button class="btn btn-success pull-right" onclick="disableScreen();submit_form('resend');"><i class="fa fa-send"></i> Obetner Estado</button>
+                                                    @if($proform->status=='APROBADA')
+                                                        <button class="btn btn-success pull-right" onclick="disableScreen();submit_form('resend');"><i class="fa fa-send"></i> Obtener Estado</button>
+                                                    @endif
                                             @endswitch
-
                                         @endif
-                                        <button class="btn btn-danger pull-right" onclick="submit_form('cancel');"><i class="fa fa-ban"></i> Rechazar</button>
+                                        @if($proform->status_sri == 'NO ENVIADA')
+                                            @if($proform->status=='PENDIENTE')
+                                                <button class="btn btn-danger pull-right" onclick="submit_form('cancel');"><i class="fa fa-ban"></i> Rechazar</button>
+                                            @endif
+                                        @endif
                                         <a class="btn btn-warning pull-left" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i> Volver</a>
                                     </form>
                                 </div>
@@ -237,7 +247,7 @@
                 document.forms.frm_action.submit();
                 break;
             default:
-                document.forms.frm_action.action='send';
+                document.forms.frm_action.action='aprobar';
                 document.forms.frm_action.submit();
                 break;
         }
@@ -251,4 +261,30 @@
         document.body.appendChild(div);
     }
 </script>
+@if (session()->has('notification'))
+    <script>
+        (function(){
+            if (!document.body.dataset.notification)
+                return false;
+            new PNotify({
+                title: document.body.dataset.notificationTitle,
+                text: document.body.dataset.notificationMessage,
+                type: document.body.dataset.notificationType,
+                styling: 'bootstrap3'
+            });
+
+            $('.tt_large').tooltip({
+                template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner large"></div></div>'
+            });
+
+        })();
+        $(document).ready(function () {
+            $("a").tooltip({
+                'selector': '',
+                'placement': 'top',
+                'container':'body'
+            });
+        });
+    </script>
+@endif
 @endsection
