@@ -32,4 +32,4 @@ public/cert/*
 public/images/*
 public/logo/*
 */.DS_Store
-public/*/.DS_Store
+public/img/.DS_Store
