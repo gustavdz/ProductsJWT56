@@ -30,3 +30,5 @@ storage/*.key
 .idea/*
 public/cert/*
 public/images/*
+public/logo/*
+
