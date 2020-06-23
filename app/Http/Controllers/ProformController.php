@@ -332,7 +332,7 @@ class ProformController extends Controller
                     $proform->prefijo_establecimiento=$factura->establecimiento;
                     $proform->status_sri=$res->return->estadoComprobante;
                     $proform->numero_autorizacion=$res->return->numeroAutorizacion;
-                    //$proform->clave_acceso=$res->return->claveAcceso;
+                    $proform->clave_acceso=$res->return->claveAcceso;
                     if($res->return->estadoComprobante == 'AUTORIZADO'){
                         $proform->fecha_autorizacion=$res->return->fechaAutorizacion;
                         $proform->mensaje_resp="OK";
