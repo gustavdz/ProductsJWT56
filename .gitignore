@@ -28,3 +28,5 @@ storage/*.key
 .phpunit.result.cache
 .idea/
 .idea/*
+public/cert/*
+public/images/*
