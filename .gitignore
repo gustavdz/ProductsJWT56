@@ -31,4 +31,4 @@ storage/*.key
 public/cert/*
 public/images/*
 public/logo/*
-
+*/.DS_Store
